@@ -1,9 +1,6 @@
 # FPC X11 Tutorial
 ## Einleitung:
 
-Im Ordner **HTML-Tutorial** befindet sich das ganze Tutorial im HTML-Format, somit ist es im Browser anschaubar.
-Das Tutorial findet man auch direkt bei den Sourcen auf GitHub: [Inhaltsverzeichniss Tutorial](wiki.md)
-
 ## Externe Beispiele:
 Diese sind alle in C/C++
 - [Rheinwerk openbook - Linux Programmierung Kapitel 14](https://openbook.rheinwerk-verlag.de/linux_unix_programmierung/Kap14-007.htm) (DE)
