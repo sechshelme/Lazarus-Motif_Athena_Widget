@@ -29,13 +29,10 @@ Diese sind alle in C/C++
 
 | Datum | Änderungen 
 | :---: | ---
+| 02.04.2023 | Package **Motif Widgets** ersellt
+| 20.03.2023 | Erste Gehversuche mit **Motif Widgets**
+| 18.03.2023 | Package **Athen Widgets** ersellt
 | 10.03.2023 | Erste Gehversuche mit **Athena Widgets**
-| 21.11.2022 | Infos zu Schriften hinzugefügt: [Fonts](font.md) 
-| 14.11.2022 | Beispiel wie man Komponenten erstellt
-| 25.10.2022 | Tutorial - Grafikprimitive
-| 24.10.2022 | Tutorial - Erstes Rechteck zeichnen
-| 23.10.2022 | Tutorial - Erstes Fenster
-| 22.10.2022 | Tutorial auf GIT-Hub einrichten.
 
 <img src="image.png">
 
