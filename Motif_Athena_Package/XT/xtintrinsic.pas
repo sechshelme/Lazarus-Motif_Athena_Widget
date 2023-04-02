@@ -317,6 +317,7 @@ type
     case byte of
       0: (valueP: PChar);
       1: (valueI: LongInt);
+      2: (valueB: Boolean);
   end;
   TArgList = ^TArg;
   PArgList = ^TArgList;
@@ -600,8 +601,9 @@ function XtGetClassExtension(para1: TWidgetClass; para2: TCardinal; para3: TXrmQ
  *
  *************************************************************** }
 
-procedure XtSetArg(var arg: TArg; n: TXtString; d: PChar);
-procedure XtSetArg(var arg: TArg; n: TXtString; d: PtrInt);
+procedure XtSetArg(var arg: TArg; n: TXtString; pc: PChar);
+procedure XtSetArg(var arg: TArg; n: TXtString; int: PtrInt);
+procedure XtSetArg(var arg: TArg; n: TXtString; bol: TBoolean);
 
 function XtMergeArgLists(para1: TArgList; para2: TCardinal; para3: TArgList; para4: TCardinal): TArgList; cdecl; external libXt;
 {**************************************************************
@@ -1015,16 +1017,22 @@ begin
   XtIsShell := _XtCheckSubclassFlag(widget, TXtEnum($20));
 end;
 
-procedure XtSetArg(var arg: TArg; n: TXtString; d: PChar);
+procedure XtSetArg(var arg: TArg; n: TXtString; pc: PChar);
 begin
   arg.Name := n;
-  arg.valueP := d;
+  arg.valueP := pc;
 end;
 
-procedure XtSetArg(var arg: TArg; n: TXtString; d: PtrInt);
+procedure XtSetArg(var arg: TArg; n: TXtString; int: PtrInt);
 begin
   arg.Name := n;
-  arg.valueI := d;
+  arg.valueI := int;
+end;
+
+procedure XtSetArg(var arg: TArg; n: TXtString; bol: TBoolean);
+begin
+  arg.Name := n;
+  arg.valueB := bol;
 end;
 
 function XtIsWMShell(widget: TWidget): TBoolean;

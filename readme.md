@@ -63,7 +63,7 @@ Diese sind alle in C/C++
 - (https://github.com/freedesktop/xorg-libXaw3d)
 - (https://cgit.freedesktop.org/xorg/lib/libXaw3d)
 
-## Motif
+## Open-Motif Widget
 - (https://sourceforge.net/projects/motif/files/)
 - (https://sourceforge.net/p/motif/code/ci/master/tree/)
 

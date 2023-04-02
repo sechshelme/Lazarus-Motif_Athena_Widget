@@ -13,7 +13,7 @@ uses
     Writeln('Hello Yourself!');
   end;
 
-  procedure main;
+  procedure main(argc:Longint;argv:PPChar);
   var
     toplevel, button: TWidget;
     app: TXtAppContext;
@@ -35,5 +35,5 @@ uses
   end;
 
 begin
-  main;
+  main(argc, argv);
 end.
