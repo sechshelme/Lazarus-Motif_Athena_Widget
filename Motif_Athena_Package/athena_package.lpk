@@ -6,6 +6,7 @@
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
+        <IncludeFiles Value="Xm"/>
         <OtherUnitFiles Value="Xaw;Xmu;XT;Xm"/>
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
@@ -217,7 +218,7 @@
       </Item>
       <Item>
         <Filename Value="Xm/xmtooltipt.pas"/>
-        <UnitName Value="xmtooltipt"/>
+        <UnitName Value="XmToolTipT"/>
       </Item>
       <Item>
         <Filename Value="Xm/xmdialogs.pas"/>
@@ -575,6 +576,10 @@
       <Item>
         <Filename Value="Xm/xmxmstrdefs23.pas"/>
         <UnitName Value="XmXmStrDefs23"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/motif_allUnits.inc"/>
+        <Type Value="Include"/>
       </Item>
     </Files>
     <RequiredPkgs>
