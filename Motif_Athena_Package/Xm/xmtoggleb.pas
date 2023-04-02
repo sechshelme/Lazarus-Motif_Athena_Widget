@@ -3,8 +3,6 @@ unit XmToggleB;
 interface
 
 uses
-  unixtype,
-  x, xlib,
   XTIntrinsic,
   XmXm;
 

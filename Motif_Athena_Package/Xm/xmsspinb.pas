@@ -3,8 +3,6 @@ unit XmSSpinB;
 interface
 
 uses
-  unixtype,
-  x, xlib,
   XTIntrinsic,
   XmXm;
 

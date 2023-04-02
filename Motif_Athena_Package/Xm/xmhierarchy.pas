@@ -3,8 +3,6 @@ unit XmHierarchy;
 interface
 
 uses
-  unixtype,
-  x, xlib,
   XTIntrinsic,
   XmXm;
 

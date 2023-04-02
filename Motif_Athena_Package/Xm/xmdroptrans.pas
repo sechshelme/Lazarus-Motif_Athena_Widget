@@ -3,10 +3,8 @@ unit XmDropTrans;
 interface
 
 uses
-  unixtype,
-  x, xlib,
-  XTIntrinsic,
-  XmXm;
+  x,
+  XTIntrinsic;
 
 {$IFDEF FPC}
 {$PACKRECORDS C}

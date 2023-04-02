@@ -3,10 +3,7 @@ unit XmPaned;
 interface
 
 uses
-  unixtype,
-  x, xlib,
-  XTIntrinsic,
-  XmXm;
+  XTIntrinsic;
 
 {$IFDEF FPC}
 {$PACKRECORDS C}

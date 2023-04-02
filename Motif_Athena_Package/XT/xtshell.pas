@@ -3,7 +3,6 @@ unit XtShell;
 interface
 
 uses
-  x, xlib,
   XTIntrinsic;
 
 const

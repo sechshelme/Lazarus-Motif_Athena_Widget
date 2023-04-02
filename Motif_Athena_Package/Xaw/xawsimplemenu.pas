@@ -3,7 +3,6 @@ unit XawSimpleMenu;
 interface
 
 uses
-  x, xlib,
   XTIntrinsic;
 
 {$IFDEF FPC}

@@ -3,8 +3,6 @@ unit XmLayoutT;
 interface
 
 uses
-  unixtype,
-  x, xlib,
   xresource,
   XTIntrinsic,
   XmXm;

@@ -3,7 +3,7 @@ unit XmuDrawing;
 interface
 
 uses
-  Unix, unixtype,
+  Unix,
   xlib, x,
   XTIntrinsic;
 

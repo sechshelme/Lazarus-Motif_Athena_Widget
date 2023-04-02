@@ -3,11 +3,8 @@ unit XmTransferT;
 interface
 
 uses
-  unixtype,
-  x, xlib,
   xresource,
   XTIntrinsic,
-  XmXm,
   XmTransfer;
 
 {$IFDEF FPC}

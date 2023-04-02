@@ -3,10 +3,8 @@ unit XmIconFile;
 interface
 
 uses
-  unixtype,
-  x, xlib,
-  XTIntrinsic,
-  XmXm;
+  xlib,
+  XTIntrinsic;
 
 {$IFDEF FPC}
 {$PACKRECORDS C}

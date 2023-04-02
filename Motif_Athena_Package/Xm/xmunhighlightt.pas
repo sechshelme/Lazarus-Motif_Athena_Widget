@@ -3,11 +3,9 @@ unit XmUnhighlightT;
 interface
 
 uses
-  unixtype,
-  x, xlib,
+  xlib,
   xresource,
-  XTIntrinsic,
-  XmXm;
+  XTIntrinsic;
 
 {$IFDEF FPC}
 {$PACKRECORDS C}

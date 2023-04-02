@@ -21,11 +21,10 @@ uses
 
   procedure main(argc:Longint;argv:PPChar);
   var
-    top, button, main_w, menubar, menu, text_w: TWidget;
+    top, main_w, menubar, menu, text_w: TWidget;
     app: TXtAppContext;
     file1, quit1: TXmString;
     args: array[0..4] of TArg;
-    n: TCardinal;
   begin
     XtSetLanguageProc(nil, nil, nil);
 

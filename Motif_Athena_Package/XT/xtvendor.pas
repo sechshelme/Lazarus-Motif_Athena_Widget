@@ -3,7 +3,6 @@ unit XtVendor;
 interface
 
   uses
-    x, xlib,
     XTIntrinsic;
 
   const

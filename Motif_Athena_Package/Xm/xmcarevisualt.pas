@@ -3,11 +3,9 @@ unit XmCareVisualT;
 interface
 
 uses
-  unixtype,
-  x, xlib,
+  x,
   xresource,
-  XTIntrinsic,
-  XmXm;
+  XTIntrinsic;
 
 {$IFDEF FPC}
 {$PACKRECORDS C}

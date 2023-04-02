@@ -1,8 +1,6 @@
 program project1;
 
 uses
-  xlib,
-  x,
   XmPushB,
   XmXm,
   XmXmStrDefs,
@@ -13,7 +11,7 @@ uses
     Writeln('Hello Yourself!');
   end;
 
-  procedure main(argc:Longint;argv:PPChar);
+  procedure main(argc: longint; argv: PPChar);
   var
     toplevel, button: TWidget;
     app: TXtAppContext;
@@ -28,7 +26,6 @@ uses
     XmStringFree(label1);
 
     XtAddCallback(button, XmNactivateCallback, @button_pushed, nil);
-
 
     XtRealizeWidget(toplevel);
     XtAppMainLoop(app);

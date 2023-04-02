@@ -3,11 +3,8 @@ unit XmDialogSavvyT;
 interface
 
 uses
-  unixtype,
-  x, xlib,
   xresource,
-  XTIntrinsic,
-  XmXm;
+  XTIntrinsic;
 
 {$IFDEF FPC}
 {$PACKRECORDS C}

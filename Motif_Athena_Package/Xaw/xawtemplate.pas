@@ -3,7 +3,6 @@ unit XawTemplate;
 interface
 
 uses
-  x, xlib,
   XTIntrinsic;
 
 {$IFDEF FPC}
