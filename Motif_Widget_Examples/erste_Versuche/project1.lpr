@@ -93,7 +93,7 @@ uses
   XmArrowB,
   XmArrowBG,
   XmAccTextT,
-  ActivatableT,
+  XmActivatableT,
   XmAtomMgr,
   XmDragIcon,
   XmDragOverS,
@@ -111,7 +111,7 @@ uses
   XmPrimitive,
   XmScreen,
   XmSpecRenderT,
-  SpinB,
+  XmSpinB,
   XmTabBox,
   XmTakesDefT,
   XmTransferT,
@@ -162,9 +162,9 @@ uses
     sb := XmVaCreateManagedScrollBar(box2, 'sb', XtNwidth, 15, XtNheight, 150, XtNbackground, $FF0000, nil);
 
 
-//    CreateButtons(box);
+    CreateButtons(box);
 
-//    CreateMenuBox(box);
+    CreateMenuBox(box);
 
     //    XmVaCreateManagedRowColumn(toplevel, 'test', XtNwidth,5, XtNheight,50,nil);
 
@@ -183,8 +183,8 @@ label1:=    XmVaCreateManagedLabel(box, 'Ich bin ein Label', nil);
 
 //    CreateList(box);
 
-//column1:=    XmVaCreateManagedColumn(box,'col',XtNwidth,50, XtNheight,50,XtNbackground,$FF00FF ,nil);
-//edit1:= XmVaCreateManagedDataField(column1, 'edit',XtNbackground,$FFFFFF, nil);
+column1:=    XmVaCreateManagedColumn(box,'col',XtNwidth,50, XtNheight,50,XtNbackground,$FF00FF ,nil);
+edit1:= XmVaCreateManagedDataField(column1, 'edit',XtNbackground,$FFFFFF, nil);
 
 
 // ToolTip: https://github.com/drbitboy/Motif_tooltip_example/blob/master/motif_tooltip.c

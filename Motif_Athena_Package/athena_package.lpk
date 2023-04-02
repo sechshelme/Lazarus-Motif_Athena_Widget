@@ -581,6 +581,82 @@
         <Filename Value="Xm/motif_allUnits.inc"/>
         <Type Value="Include"/>
       </Item>
+      <Item>
+        <Filename Value="Xm/copyright.md"/>
+        <Type Value="Text"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/copyright2.md"/>
+        <Type Value="Text"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmacctextt.pas"/>
+        <UnitName Value="XmAccTextT"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmdragicon.pas"/>
+        <UnitName Value="XmDragIcon"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmgadget.pas"/>
+        <UnitName Value="XmGadget"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmgrabshell.pas"/>
+        <UnitName Value="XmGrabShell"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmiconh.pas"/>
+        <UnitName Value="XmIconH"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmmanager.pas"/>
+        <UnitName Value="XmManager"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmmenushell.pas"/>
+        <UnitName Value="XmMenuShell"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmpointint.pas"/>
+        <UnitName Value="XmPointInT"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmprimitive.pas"/>
+        <UnitName Value="XmPrimitive"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmscreen.pas"/>
+        <UnitName Value="XmScreen"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmspecrendert.pas"/>
+        <UnitName Value="XmSpecRendert"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmtabbox.pas"/>
+        <UnitName Value="XmTabBox"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmtakesdeft.pas"/>
+        <UnitName Value="XmTakesDefT"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmtransfer.pas"/>
+        <UnitName Value="XmTransfer"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmtravcont.pas"/>
+        <UnitName Value="XmTravCont"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmtxtpropcv.pas"/>
+        <UnitName Value="XmTxtPropCv"/>
+      </Item>
+      <Item>
+        <Filename Value="Xm/xmvendors.pas"/>
+        <UnitName Value="XmVendors"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>

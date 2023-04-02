@@ -30,7 +30,10 @@ uses
   XmScrollFrameT, XmSelectioB, XmSeparatoG, XmSeparator, XmSlideC, XmSpinB, 
   XmSSpinB, XmTabList, XmTabStack, XmTextF, XmToggleB, XmToggleBG, 
   XmToolTipCT, XmTransferT, XmTree, XmUnhighlightT, XmUnitTypeT, XmVirtKeys, 
-  XmXmfuncs, XmXmIm, Xmxmlist, XmXmStrDefs22, XmXmStrDefs23, LazarusPackageIntf;
+  XmXmfuncs, XmXmIm, Xmxmlist, XmXmStrDefs22, XmXmStrDefs23, XmAccTextT, 
+  XmDragIcon, XmGadget, XmGrabShell, XmIconH, XmManager, XmMenuShell, 
+  XmPointInT, XmPrimitive, XmScreen, XmSpecRendert, XmTabBox, XmTakesDefT, 
+  XmTransfer, XmTravCont, XmTxtPropCv, XmVendors, LazarusPackageIntf;
 
 implementation
 

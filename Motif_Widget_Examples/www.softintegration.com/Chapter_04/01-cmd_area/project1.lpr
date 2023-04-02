@@ -37,7 +37,7 @@ uses
     XmStringFree(file1);
 
     quit1 := XmStringCreateLocalized('Quit');
-    menu:=XmVaCreateSimpleMenuBar(menubar,'file_menu',0,@Press_Exit,XmVaPUSHBUTTON,quit1 ,'Q',nil,nil,nil);
+    menu:=XmVaCreateSimplePulldownMenu(menubar,'file_menu',0,@Press_Exit,XmVaPUSHBUTTON,quit1 ,'Q',nil,nil,nil);
     XmStringFree(quit1);
 
     XtManageChild(menubar);
@@ -50,10 +50,12 @@ uses
     text_w:=XmCreateScrolledText(main_w,'text_w',args,4);
     XtManageChild(text_w);
 
+    XtVaSetValues (menu, XmNuserData, text_w, nil);
+
     //////// Hier fehlt was !
 
 
-
+//     XmMainWindowSetAreas (main_w, menubar, command_w,          nil, nil, XtParent (text_w));
     XtRealizeWidget(top);
     XtAppMainLoop(app);
   end;

@@ -56,26 +56,6 @@
         <Filename Value="project1.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit>
-      <Unit>
-        <Filename Value="mybuttons.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="MyButtons"/>
-      </Unit>
-      <Unit>
-        <Filename Value="mymesssagedialog.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="MyMesssageDialog"/>
-      </Unit>
-      <Unit>
-        <Filename Value="mymenubox.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="MyMenuBox"/>
-      </Unit>
-      <Unit>
-        <Filename Value="mylist.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="MyList"/>
-      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

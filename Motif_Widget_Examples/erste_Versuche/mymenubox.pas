@@ -18,7 +18,7 @@ procedure CreateMenuBox(Parent: TWidget);
 
 implementation
 
-procedure Close(w: TWidget; client, call: TXtPointer);
+procedure Close(w: TWidget; client, call: TXtPointer); cdecl;
 begin
   halt;
 end;
@@ -40,7 +40,7 @@ begin
 
 
   quit1 := XmStringCreateLocalized('Beenden');
-  menu := XmVaCreateSimpleMenuBar(menubar, 'file_menu', 0, @Close, XmVaPUSHBUTTON, quit1, 'B', nil, nil, nil);
+  menu := XmVaCreateSimplePulldownMenu(menubar, 'file_menu', 0, @Close, XmVaPUSHBUTTON, quit1, 'B', nil, nil, nil);
   XmStringFree(quit1);
   XtManageChild(menubar);
 
@@ -49,7 +49,6 @@ begin
   XtManageChild(text_w);
 
   XtVaSetValues(menu, XmNuserData, text_w, nil);
-
 end;
 
 end.
