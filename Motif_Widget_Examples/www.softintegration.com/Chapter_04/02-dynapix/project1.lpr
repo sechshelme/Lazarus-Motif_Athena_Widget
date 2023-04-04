@@ -14,6 +14,7 @@ uses
   XmText,
   XmLabel,
   XmMessageB,
+  XmFileSB,
   XTComposite,
   XTIntrinsic;
 
@@ -30,11 +31,6 @@ var
     Halt;
   end;
 
-  procedure file_cb(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
-  begin
-
-  end;
-
   procedure load_pimap(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
   var
     cbs: PXmFileSelectionBoxCallbackStruct;
@@ -47,6 +43,7 @@ var
         WriteLn('Internal Error');
         exit;
       end;
+      strcopy(cur_bitmap,file1);
       XtFree(file1);
     end;
 
@@ -61,17 +58,50 @@ var
     end;
   end;
 
+procedure unmanagechild(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+begin
+   XtUnmanageChild(para1);
+end;
+
+  procedure FileHelp(para1: TWidget; para2: TXtPointer; para3: TXtPointer);
+    cdecl;
+  begin
+    WriteLn('Hilfe zur Dateien');
+  end;
+
+  procedure file_cb(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  var
+    item_no: PtrInt;
+    dialog: TWidget = nil;
+  begin
+    item_no := PtrInt(para2);
+    if item_no = 1 then begin
+      Halt;
+    end;
+    WriteLn(item_no);
+
+    if dialog = nil then begin
+      dialog := XmCreateFileSelectionDialog(toplevel, 'file_sel', nil, 0);
+      XtAddCallback(dialog, XmNokCallback, @load_pimap,nil);
+      XtAddCallback(dialog, XmNcancelCallback, @unmanagechild,nil);
+      XtAddCallback(dialog, XmNhelpCallback, @FileHelp,nil);
+    end;
+
+    XtManageChild(dialog);
+    XtPopup(XtParent(dialog), XtGrabNone);
+  end;
+
   procedure change_color(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
   var
     dpy: PDisplay;
     cmap: TColormap;
-    item_no: integer;
     xcolor, unused: TXColor;
     widget: TWidget = nil;
+    item_no: PtrInt;
   begin
     dpy := XtDisplay(label1);
     cmap := DefaultColormapOfScreen(XtScreen(label1));
-    item_no := PtrUInt(para2);
+    item_no := PtrInt(para2);
     if (XAllocNamedColor(dpy, cmap, colors[item_no], @xcolor, @unused) = 0) or (cur_color = xcolor.pixel) then begin
       Exit;
     end;
@@ -101,7 +131,8 @@ var
 
   procedure main(argc: longint; argv: PPChar);
   var
-    main_w, menubar, menu, text_w, command_w, widget: TWidget;
+    main_w, menubar, menu, text_w, command_w:TWidget;
+    widget: TWidget=nil;
     app: TXtAppContext;
     file1, quit1, edit1, help1, open1, black1, red1, green1, blue1: TXmString;
     args: array[0..4] of TArg;
