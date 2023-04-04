@@ -47,8 +47,10 @@ char *argv[];
         XmNforeground, &fg,
         XmNbackground, &bg,
         NULL);
-    on = XmGetPixmap (XtScreen (rowcol), "switch_on.xpm", fg, bg);
-    off = XmGetPixmap (XtScreen (rowcol), "switch_off.xpm", fg, bg);
+//    on = XmGetPixmap (XtScreen (rowcol), "switch_on.xpm", fg, bg);
+//    off = XmGetPixmap (XtScreen (rowcol), "switch_off.xpm", fg, bg);
+    on = XmGetPixmap (XtScreen (rowcol), "Left", fg, bg);
+    off = XmGetPixmap (XtScreen (rowcol), "Right", fg, bg);
     if (on == XmUNSPECIFIED_PIXMAP || off == XmUNSPECIFIED_PIXMAP) {
         puts ("Couldn't load pixmaps");
         exit (1);

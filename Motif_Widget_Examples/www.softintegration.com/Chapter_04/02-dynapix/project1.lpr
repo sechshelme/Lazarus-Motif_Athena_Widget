@@ -3,6 +3,7 @@ program project1;
 uses
   heaptrc,
   Strings,
+  ctypes,
   xlib,
   x,
   XmXm,
@@ -11,8 +12,18 @@ uses
   XmMainW,
   XmCommand,
   XmText,
+  XmLabel,
+  XmMessageB,
   XTComposite,
   XTIntrinsic;
+
+const
+  colors: array[0..3] of PChar = ('Black', 'Red', 'Green', 'Blue');
+var
+  cur_color: culong;
+  toplevel, label1: TWidget;
+  cur_bitmap: array[0..1023] of char = 'xlogo64';
+
 
   procedure Press_Exit(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   begin
@@ -24,19 +35,77 @@ uses
 
   end;
 
-  procedure change_color(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  procedure load_pimap(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  var
+    cbs: PXmFileSelectionBoxCallbackStruct;
+    file1: PChar;
+    pixmap, old: TPixmap;
   begin
+    cbs := PXmFileSelectionBoxCallbackStruct(para3);
+    if cbs <> nil then begin
+      if not XmStringGetLtoR(cbs^.Value, XmFONTLIST_DEFAULT_TAG, @file1) then begin
+        WriteLn('Internal Error');
+        exit;
+      end;
+      XtFree(file1);
+    end;
 
+    pixmap := XmGetPixmap(XtScreen(toplevel), cur_bitmap, cur_color, WhitePixelOfScreen(XtScreen(toplevel)));
+    if pixmap = XmUNSPECIFIED_PIXMAP then begin
+      WriteLn('Can''t create pixmap from ', cur_bitmap);
+    end else begin
+      XtVaGetValues(label1, XmNlabelPixmap, @old, nil);
+      XmDestroyPixmap(XtScreen(toplevel), old);
+      XtVaSetValues(label1, XmNlabelType, XmPIXMAP, XmNlabelPixmap, pixmap, nil);
+      WriteLn('fdsfds');
+    end;
+  end;
+
+  procedure change_color(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  var
+    dpy: PDisplay;
+    cmap: TColormap;
+    item_no: integer;
+    xcolor, unused: TXColor;
+    widget: TWidget = nil;
+  begin
+    dpy := XtDisplay(label1);
+    cmap := DefaultColormapOfScreen(XtScreen(label1));
+    item_no := PtrUInt(para2);
+    if (XAllocNamedColor(dpy, cmap, colors[item_no], @xcolor, @unused) = 0) or (cur_color = xcolor.pixel) then begin
+      Exit;
+    end;
+    cur_color := xcolor.pixel;
+    load_pimap(widget, nil, nil);
+  end;
+
+  procedure hell_cp(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  const
+    ms = 'Use the FileSelection dialog to find bitmap files to' + #10 +
+      'display in the scrolling area in the main window.  Use' + #10 +
+      'the edit menu to display the bitmap in different colors.';
+
+    dialog: TWidget = nil;
+  var
+    msg: TXmString;
+    args: array[0..0] of TArg;
+  begin
+    if dialog = nil then begin
+      msg := XmStringCreateLtoR(ms, XmFONTLIST_DEFAULT_TAG);
+      XtSetArg(args[0], XmNmessageString, msg);
+      dialog := XmCreateInformationDialog(toplevel, 'help_dialog', args, 1);
+    end;
+    XtManageChild(dialog);
+    XtPopup(XtParent(dialog), XtGrabNone);
   end;
 
   procedure main(argc: longint; argv: PPChar);
   var
-    toplevel, main_w, menubar, menu, text_w, command_w, widget: TWidget;
+    main_w, menubar, menu, text_w, command_w, widget: TWidget;
     app: TXtAppContext;
     file1, quit1, edit1, help1, open1, black1, red1, green1, blue1: TXmString;
     args: array[0..4] of TArg;
-  const
-    collors: array[0..3] of PChar = ('Black', 'Red', 'Green', 'Blue');
+    pixmap: TPixmap;
   begin
     XtSetLanguageProc(nil, nil, nil);
 
@@ -48,11 +117,14 @@ uses
     edit1 := XmStringCreateLocalized('Edit');
     help1 := XmStringCreateLocalized('Help');
 
-    menubar := XmVaCreateSimpleMenuBar(main_w, 'menubar', XmVaCASCADEBUTTON, file1, 'F', XmVaCASCADEBUTTON, edit1, 'E', XmVaCASCADEBUTTON, help1, 'H', nil);
+    menubar := XmVaCreateSimpleMenuBar(main_w, 'menubar',
+      XmVaCASCADEBUTTON, file1, 'F',
+      XmVaCASCADEBUTTON, edit1, 'E',
+      XmVaCASCADEBUTTON, help1, 'H', nil);
     XmStringFree(file1);
     XmStringFree(edit1);
 
-    if widget = XtNameToWidget(menubar, 'buton_2') then begin
+    if widget = XtNameToWidget(menubar, 'button_2') then begin
       XtVaSetValues(menubar, XmNmenuHelpWidget, widget, nil);
     end;
 
@@ -65,10 +137,10 @@ uses
     XmStringFree(open1);
     XmStringFree(quit1);
 
-    black1 := XmStringCreateLocalized(collors[0]);
-    red1 := XmStringCreateLocalized(collors[1]);
-    green1 := XmStringCreateLocalized(collors[2]);
-    blue1 := XmStringCreateLocalized(collors[3]);
+    black1 := XmStringCreateLocalized(colors[0]);
+    red1 := XmStringCreateLocalized(colors[1]);
+    green1 := XmStringCreateLocalized(colors[2]);
+    blue1 := XmStringCreateLocalized(colors[3]);
 
     menu := XmVaCreateSimplePulldownMenu(menubar, 'edit_menu', 1, @change_color,
       XmVaRADIOBUTTON, black1, 'k', nil, nil,
@@ -78,34 +150,36 @@ uses
       XmNradioBehavior, True,
       XmNradioAlwaysOne, True, nil);
 
-
     XmStringFree(black1);
     XmStringFree(red1);
     XmStringFree(green1);
     XmStringFree(blue1);
 
+    if widget = XtNameToWidget(menubar, 'button_0') then begin
+      XtVaSetValues(widget, XmNset, True, nil);
+    end;
 
+    XmVaCreateSimplePulldownMenu(menubar, 'help_menu', 2, @hell_cp, XmVaPUSHBUTTON, help1, 'H', nil, nil, nil);
+    XmStringFree(help1);
 
     XtManageChild(menubar);
 
-    XtSetArg(args[0], XmNrows, 24);
-    XtSetArg(args[1], XmNcolumns, 80);
-    XtSetArg(args[2], XmNeditable, False);
-    XtSetArg(args[3], XmNeditMode, XmMULTI_LINE_EDIT);
+    if argv[1] <> nil then begin
+      strcopy(cur_bitmap, argv[1]);
+    end;
+    cur_color := BlackPixelOfScreen(XtScreen(toplevel));
 
-    text_w := XmCreateScrolledText(main_w, 'text_w', args, 4);
-    XtManageChild(text_w);
+    pixmap := XmGetPixmap(XtScreen(toplevel), cur_bitmap, cur_color, WhitePixelOfScreen(XtScreen(toplevel)));
 
-    XtVaSetValues(menu, XmNuserData, text_w, nil);
+    if pixmap = XmUNSPECIFIED_PIXMAP then begin
+      WriteLn('can''t create initial pixmap');
+      Halt(1);
+    end;
 
-    file1 := XmStringCreateLocalized('Command');
-    command_w := XtVaCreateWidget('command_w', xmCommandWidgetClass, main_w, XmNpromptString, file1, nil);
-    XtManageChild(command_w);
-    XmStringFree(file1);
+    label1 := XtVaCreateManagedWidget('label', xmLabelWidgetClass, main_w, XmNlabelType, XmPIXMAP, XmNlabelPixmap, pixmap, nil);
 
-    //    XtAddCallback(command_w, XmNcommandEnteredCallback, @exec_cmd, text_w);
+    XtVaSetValues(main_w, XmNmenuBar, menubar, XmNworkWindow, label1, nil);
 
-    XmMainWindowSetAreas(main_w, menubar, command_w, nil, nil, XtParent(text_w));
     XtRealizeWidget(toplevel);
     XtAppMainLoop(app);
   end;

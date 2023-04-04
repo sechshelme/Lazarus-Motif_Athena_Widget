@@ -15,11 +15,16 @@ var
   procedure On_Click(w: TWidget; client: TXtPointer; call: TXtPointer); cdecl;
   var
     Caption: PChar;
+//    name:array[0..15] of Char;
+name:PChar;
     s: string;
   begin
     XtVaGetValues(w, XtNlabel, @Caption, nil);
+    XtVaGetValues(w, XtNname, name, nil);
     s := 'Es wurde der Button: "' + Caption + '" gedrueckt';
     WriteLn(s);
+//    WriteLn(name);
+//    WriteLn(Length(name));
     XtVaSetValues(label1, XtNlabel, PChar(s));
   end;
 
@@ -37,7 +42,7 @@ var
     XtAddCallback(button1, XtNcallback, @On_Click, nil);
 
     button2 := XtCreateManagedWidget('Buttton 2', commandWidgetClass, box, nil, 0);
-    XtVaSetValues(button2, XtNbackground, $FF8888, nil);
+    XtVaSetValues(button2, XtNbackground, $FF8888,XtNname,PChar('1234'), nil);
     XtAddCallback(button2, XtNcallback, @On_Click, nil);
 
     button3 := XtCreateManagedWidget('Buttton 3', commandWidgetClass, box, nil, 0);
