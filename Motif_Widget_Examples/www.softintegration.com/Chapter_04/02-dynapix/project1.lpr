@@ -26,11 +26,6 @@ var
   cur_bitmap: array[0..1023] of char = 'xlogo64';
 
 
-  procedure Press_Exit(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
-  begin
-    Halt;
-  end;
-
   procedure load_pimap(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
   var
     cbs: PXmFileSelectionBoxCallbackStruct;
@@ -43,7 +38,7 @@ var
         WriteLn('Internal Error');
         exit;
       end;
-      strcopy(cur_bitmap,file1);
+      strcopy(cur_bitmap, file1);
       XtFree(file1);
     end;
 
@@ -58,13 +53,12 @@ var
     end;
   end;
 
-procedure unmanagechild(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
-begin
-   XtUnmanageChild(para1);
-end;
+  procedure unmanagechild(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  begin
+    XtUnmanageChild(para1);
+  end;
 
-  procedure FileHelp(para1: TWidget; para2: TXtPointer; para3: TXtPointer);
-    cdecl;
+  procedure FileHelp(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
   begin
     WriteLn('Hilfe zur Dateien');
   end;
@@ -82,9 +76,9 @@ end;
 
     if dialog = nil then begin
       dialog := XmCreateFileSelectionDialog(toplevel, 'file_sel', nil, 0);
-      XtAddCallback(dialog, XmNokCallback, @load_pimap,nil);
-      XtAddCallback(dialog, XmNcancelCallback, @unmanagechild,nil);
-      XtAddCallback(dialog, XmNhelpCallback, @FileHelp,nil);
+      XtAddCallback(dialog, XmNokCallback, @load_pimap, nil);
+      XtAddCallback(dialog, XmNcancelCallback, @unmanagechild, nil);
+      XtAddCallback(dialog, XmNhelpCallback, @FileHelp, nil);
     end;
 
     XtManageChild(dialog);
@@ -131,8 +125,8 @@ end;
 
   procedure main(argc: longint; argv: PPChar);
   var
-    main_w, menubar, menu, text_w, command_w:TWidget;
-    widget: TWidget=nil;
+    main_w, menubar, menu, text_w, command_w: TWidget;
+    widget: TWidget = nil;
     app: TXtAppContext;
     file1, quit1, edit1, help1, open1, black1, red1, green1, blue1: TXmString;
     args: array[0..4] of TArg;
