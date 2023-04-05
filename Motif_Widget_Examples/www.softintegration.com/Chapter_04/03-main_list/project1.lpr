@@ -13,8 +13,6 @@ uses
   XmCommand,
   XmText,
   XmList,
-  XmMessageB,
-  XmFileSB,
   XTComposite,
   XTIntrinsic;
 
@@ -23,7 +21,7 @@ uses
     toplevel, main_w, list_w: TWidget;
     app: TXtAppContext;
   const
-    ListData= 'Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag';
+    ListData = 'Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag';
   begin
     XtSetLanguageProc(nil, nil, nil);
 
@@ -31,20 +29,17 @@ uses
 
     main_w := XtVaCreateManagedWidget('main_window', xmMainWindowWidgetClass, toplevel, nil);
 
-    list_w:=XmCreateScrolledList(main_w,'main_list',nil,0);
+    list_w := XmCreateScrolledList(main_w, 'main_list', nil, 0);
 
     XtVaSetValues(list_w,
-    XtVaTypedArg, XmNitems,
-//    XmRString,ListData,Length(ListData),
-    XmRString,ListData,53,
-    XmNitemCount,7,
-    XmNvisibleItemCount,5,
-    nil);
-
+      XtVaTypedArg, XmNitems,
+      XmRString, ListData, 53,
+      XmNitemCount, 7,
+      XmNvisibleItemCount, 5, nil);
 
     XtManageChild(list_w);
 
-    XtVaSetValues(main_w,XmNworkWindow,XtParent(list_w),nil);
+    XtVaSetValues(main_w, XmNworkWindow, XtParent(list_w), nil);
 
     XtRealizeWidget(toplevel);
     XtAppMainLoop(app);
