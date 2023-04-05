@@ -103,7 +103,7 @@ var
     load_pimap(widget, nil, nil);
   end;
 
-  procedure hell_cp(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  procedure help_cp(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
   const
     ms = 'Use the FileSelection dialog to find bitmap files to' + #10 +
       'display in the scrolling area in the main window.  Use' + #10 +
@@ -149,7 +149,8 @@ var
     XmStringFree(file1);
     XmStringFree(edit1);
 
-    if widget = XtNameToWidget(menubar, 'button_2') then begin
+    widget := XtNameToWidget(menubar, 'button_2');
+    if widget <> nil then begin
       XtVaSetValues(menubar, XmNmenuHelpWidget, widget, nil);
     end;
 
@@ -180,11 +181,12 @@ var
     XmStringFree(green1);
     XmStringFree(blue1);
 
-    if widget = XtNameToWidget(menubar, 'button_0') then begin
+    widget := XtNameToWidget(menubar, 'button_0');
+    if widget <> nil then begin
       XtVaSetValues(widget, XmNset, True, nil);
     end;
 
-    XmVaCreateSimplePulldownMenu(menubar, 'help_menu', 2, @hell_cp, XmVaPUSHBUTTON, help1, 'H', nil, nil, nil);
+    XmVaCreateSimplePulldownMenu(menubar, 'help_menu', 2, @help_cp, XmVaPUSHBUTTON, help1, 'H', nil, nil, nil);
     XmStringFree(help1);
 
     XtManageChild(menubar);

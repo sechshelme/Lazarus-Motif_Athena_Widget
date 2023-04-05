@@ -103,7 +103,7 @@ var
     load_pimap(widget, nil, nil);
   end;
 
-  procedure hell_cp(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  procedure help_cp(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
   const
     ms = 'Use the FileSelection dialog to find bitmap files to' + #10 +
       'display in the scrolling area in the main window.  Use' + #10 +
@@ -113,12 +113,25 @@ var
   var
     msg: TXmString;
     args: array[0..0] of TArg;
+    w: TWidget;
   begin
     if dialog = nil then begin
       msg := XmStringCreateLtoR(ms, XmFONTLIST_DEFAULT_TAG);
       XtSetArg(args[0], XmNmessageString, msg);
       dialog := XmCreateInformationDialog(toplevel, 'help_dialog', args, 1);
     end;
+    w := XtNameToWidget(dialog, '*.OK');
+    if w <> nil then begin
+      WriteLn('gefunden');
+      XtVaSetValues( w,XmNbackground,$FF0000,nil);
+    end;
+
+    w := XtNameToWidget(dialog, '*.Cancel');
+    if w <> nil then begin
+      WriteLn('gefunden');
+      XtVaSetValues( w,XmNbackground,$00FF00,nil);
+    end;
+
     XtManageChild(dialog);
     XtPopup(XtParent(dialog), XtGrabNone);
   end;
@@ -185,11 +198,12 @@ var
     XmStringFree(green1);
     XmStringFree(blue1);
 
-    if widget = XtNameToWidget(menubar, 'button_0') then begin
-      XtVaSetValues(widget, XmNset, True, nil);
+    widget := XtNameToWidget(menubar, 'button_0');
+    if widget <> nil then begin
+      XtVaSetValues(widget, XmNset, False, nil);
     end;
 
-    XmVaCreateSimplePulldownMenu(menubar, 'help_menu', 2, @hell_cp, XmVaPUSHBUTTON, help1, 'H', nil, nil, nil);
+    XmVaCreateSimplePulldownMenu(menubar, 'help_menu', 2, @help_cp, XmVaPUSHBUTTON, help1, 'H', nil, nil, nil);
     XmStringFree(help1);
 
     XtManageChild(menubar);
