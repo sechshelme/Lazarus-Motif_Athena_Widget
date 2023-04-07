@@ -85,7 +85,7 @@ var
     XtPopup(XtParent(dialog), XtGrabNone);
   end;
 
-  procedure change_color(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  procedure change_color(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var
     dpy: PDisplay;
     cmap: TColormap;
@@ -95,7 +95,7 @@ var
   begin
     dpy := XtDisplay(label1);
     cmap := DefaultColormapOfScreen(XtScreen(label1));
-    item_no := PtrInt(para2);
+    item_no := PtrInt(client_data);
     if (XAllocNamedColor(dpy, cmap, colors[item_no], @xcolor, @unused) = 0) or (cur_color = xcolor.pixel) then begin
       Exit;
     end;
@@ -103,9 +103,10 @@ var
     load_pimap(widget, nil, nil);
   end;
 
-  procedure help_cp(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  procedure help_cp(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   const
-    ms = 'Use the FileSelection dialog to find bitmap files to' + #10 +
+    ms =
+      'Use the FileSelection dialog to find bitmap files to' + #10 +
       'display in the scrolling area in the main window.  Use' + #10 +
       'the edit menu to display the bitmap in different colors.';
 
@@ -113,23 +114,23 @@ var
   var
     msg: TXmString;
     args: array[0..0] of TArg;
-    w: TWidget;
+    widget: TWidget;
   begin
     if dialog = nil then begin
       msg := XmStringCreateLtoR(ms, XmFONTLIST_DEFAULT_TAG);
       XtSetArg(args[0], XmNmessageString, msg);
       dialog := XmCreateInformationDialog(toplevel, 'help_dialog', args, 1);
     end;
-    w := XtNameToWidget(dialog, '*.OK');
-    if w <> nil then begin
+    widget := XtNameToWidget(dialog, '*.OK');
+    if widget <> nil then begin
       WriteLn('gefunden');
-      XtVaSetValues( w,XmNbackground,$FF0000,nil);
+      XtVaSetValues(widget, XmNbackground, $FF0000, nil);
     end;
 
-    w := XtNameToWidget(dialog, '*.Cancel');
-    if w <> nil then begin
+    widget := XtNameToWidget(dialog, '*.Cancel');
+    if widget <> nil then begin
       WriteLn('gefunden');
-      XtVaSetValues( w,XmNbackground,$00FF00,nil);
+      XtVaSetValues(widget, XmNbackground, $00FF00, nil);
     end;
 
     XtManageChild(dialog);

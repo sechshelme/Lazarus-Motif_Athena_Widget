@@ -96,7 +96,7 @@ uses
     wargs: array[0..3] of TArg;
 
     colargs: array of TArg = ((Name: XtNbackground;
-      valueI: $FF00), (Name: XtNforeground; valueI: $FFFF00), (Name: XtNlabel; valueP: '$FFFF00'));
+      valueI: $FF00), (Name: XtNforeground; valueI: $FFFF00), (Name: XtNlabel; valuePC: '$FFFF00'));
     app: TXtAppContext;
 
   begin

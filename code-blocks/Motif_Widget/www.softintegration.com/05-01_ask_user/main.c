@@ -140,7 +140,7 @@ int default_ans;
         XmNcancelLabelString,  no,
         XmNdefaultButtonType,  default_ans == YES ?
             XmDIALOG_OK_BUTTON : XmDIALOG_CANCEL_BUTTON,
-        NULL);
+        FALSE);
     XmStringFree (text);
     XmStringFree (yes);
     XmStringFree (no);

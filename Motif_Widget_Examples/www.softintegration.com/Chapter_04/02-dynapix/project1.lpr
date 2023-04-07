@@ -26,13 +26,13 @@ var
   cur_bitmap: array[0..1023] of char = 'xlogo64';
 
 
-  procedure load_pimap(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  procedure load_pimap(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var
     cbs: PXmFileSelectionBoxCallbackStruct;
     file1: PChar;
     pixmap, old: TPixmap;
   begin
-    cbs := PXmFileSelectionBoxCallbackStruct(para3);
+    cbs := PXmFileSelectionBoxCallbackStruct(call_data);
     if cbs <> nil then begin
       if not XmStringGetLtoR(cbs^.Value, XmFONTLIST_DEFAULT_TAG, @file1) then begin
         WriteLn('Internal Error');
@@ -53,22 +53,22 @@ var
     end;
   end;
 
-  procedure unmanagechild(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  procedure unmanagechild(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   begin
-    XtUnmanageChild(para1);
+    XtUnmanageChild(w);
   end;
 
-  procedure FileHelp(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  procedure FileHelp(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   begin
     WriteLn('Hilfe zur Dateien');
   end;
 
-  procedure file_cb(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  procedure file_cb(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var
     item_no: PtrInt;
     dialog: TWidget = nil;
   begin
-    item_no := PtrInt(para2);
+    item_no := PtrInt(client_data);
     if item_no = 1 then begin
       Halt;
     end;
@@ -85,7 +85,7 @@ var
     XtPopup(XtParent(dialog), XtGrabNone);
   end;
 
-  procedure change_color(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  procedure change_color(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var
     dpy: PDisplay;
     cmap: TColormap;
@@ -95,7 +95,7 @@ var
   begin
     dpy := XtDisplay(label1);
     cmap := DefaultColormapOfScreen(XtScreen(label1));
-    item_no := PtrInt(para2);
+    item_no := PtrInt(client_data);
     if (XAllocNamedColor(dpy, cmap, colors[item_no], @xcolor, @unused) = 0) or (cur_color = xcolor.pixel) then begin
       Exit;
     end;
@@ -103,7 +103,7 @@ var
     load_pimap(widget, nil, nil);
   end;
 
-  procedure help_cp(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  procedure help_cp(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   const
     ms = 'Use the FileSelection dialog to find bitmap files to' + #10 +
       'display in the scrolling area in the main window.  Use' + #10 +

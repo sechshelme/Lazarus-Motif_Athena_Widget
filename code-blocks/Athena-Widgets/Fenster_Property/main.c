@@ -17,23 +17,13 @@ int main(int argc, char **argv) {
     command = XtCreateManagedWidget("Hello World !", commandWidgetClass, toplevel, NULL, 0);
     XtAddCallback(command, XtNcallback, quit, NULL);
 
-    int i = 0;
-    XtSetArg(wargs[i], XtNwidth, 320);
-    i++;
+    XtSetArg(wargs[0], XtNwidth, 320);
+    XtSetArg(wargs[1], XtNheight, 200);
+    XtSetArg(wargs[2], XtNlabel, "Click = Quit");
+    XtSetArg(wargs[3], XtNbackground, 0xFF);
+    XtSetArg(wargs[4], XtNforeground, 0xFFFFFF);
 
-    XtSetArg(wargs[i], XtNheight, 200);
-    i++;
-
-    XtSetArg(wargs[i], XtNlabel, "Click = Quit");
-    i++;
-
-    XtSetArg(wargs[i], XtNbackground, 0xFF);
-    i++;
-
-    XtSetArg(wargs[i], XtNforeground, 0xFFFFFF);
-    i++;
-
-    XtSetValues(command, wargs, i);
+    XtSetValues(command, wargs, 5);
 
     XtRealizeWidget(toplevel);
 

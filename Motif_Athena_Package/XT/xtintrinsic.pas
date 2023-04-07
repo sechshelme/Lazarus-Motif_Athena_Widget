@@ -244,7 +244,7 @@ type
   TXtConvertArgList = PXtConvertArgRec;
   PXtConvertArgList = ^TXtConvertArgList;
 
-  TXtConvertArgProc = procedure(para1: TWidget; para2: PCardinal; para3: PXrmValue); cdecl;
+  TXtConvertArgProc = procedure(object_: TWidget; size: PCardinal; value_return: PXrmValue); cdecl;
 
   PXtWidgetGeometry = ^TXtWidgetGeometry;
   TXtWidgetGeometry = record
@@ -315,9 +315,10 @@ type
   TArg = record
     Name: TString;
     case byte of
-      0: (valueP: PChar);
-      1: (valueI: LongInt);
-      2: (valueB: Boolean);
+      0: (valueP: Pointer);
+      1: (valuePC: PChar);
+      2: (valueI: LongInt);
+      3: (valueB: Boolean);
   end;
   TArgList = ^TArg;
   PArgList = ^TArgList;
@@ -328,7 +329,7 @@ type
   PXtVarArgsList = ^TXtVarArgsList;
   TXtVarArgsList = TXtPointer;
 
-  TXtCallbackProc = procedure(para1: TWidget; para2: TXtPointer; para3: TXtPointer); cdecl;
+  TXtCallbackProc = procedure(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
 
   PXtCallbackRec = ^TXtCallbackRec;
   TXtCallbackRec = record
@@ -601,9 +602,10 @@ function XtGetClassExtension(para1: TWidgetClass; para2: TCardinal; para3: TXrmQ
  *
  *************************************************************** }
 
-procedure XtSetArg(var arg: TArg; n: TXtString; pc: PChar);
-procedure XtSetArg(var arg: TArg; n: TXtString; int: PtrInt);
-procedure XtSetArg(var arg: TArg; n: TXtString; bol: TBoolean);
+procedure XtSetArg(var arg: TArg; n: TXtString; pc: PChar); overload; inline;
+procedure XtSetArg(var arg: TArg; n: TXtString; p: Pointer); overload; inline;
+procedure XtSetArg(var arg: TArg; n: TXtString; int: PtrInt); overload; inline;
+procedure XtSetArg(var arg: TArg; n: TXtString; bol: TBoolean); overload; inline;
 
 function XtMergeArgLists(para1: TArgList; para2: TCardinal; para3: TArgList; para4: TCardinal): TArgList; cdecl; external libXt;
 {**************************************************************
@@ -1020,7 +1022,13 @@ end;
 procedure XtSetArg(var arg: TArg; n: TXtString; pc: PChar);
 begin
   arg.Name := n;
-  arg.valueP := pc;
+  arg.valuePC := pc;
+end;
+
+procedure XtSetArg(var arg: TArg; n: TXtString; p: Pointer);
+begin
+  arg.Name := n;
+  arg.valueP := p;
 end;
 
 procedure XtSetArg(var arg: TArg; n: TXtString; int: PtrInt);
