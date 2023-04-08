@@ -1,5 +1,8 @@
 program project1;
 
+//{$MODESWITCH ADVANCEDRECORDS}
+{$modeswitch typehelpers}
+
 uses
   XawCommand,
   XTStringdefs,
@@ -11,6 +14,39 @@ uses
 
 var
   label1: TWidget;
+
+type
+  TArgs = array of TArg;
+  TArgsHelper = type helper for TArgs
+    procedure Add(n: TXtString; i: ptrint);
+    function GetPointer: PArg;
+    function GetLength: SizeInt;
+  end;
+
+  procedure TArgsHelper.Add(n: TXtString; i: ptrint);
+  var
+    l: SizeInt;
+  begin
+    l := Length(Self);
+    SetLength(self, l + 1);
+    self[l].valueI := i;
+    self[l].Name := n;
+  end;
+
+  function TArgsHelper.GetPointer: PArg;
+  begin
+    if Length(Self) = 0 then begin
+      Result := nil;
+    end else begin
+      Result := @self[0];
+    end;
+  end;
+
+  function TArgsHelper.GetLength: SizeInt;
+  begin
+    Result := Length(Self);
+  end;
+
 
   procedure On_Click(w: TWidget; client: TXtPointer; call: TXtPointer); cdecl;
   var
@@ -32,20 +68,33 @@ var
   var
     toplevel, button1, button2, box, button3: TWidget;
     app: TXtAppContext;
+    argsta: array[0..7] of TArg;
+    argdyn: TArgs = nil;
   begin
     toplevel := XtVaAppInitialize(@app, 'noname', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
 
     box := XtCreateManagedWidget('box', boxWidgetClass, toplevel, nil, 0);
     XtVaSetValues(box, XtNorientation, XtEhorizontal, nil);
 
-    button1 := XtCreateManagedWidget('Buttton 1', commandWidgetClass, box, nil, 0);
+    XtSetArg(argsta[0], XtNwidth, 100);
+    XtSetArg(argsta[1], XtNheight, 33);
+    XtSetArg(argsta[2], XtNbackground, $88FF88);
+    XtSetArg(argsta[3], XtNforeground, $FFFFFF);
+
+    button1 := XtCreateManagedWidget('Buttton 1', commandWidgetClass, box, argsta, 4);
     XtAddCallback(button1, XtNcallback, @On_Click, nil);
 
     button2 := XtCreateManagedWidget('Buttton 2', commandWidgetClass, box, nil, 0);
     XtVaSetValues(button2, XtNbackground, $FF8888, XtNname, PChar('1234'), nil);
     XtAddCallback(button2, XtNcallback, @On_Click, nil);
 
-    button3 := XtCreateManagedWidget('Buttton 3', commandWidgetClass, box, nil, 0);
+    argdyn.Add(XtNwidth, 75);
+    argdyn.Add(XtNheight, 25);
+    argdyn.Add(XtNbackground, $FF8888);
+    argdyn.Add(XtNforeground, $FFFFFFF);
+
+    button3 := XtCreateManagedWidget('Buttton 3', commandWidgetClass, box, argdyn.GetPointer, argdyn.GetLength);
+
     XtAddCallback(button3, XtNcallback, @On_Click, nil);
 
     label1 := XtCreateManagedWidget('', labelWidgetClass, box, nil, 0);
