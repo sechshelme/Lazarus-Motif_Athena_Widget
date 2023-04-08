@@ -17,10 +17,14 @@ var
 
 type
   TArgs = array of TArg;
+
+  { TArgsHelper }
+
   TArgsHelper = type helper for TArgs
+  public
     procedure Add(n: TXtString; i: ptrint);
-    function GetPointer: PArg;
-    function GetLength: SizeInt;
+    function Ptr: PArg;
+    function Count: SizeInt;
   end;
 
   procedure TArgsHelper.Add(n: TXtString; i: ptrint);
@@ -33,7 +37,7 @@ type
     self[l].Name := n;
   end;
 
-  function TArgsHelper.GetPointer: PArg;
+  function TArgsHelper.Ptr: PArg;
   begin
     if Length(Self) = 0 then begin
       Result := nil;
@@ -42,7 +46,7 @@ type
     end;
   end;
 
-  function TArgsHelper.GetLength: SizeInt;
+  function TArgsHelper.Count: SizeInt;
   begin
     Result := Length(Self);
   end;
@@ -93,7 +97,7 @@ type
     argdyn.Add(XtNbackground, $FF8888);
     argdyn.Add(XtNforeground, $FFFFFFF);
 
-    button3 := XtCreateManagedWidget('Buttton 3', commandWidgetClass, box, argdyn.GetPointer, argdyn.GetLength);
+    button3 := XtCreateManagedWidget('Buttton 3', commandWidgetClass, box, argdyn.Ptr, argdyn.Count);
 
     XtAddCallback(button3, XtNcallback, @On_Click, nil);
 
