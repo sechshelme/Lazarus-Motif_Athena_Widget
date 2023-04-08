@@ -83,7 +83,7 @@ type
     XtSetArg(argsta[0], XtNwidth, 100);
     XtSetArg(argsta[1], XtNheight, 33);
     XtSetArg(argsta[2], XtNbackground, $88FF88);
-    XtSetArg(argsta[3], XtNforeground, $FFFFFF);
+    XtSetArg(argsta[3], XtNforeground, $0088FF);
 
     button1 := XtCreateManagedWidget('Buttton 1', commandWidgetClass, box, argsta, 4);
     XtAddCallback(button1, XtNcallback, @On_Click, nil);

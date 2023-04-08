@@ -602,10 +602,10 @@ function XtGetClassExtension(para1: TWidgetClass; para2: TCardinal; para3: TXrmQ
  *
  *************************************************************** }
 
-procedure XtSetArg(var arg: TArg; n: TXtString; pc: PChar); overload; inline;
-procedure XtSetArg(var arg: TArg; n: TXtString; p: Pointer); overload; inline;
-procedure XtSetArg(var arg: TArg; n: TXtString; int: PtrInt); overload; inline;
-procedure XtSetArg(var arg: TArg; n: TXtString; bol: TBoolean); overload; inline;
+procedure XtSetArg(out arg: TArg; n: TXtString; pc: PChar); overload; inline;
+procedure XtSetArg(out arg: TArg; n: TXtString; p: Pointer); overload; inline;
+procedure XtSetArg(out arg: TArg; n: TXtString; int: PtrInt); overload; inline;
+procedure XtSetArg(out arg: TArg; n: TXtString; bol: TBoolean); overload; inline;
 
 function XtMergeArgLists(para1: TArgList; para2: TCardinal; para3: TArgList; para4: TCardinal): TArgList; cdecl; external libXt;
 {**************************************************************
@@ -1019,25 +1019,25 @@ begin
   XtIsShell := _XtCheckSubclassFlag(widget, TXtEnum($20));
 end;
 
-procedure XtSetArg(var arg: TArg; n: TXtString; pc: PChar);
+procedure XtSetArg(out arg: TArg; n: TXtString; pc: PChar);
 begin
   arg.Name := n;
   arg.valuePC := pc;
 end;
 
-procedure XtSetArg(var arg: TArg; n: TXtString; p: Pointer);
+procedure XtSetArg(out arg: TArg; n: TXtString; p: Pointer);
 begin
   arg.Name := n;
   arg.valueP := p;
 end;
 
-procedure XtSetArg(var arg: TArg; n: TXtString; int: PtrInt);
+procedure XtSetArg(out arg: TArg; n: TXtString; int: PtrInt);
 begin
   arg.Name := n;
   arg.valueI := int;
 end;
 
-procedure XtSetArg(var arg: TArg; n: TXtString; bol: TBoolean);
+procedure XtSetArg(out arg: TArg; n: TXtString; bol: TBoolean);
 begin
   arg.Name := n;
   arg.valueB := bol;
