@@ -323,7 +323,8 @@ type
   TArgList = ^TArg;
   PArgList = ^TArgList;
 
-  function XtNumber(arr: array of TArg): cardinal;
+//  function XtNumber(arr: array of TArg): cardinal;
+  function XtNumber(arr: array of const): cardinal;
 
 type
   PXtVarArgsList = ^TXtVarArgsList;
@@ -987,11 +988,11 @@ function XtCvtPixelToColor(para1: PDisplay; para2: TXrmValuePtr; para3: PCardina
 
 implementation
 
-function XtNumber(arr: array of TArg): cardinal;
+function XtNumber(arr: array of const): cardinal;
 begin
   //      XtNumber:=TCardinal((sizeof(arr))/(sizeof(arr[0])));
   XtNumber := (sizeof(arr)) div (sizeof(TArg));
-  Result := Length(arr);
+//  Result := Length(arr);
 end;
 
 function XtIsRectObj(widget: TWidget): boolean;
