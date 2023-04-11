@@ -32,21 +32,6 @@ type
   end;
   PActionAreaItem = ^TActionAreaItem;
 
-
-  procedure activate_cb(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
-  var
-    cbs: PXmAnyCallbackStruct;
-    action_area, dflt: TWidget;
-  begin
-    cbs := PXmAnyCallbackStruct(call_data);
-    action_area := TWidget(client_data);
-
-    XtVaGetValues(action_area, XmNdefaultButton, @dflt, nil);
-    if dflt <> nil then begin
-      XtCallActionProc(dflt, 'ArmAndActivate', cbs^.event, nil, 0);
-    end;
-  end;
-
   procedure ok_pushed(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var
     text_w: TWidget;
@@ -87,37 +72,15 @@ type
     Halt;
   end;
 
-  function CreateActionArea(parent: TWidget; actions: PActionAreaItem; num_actions: integer): TWidget;
+procedure CreateActionArea(dialog: TWidget; actions: PActionAreaItem; num_actions: integer);
   const
     TIGHTNESS = 20;
   var
-    action_area, widget: TWidget;
-    i, lAtt, rAtt: integer;
-    h, Height: TDimension;
+    widget: TWidget;
+    i: integer;
   begin
-    action_area := XtVaCreateWidget('action_area', xmFormWidgetClass, parent,
-      XmNfractionBase, TIGHTNESS * num_actions - 1,
-      XmNleftOffset, 10,
-      XmNrightOffset, 10,
-      nil);
     for i := 0 to num_actions - 1 do begin
-      if i <> 0 then  begin
-        lAtt := XmATTACH_POSITION;
-      end else begin
-        lAtt := XmATTACH_FORM;
-      end;
-      if not (i = num_actions - 1) then begin
-        rAtt := XmATTACH_POSITION;
-      end else begin
-        rAtt := XmATTACH_FORM;
-      end;
-      widget := XtVaCreateManagedWidget(actions[i].label_, xmPushButtonWidgetClass, action_area,
-        XmNleftAttachment, lAtt,
-        XmNleftPosition, TIGHTNESS * i,
-        XmNtopAttachment, XmATTACH_FORM,
-        XmNbottomAttachment, XmATTACH_FORM,
-        XmNrightAttachment, rAtt,
-        XmNrightPosition, TIGHTNESS * i + (TIGHTNESS - 1),
+      widget := XtVaCreateManagedWidget(actions[i].label_, xmPushButtonWidgetClass, dialog,
         XmNshowAsDefault, integer(i = 0),
         XmNdefaultButtonShadowThickness, 1,
         nil);
@@ -125,19 +88,11 @@ type
         XtAddCallback(widget, XmNactivateCallback, actions[i].callback, actions[i].Data);
       end;
       if i = 0 then  begin
-        XtVaGetValues(action_area, XmNmarginHeight, @h, nil);
-        XtVaGetValues(widget, XmNheight, @Height, nil);
-        Inc(Height, 2 * h);
-        XtVaSetValues(action_area,
+        XtVaSetValues(dialog,
           XmNdefaultButton, widget,
-          XmNpaneMaximum, Height,
-          XmNpaneMinimum, Height,
           nil);
       end;
     end;
-
-    XtManageChild(action_area);
-    Result := action_area;
   end;
 
   procedure do_dialog(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
@@ -150,21 +105,20 @@ type
       (label_: 'Cancel'; callback: @close_dialog; Data: nil),
       (label_: 'Help'; callback: @help; Data: @Hilfe_Text));
   var
-    dialog, pane, rc, text_w, action_a: TWidget;
+    dialog, rc, text_w: TWidget;
     string_: TXmString;
+    args:array[0..4]of TArg;
   begin
 
-    dialog := XtVaCreatePopupShell('dialog', xmDialogShellWidgetClass, XtParent(w),
-      XmNtitle, 'Dialog Shell',
-      XmNdeleteResponse, XmDESTROY, nil);
+    string_:=XmStringCreateLocalized('Dialog Shell');
+    XtSetArg(args[0],XmNdialogTitle,string_);
+    XtSetArg(args[1],XmNautoUnmanage,False);
+    dialog := XmCreateTemplateDialog(XtParent(w),'dialog', args, 2);
+    XmStringFree(string_);
 
     action_items[2].Data := TXtPointer(dialog);
 
-    pane := XtVaCreateWidget('pane', xmPanedWindowWidgetClass, dialog,
-      XmNsashWidth, 1,
-      XmNsashHeight, 1, nil);
-
-    rc := XtVaCreateWidget('rowcol', xmRowColumnWidgetClass, pane, nil);
+    rc := XtVaCreateWidget('control_area', xmRowColumnWidgetClass, dialog, nil);
     string_ := XmStringCreateLocalized('Type Something:');
     XtVaCreateManagedWidget('label', xmLabelGadgetClass, rc,
       XmNlabelString, string_, nil);
@@ -177,12 +131,11 @@ type
     action_items[0].Data := TXtPointer(text_w);
     action_items[1].Data := TXtPointer(text_w);
 
-    //        action_a:=CreateActionArea(pane,@action_items,XtNumber(action_items));
-    action_a := CreateActionArea(pane, action_items, Length(action_items));
-    XtAddCallback(text_w, XmNactivateCallback, @activate_cb, action_a);
+    //        CreateActionArea(pane,@action_items,XtNumber(action_items));
+     CreateActionArea(dialog, action_items, Length(action_items));
 
-    XtManageChild(pane);
-    XtPopup(dialog, XtGrabNone);
+    XtManageChild(dialog);
+    XtPopup(XtParent( dialog), XtGrabNone);
   end;
 
   procedure main(argc: longint; argv: PPChar);
