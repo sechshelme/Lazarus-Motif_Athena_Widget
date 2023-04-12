@@ -24,15 +24,77 @@ uses
   XTComposite,
   XTIntrinsic;
 
-  procedure file_cb(w: TWidget; client_data: TXtPointer; call_data: TXtPointer
-    ); cdecl;
+  procedure file_cb(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
+  var
+    item_no: PtrUInt;
   begin
-
+    item_no := PtrUInt(client_data);
+    WriteLn('Item ', item_no + 1, ' (', XtName(w), ') selected'#10);
+    if item_no = 2 then begin
+      Halt;
+    end;
   end;
 
-  procedure help_cb(w: TWidget; client_data: TXtPointer; call_data: TXtPointer
-    ); cdecl;
+  function GetTopShell(w: TWidget): TWidget;
   begin
+    //    while (w <> nil) and not XtIsWMShell(w) do begin
+    if w = nil then begin
+      WriteLn('nil');
+    end;
+    //    while not (w <> nil) and not _XtCheckSubclassFlag(w, TXtEnum($40)) do begin
+    while not (w <> nil) or not _XtCheckSubclassFlag(w, TXtEnum($40)) do begin
+      WriteLn('dsfdfsd');
+      w := XtParent(w);
+    end;
+    Result := w;
+  end;
+
+const
+  info_width = 32;
+  info_height = 32;
+  info_bits: array[0..128 - 1] of byte = (
+    $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00,
+    $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00,
+    $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00,
+    $00, $e0, $07, $00, $00, $f8, $1f, $00, $00, $7c, $3e, $00,
+    $00, $3e, $7c, $00, $00, $3f, $fc, $00, $00, $7f, $fe, $00,
+    $80, $ff, $ff, $01, $80, $1f, $fc, $01, $80, $3f, $fc, $01,
+    $80, $3f, $fc, $01, $80, $3f, $fc, $01, $80, $3f, $fc, $01,
+    $00, $3f, $fc, $00, $00, $1f, $f8, $00, $00, $fe, $7f, $00,
+    $00, $fc, $3f, $00, $00, $f8, $1f, $00, $00, $e0, $07, $00,
+    $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00,
+    $00, $00, $00, $00, $00, $00, $00, $00);
+
+  procedure help_cb(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
+  var
+    help_dialog, pane, form, label_: TWidget;
+    fg, bg: TPixel;
+    pixmap: TPixmap;
+  begin
+    help_dialog := XtVaCreatePopupShell('Help', xmDialogShellWidgetClass, GetTopShell(w),
+      XmNdeleteResponse, XmDESTROY, nil);
+
+    pane := XtVaCreateWidget('pane', xmPanedWindowWidgetClass, help_dialog,
+      XmNsashWidth, 1,
+      XmNsashHeight, 1, nil);
+
+    form := XtVaCreateWidget('form1', xmFormWidgetClass, pane, nil);
+    XtVaGetValues(form,
+      XmNforeground, @fg,
+      XmNbackground, @bg, nil);
+
+    pixmap := XCreatePixmapFromBitmapData(XtDisplay(form), RootWindowOfScreen(XtScreen(form)),
+      @info_bits, info_width, info_height, fg, bg, DefaultDepthOfScreen(XtScreen(form)));
+
+    label_:=XtVaCreateManagedWidget('label',xmLabelGadgetClass,form,
+    XmNlabelType,XmPIXMAP,
+    XmNlabelPixmap,pixmap,
+    XmNleftAttachment,XmATTACH_FORM,
+    XmNtopAttachment,XmATTACH_FORM,
+    XmNbottomAttachment,XmATTACH_FORM,
+    nil);
+
+    XtPopup(help_dialog, XtGrabNone);
 
   end;
 
