@@ -41,8 +41,7 @@ uses
     if w = nil then begin
       WriteLn('nil');
     end;
-    //    while not (w <> nil) and not _XtCheckSubclassFlag(w, TXtEnum($40)) do begin
-    while not (w <> nil) or not _XtCheckSubclassFlag(w, TXtEnum($40)) do begin
+    while not (w <> nil) or not XtIsWMShell(w) do begin
       WriteLn('dsfdfsd');
       w := XtParent(w);
     end;
