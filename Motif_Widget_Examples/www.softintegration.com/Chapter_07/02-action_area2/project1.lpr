@@ -72,7 +72,7 @@ type
     Halt;
   end;
 
-procedure CreateActionArea(dialog: TWidget; actions: PActionAreaItem; num_actions: integer);
+  procedure CreateActionArea(dialog: TWidget; actions: PActionAreaItem; num_actions: integer);
   const
     TIGHTNESS = 20;
   var
@@ -99,7 +99,7 @@ procedure CreateActionArea(dialog: TWidget; actions: PActionAreaItem; num_action
   const
     Hilfe_Text: array[0..30] of char = 'Hier sollte eine Hilfe kommen !';
 
-    action_items: array[0..3] of TActionAreaItem = (
+    action_items: array of TActionAreaItem = (
       (label_: 'OK'; callback: @ok_pushed; Data: nil),
       (label_: 'Clear'; callback: @clear_pushed; Data: nil),
       (label_: 'Cancel'; callback: @close_dialog; Data: nil),
@@ -107,13 +107,13 @@ procedure CreateActionArea(dialog: TWidget; actions: PActionAreaItem; num_action
   var
     dialog, rc, text_w: TWidget;
     string_: TXmString;
-    args:array[0..4]of TArg;
+    args: array[0..4] of TArg;
   begin
 
-    string_:=XmStringCreateLocalized('Dialog Shell');
-    XtSetArg(args[0],XmNdialogTitle,string_);
-    XtSetArg(args[1],XmNautoUnmanage,False);
-    dialog := XmCreateTemplateDialog(XtParent(w),'dialog', args, 2);
+    string_ := XmStringCreateLocalized('Dialog Shell');
+    XtSetArg(args[0], XmNdialogTitle, string_);
+    XtSetArg(args[1], XmNautoUnmanage, False);
+    dialog := XmCreateTemplateDialog(XtParent(w), 'dialog', args, 2);
     XmStringFree(string_);
 
     action_items[2].Data := TXtPointer(dialog);
@@ -131,11 +131,11 @@ procedure CreateActionArea(dialog: TWidget; actions: PActionAreaItem; num_action
     action_items[0].Data := TXtPointer(text_w);
     action_items[1].Data := TXtPointer(text_w);
 
-    //        CreateActionArea(pane,@action_items,XtNumber(action_items));
-     CreateActionArea(dialog, action_items, Length(action_items));
+    //        CreateActionArea(dialog,@action_items[0],XtNumber(action_items));
+    CreateActionArea(dialog, @action_items[0], Length(action_items));
 
     XtManageChild(dialog);
-    XtPopup(XtParent( dialog), XtGrabNone);
+    XtPopup(XtParent(dialog), XtGrabNone);
   end;
 
   procedure main(argc: longint; argv: PPChar);

@@ -192,7 +192,7 @@ Widget w;
 XtPointer client_data;
 XtPointer call_data;
 {
-    Widget help_dialog, pane, text_w, form, sep, widget, label;
+Widget help_dialog, pane, text_w, form, sep, widget, label;
     extern void DestroyShell();
     Pixmap pixmap;
     Pixel fg, bg;

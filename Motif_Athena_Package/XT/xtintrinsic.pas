@@ -990,9 +990,12 @@ implementation
 
 function XtNumber(arr: array of const): cardinal;
 begin
+
+
   //      XtNumber:=TCardinal((sizeof(arr))/(sizeof(arr[0])));
   XtNumber := (sizeof(arr)) div (sizeof(TArg));
-//  Result := Length(arr);
+  Result := Length(arr);
+  WriteLn(Result);
 end;
 
 function XtIsRectObj(widget: TWidget): boolean;
