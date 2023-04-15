@@ -46,10 +46,12 @@ uses
     push_button := TWidget(client_data);
     WriteLn('push  ', PtrInt(push_button));
     WriteLn('data  ', PtrInt(client_data));
-    cbs := PXmSelectionBoxCallbackStruct(call_data);
+    //    cbs := PXmSelectionBoxCallbackStruct(call_data);
     XtVaGetValues(w, XmNuserData, @n, nil);
     WriteLn('push  ', PtrInt(push_button));
     WriteLn('data  ', PtrInt(client_data));
+
+    exit;
 
     if n = 0 then begin
       XtVaSetValues(client_data, XmNlabelString, cbs^.Value, nil);
@@ -108,7 +110,6 @@ uses
     XmStringFree(t);
 
     XtAddCallback(dialog, XmNokCallback, @read_name, w);
-    WriteLn('pused  ', PtrInt(w));
     XtAddCallback(dialog, XmNcancelCallback, @DestroyWidget, nil);
 
     XtUnmanageChild(XmSelectionBoxGetChild(dialog, XmDIALOG_HELP_BUTTON));
@@ -120,13 +121,13 @@ uses
     btn1 := XmStringCreateLocalized('Change Name');
     btn2 := XmStringCreateLocalized('Change Color');
 
-    toggle_box := XmVaCreateSimpleRadioBox(dialog, 'radio_box', 0, @togggle_callback,
-      XmVaRADIOBUTTON, btn1, 0, nil, nil,
-      XmVaRADIOBUTTON, btn2, 0, nil, nil,
-      nil);
-    XmStringFree(btn1);
-    XmStringFree(btn2);
-    XtManageChild(toggle_box);
+    //toggle_box := XmVaCreateSimpleRadioBox(dialog, 'radio_box', 0, @togggle_callback,
+    //  XmVaRADIOBUTTON, btn1, 0, nil, nil,
+    //  XmVaRADIOBUTTON, btn2, 0, nil, nil,
+    //  nil);
+    //XmStringFree(btn1);
+    //XmStringFree(btn2);
+    //XtManageChild(toggle_box);
 
     XtManageChild(dialog);
     XtPopup(XtParent(dialog), XtGrabNone);
@@ -137,9 +138,12 @@ uses
     toplevel, button1, rc: TWidget;
     app: TXtAppContext;
   begin
+
     XtSetLanguageProc(nil, nil, nil);
 
     toplevel := XtVaAppInitialize(@app, 'Demos', nil, 0, @argc, argv, nil, nil);
+    read_name(toplevel, Pointer(1234), nil);
+
 
     rc := XtVaCreateWidget('rowcol', xmRowColumnWidgetClass, toplevel, nil);
 

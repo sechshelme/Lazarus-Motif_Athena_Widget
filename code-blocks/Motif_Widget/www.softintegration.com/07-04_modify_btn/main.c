@@ -45,6 +45,14 @@ char *argv[];
     /* Create two pushbuttons -- both have the same callback */
     button = XtVaCreateManagedWidget ("PushMe 1",
         xmPushButtonWidgetClass, rc, NULL);
+
+    XtVaSetValues (button,
+       XtVaTypedArg, XmNforeground,
+        XmRString, 'cyan', 0,
+            NULL);
+
+
+
     XtAddCallback (button, XmNactivateCallback, pushed, NULL);
     button = XtVaCreateManagedWidget ("PushMe 2",
         xmPushButtonWidgetClass, rc, NULL);
