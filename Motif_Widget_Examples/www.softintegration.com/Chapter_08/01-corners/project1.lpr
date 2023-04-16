@@ -69,11 +69,16 @@ const
       nil);
   end;
 
+  procedure enter(w: TWidget; event: PXEvent; params: PString;    num_params: PCardinal); cdecl;
+  begin
+    WriteLn('enter');
+  end;
+
   procedure main(argc: longint; argv: PPChar);
   var
     toplevel, bboard: TWidget;
     app: TXtAppContext;
-    rec: TXtActionsRec;
+    rec: array[0..1] of TXtActionsRec;
     i: integer;
   begin
     XtSetLanguageProc(nil, nil, nil);
@@ -82,11 +87,13 @@ const
 
     bboard := XtVaCreateManagedWidget('bboard', xmBulletinBoardWidgetClass, toplevel, nil);
 
-    rec._string := PChar('resize');
-    rec.proc := @resize;
+    rec[0]._string := PChar('resize');
+    rec[0].proc := @resize;
+    rec[1]._string := PChar('enter');
+    rec[1].proc := @enter;
 
-   XtAppAddActions(app, @rec, 1);
-    XtOverrideTranslations(bboard, XtParseTranslationTable(PChar(': resize()')));
+    XtAppAddActions(app, @rec, 2);
+    XtOverrideTranslations(bboard, XtParseTranslationTable('<Configure>: resize() '#10' <EnterWindow>: enter()'));
 
     for i := 0 to Length(corners) - 1 do begin
       XtVaCreateManagedWidget(corners[i], xmPushButtonWidgetClass, bboard, nil);

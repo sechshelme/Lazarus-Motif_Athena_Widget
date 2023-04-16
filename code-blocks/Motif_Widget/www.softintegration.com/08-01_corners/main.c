@@ -18,12 +18,14 @@
  */
 #include <Xm/BulletinB.h>
 #include <Xm/PushB.h>
+#include <stdio.h>
 
 char *corners[] = {
     "Top Left", "Top Right", "Bottom Left", "Bottom Right",
 };
 
 static void resize();
+static void enter();
 
 main(argc, argv)
 int argc;
@@ -31,14 +33,14 @@ char *argv[];
 {
     Widget toplevel, bboard;
     XtAppContext app;
-    XtActionsRec rec;
+    XtActionsRec rec[2];
     int i;
 
     XtSetLanguageProc (NULL, NULL, NULL);
 
     /* Initialize toolkit and create toplevel shell */
     toplevel = XtVaAppInitialize (&app, "Demos", NULL, 0,
-        &argc, argv, NULL, NULL);
+        &argc, argv, NULL, XmNwidth, 320, XmNheight, 320,  NULL);
 
     /* Create your standard BulletinBoard widget */
     bboard = XtVaCreateManagedWidget ("bboard",
@@ -48,12 +50,15 @@ char *argv[];
      * (also called ConfigureNotify or Configure events).  If the
      * event is generated, call the function resize().
      */
-    rec.string = "resize";
-    rec.proc = resize;
-    XtAppAddActions (app, &rec, 1);
+    rec[0].string = "resize";
+    rec[0].proc = resize;
+    rec[1].string = "enter";
+    rec[1].proc = enter;
+    XtAppAddActions (app, &rec, 2);
     XtOverrideTranslations (bboard,
-        XtParseTranslationTable (": nnnresize()"));
-
+        XtParseTranslationTable ("<Configure>: resize() \n <EnterWindow>: enter()   \n\0"));
+//        XtParseTranslationTable ("<EnterWindow>: enter()"));
+//
     /* Create children of the dialog -- a PushButton in each corner. */
     for (i = 0; i < XtNumber (corners); i++)
         XtVaCreateManagedWidget (corners[i],
@@ -61,6 +66,17 @@ char *argv[];
 
     XtRealizeWidget (toplevel);
     XtAppMainLoop (app);
+}
+
+static void
+enter(w, event, args, num_args)
+Widget w;
+XEvent *event;
+String args[];
+int *num_args;
+{
+  printf("Enter gedrückt\n");
+  XtVaSetValues(w, XmNbackground, 255, NULL);
 }
 
 /* resize(), the routine that is automatically called by Xt upon the
@@ -81,6 +97,9 @@ int *num_args; /* unused */
     int width = cevent->width;
     int height = cevent->height;
 
+//XtVaSetValues(w, XmNbackground, 255, NULL);
+
+
     /* get handle to BulletinBoard's children and marginal spacing */
     XtVaGetValues (w,
         XmNchildren, &children,
@@ -90,6 +109,7 @@ int *num_args; /* unused */
 
     /* place the top left widget */
     XtVaSetValues (children[0],
+        XmNbackground, 0xFF,
         XmNx, margin_w,
         XmNy, margin_h,
         NULL);
