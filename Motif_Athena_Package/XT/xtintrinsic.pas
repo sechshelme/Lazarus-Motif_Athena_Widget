@@ -199,7 +199,7 @@ type
   TModifiers = LongInt;
 
 
-  TXtActionProc = procedure(para1: TWidget; para2: PXEvent; para3: PString; para4: PCardinal); cdecl;
+  TXtActionProc = procedure(w: TWidget; event: PXEvent; params: PString; num_params: PCardinal); cdecl;
 
   PXtBoundActions = ^TXtBoundActions;
   TXtBoundActions = record
@@ -323,7 +323,7 @@ type
   TArgList = ^TArg;
   PArgList = ^TArgList;
 
-//  function XtNumber(arr: array of TArg): cardinal;
+// --- Anstelle von XTNumber(), Length() verwenden !! ---
   function XtNumber(arr: array of const): cardinal;
 
 type
