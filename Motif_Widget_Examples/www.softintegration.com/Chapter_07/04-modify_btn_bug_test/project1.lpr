@@ -25,7 +25,7 @@ uses
     dialog: TWidget;
   begin
     dialog := XmCreatePromptDialog(w, 'notice_popup', nil, 0);
-    XtVaSetValues(dialog, XmNuserData, 321);
+    XtVaSetValues(dialog, XmNuserData, 321, nil);
     XtAddCallback(dialog, XmNokCallback, @read_name, w); // Mit Fehler
 
     XtManageChild(dialog);

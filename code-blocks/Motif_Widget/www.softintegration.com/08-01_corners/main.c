@@ -26,6 +26,7 @@ char *corners[] = {
 
 static void resize();
 static void enter();
+static void test();
 
 main(argc, argv)
 int argc;
@@ -33,7 +34,7 @@ char *argv[];
 {
     Widget toplevel, bboard;
     XtAppContext app;
-    XtActionsRec rec[2];
+    XtActionsRec rec[3];
     int i;
 
     XtSetLanguageProc (NULL, NULL, NULL);
@@ -50,13 +51,16 @@ char *argv[];
      * (also called ConfigureNotify or Configure events).  If the
      * event is generated, call the function resize().
      */
+
     rec[0].string = "resize";
     rec[0].proc = resize;
     rec[1].string = "enter";
     rec[1].proc = enter;
-    XtAppAddActions (app, &rec, 2);
+    rec[2].string = "test";
+    rec[2].proc = test;
+    XtAppAddActions (app, &rec, 3);
     XtOverrideTranslations (bboard,
-        XtParseTranslationTable ("<Configure>: resize() \n <EnterWindow>: enter()   \n\0"));
+        XtParseTranslationTable ("<ConfigureNotify>: revsize() \n <EnterNotify>: enter() \n <Motion>: test()"));
 //        XtParseTranslationTable ("<EnterWindow>: enter()"));
 //
     /* Create children of the dialog -- a PushButton in each corner. */
@@ -75,8 +79,19 @@ XEvent *event;
 String args[];
 int *num_args;
 {
-  printf("Enter gedrückt\n");
+  printf("Fenster rein\n");
   XtVaSetValues(w, XmNbackground, 255, NULL);
+}
+
+static void
+test(w, event, args, num_args)
+Widget w;
+XEvent *event;
+String args[];
+int *num_args;
+{
+  printf("Fesnter raus\n");
+  XtVaSetValues(w, XmNbackground, 255 * 256, NULL);
 }
 
 /* resize(), the routine that is automatically called by Xt upon the

@@ -188,12 +188,14 @@ type
 //{$include <X11/RectObj.h>}
 type
   PXtTranslations = ^TXtTranslations;
-  TXtTranslations = record
-  end; //PTranslationData;
+//  TXtTranslations = record
+//  end; //PTranslationData;
+  TXtTranslations = Pointer;
 
   PXtAccelerators = ^TXtAccelerators;
-  TXtAccelerators = record
-  end; //PTranslationData;
+//  TXtAccelerators = record
+//  end; //PTranslationData;
+  TXtAccelerators = Pointer;
 
   PModifiers = ^TModifiers;
   TModifiers = LongInt;
