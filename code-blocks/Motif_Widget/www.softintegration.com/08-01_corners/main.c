@@ -60,7 +60,7 @@ char *argv[];
     rec[2].proc = test;
     XtAppAddActions (app, &rec, 3);
     XtOverrideTranslations (bboard,
-        XtParseTranslationTable ("<ConfigureNotify>: revsize() \n <EnterNotify>: enter() \n <Motion>: test()"));
+        XtParseTranslationTable ("<ConfigureNotify>: resize() \n <EnterNotify>: enter() \n <Motion>: test()"));
 //        XtParseTranslationTable ("<EnterWindow>: enter()"));
 //
     /* Create children of the dialog -- a PushButton in each corner. */
@@ -121,6 +121,11 @@ int *num_args; /* unused */
         XmNmarginWidth, &margin_w,
         XmNmarginHeight, &margin_h,
         NULL);
+
+        printf("%i\n", margin_w);
+        printf("%i\n", margin_h);
+
+        return;
 
     /* place the top left widget */
     XtVaSetValues (children[0],

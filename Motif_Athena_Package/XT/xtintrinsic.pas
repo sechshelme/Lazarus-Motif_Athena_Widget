@@ -163,7 +163,7 @@ type
 
   PPDimension = ^PDimension;
   PDimension = ^TDimension;
-  TDimension = word;
+  TDimension = cshort;
 
   PPosition = ^TPosition;
   TPosition = smallint;

@@ -4,6 +4,7 @@ uses
   heaptrc,
   Unix,
   Strings,
+  XTStringdefs,
   xlib,
   x,
   XmXm,
@@ -32,7 +33,7 @@ const
   var
     children: TWidgetList;
     w_widht, w_height: TDimension;
-    margin_w, margin_h: Integer;
+    margin_w, margin_h: cshort ;
     cevent: PXConfigureEvent;
     Width, Height: cint;
   begin
@@ -55,7 +56,9 @@ const
 
     XtVaSetValues(children[0],
     XmNbackground, random($FFFFFF),
-    //   XmNx, margin_w, XmNy, margin_h,
+    XmNwidth, Width-120, XmNheight, Height-120,
+//    XmNleftOffset,20,
+//    XmNx, margin_w, XmNy, margin_h,
 //       XmNx, 50, XmNy, 50,
       nil);
     exit;
@@ -98,7 +101,7 @@ const
 
     toplevel := XtVaAppInitialize(@app, 'Demos', nil, 0, @argc, argv, nil, nil);
 
-    bboard := XtVaCreateManagedWidget('bboard', xmBulletinBoardWidgetClass, toplevel, nil);
+    bboard := XtVaCreateManagedWidget('bboard', xmBulletinBoardWidgetClass, toplevel,XtNx,100, nil);
 
     SetLength(rec, 2);
     rec[0]._string := PChar('resize');
