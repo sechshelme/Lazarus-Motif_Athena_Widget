@@ -204,8 +204,9 @@ type
   TXtActionProc = procedure(w: TWidget; event: PXEvent; params: PString; num_params: PCardinal); cdecl;
 
   PXtBoundActions = ^TXtBoundActions;
-  TXtBoundActions = record
-  end; //PXtActionProc;
+//  TXtBoundActions = record
+//  end; //PXtActionProc;
+  TXtBoundActions = Pointer;
 
   PXtActionsRec = ^TXtActionsRec;
   TXtActionsRec = record
@@ -738,8 +739,6 @@ const
  *
  *********************************************************** }
 
-
-
 type
   PXtCheckpointTokenRec = ^TXtCheckpointTokenRec;
   TXtCheckpointTokenRec = record
@@ -795,7 +794,6 @@ function XtMalloc(para1: TCardinal): PChar; cdecl; external libXt;
 function XtCalloc(para1: TCardinal; para2: TCardinal): PChar; cdecl; external libXt;
 function XtRealloc(para1: PChar; para2: TCardinal): PChar; cdecl; external libXt;
 procedure XtFree(para1: PChar); cdecl; external libXt;
-
 function XtAsprintf(new_string:PXtString; format:Pchar):TCardinal;cdecl; varargs external libXt;
 
 function XtNewString(para1: TString): TString; cdecl; external libXt;
@@ -815,7 +813,6 @@ procedure XtRemoveWorkProc(para1: TXtWorkProcId); cdecl; external libXt;
  **************************************************************** }
 
 function XtGetGC(para1: TWidget; para2: TXtGCMask; para3: PXGCValues): TGC; cdecl; external libXt;
-
 function XtAllocateGC(para1: TWidget; para2: TCardinal; para3: TXtGCMask; para4: PXGCValues; para5: TXtGCMask; para6: TXtGCMask): TGC; cdecl; external libXt;
 
 (* This implementation of XtDestroyGC differs from the formal specification
@@ -982,7 +979,6 @@ function XtCvtIntToShort(para1: PDisplay; para2: TXrmValuePtr; para3: PCardinal;
 function XtCvtIntToUnsignedChar(para1: PDisplay; para2: TXrmValuePtr; para3: PCardinal; para4: TXrmValuePtr; para5: TXrmValuePtr; para6: PXtPointer): TBoolean; cdecl; external libXt;
 function XtCvtColorToPixel(para1: PDisplay; para2: TXrmValuePtr; para3: PCardinal; para4: TXrmValuePtr; para5: TXrmValuePtr; para6: PXtPointer): TBoolean; cdecl; external libXt;
 
-
 function XtCvtStringToPosition(para1: PDisplay; para2: TXrmValuePtr; para3: PCardinal; para4: TXrmValuePtr; para5: TXrmValuePtr; para6: PXtPointer): TBoolean; cdecl; external libXt Name 'XtCvtStringToShort';
 function XtCvtIntToDimension(para1: PDisplay; para2: TXrmValuePtr; para3: PCardinal; para4: TXrmValuePtr; para5: TXrmValuePtr; para6: PXtPointer): TBoolean; cdecl; external libXt Name 'XtCvtIntToShort';
 function XtCvtIntToPosition(para1: PDisplay; para2: TXrmValuePtr; para3: PCardinal; para4: TXrmValuePtr; para5: TXrmValuePtr; para6: PXtPointer): TBoolean; cdecl; external libXt Name 'XtCvtIntToShort';
@@ -992,8 +988,6 @@ implementation
 
 function XtNumber(arr: array of const): cardinal;
 begin
-
-
   //      XtNumber:=TCardinal((sizeof(arr))/(sizeof(arr[0])));
   XtNumber := (sizeof(arr)) div (sizeof(TArg));
   Result := Length(arr);
