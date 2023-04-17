@@ -4,7 +4,6 @@ uses
   heaptrc,
   Unix,
   Strings,
-  XTStringdefs,
   xlib,
   x,
   XmXm,
@@ -101,7 +100,8 @@ const
 
     toplevel := XtVaAppInitialize(@app, 'Demos', nil, 0, @argc, argv, nil, nil);
 
-    bboard := XtVaCreateManagedWidget('bboard', xmBulletinBoardWidgetClass, toplevel,XtNx,100, nil);
+ //   bboard := XtVaCreateManagedWidget('bboard', xmBulletinBoardWidgetClass, toplevel,XtNx,100, nil);
+    bboard := XtVaCreateManagedWidget('bboard', xmBulletinBoardWidgetClass, toplevel, nil);
 
     SetLength(rec, 2);
     rec[0]._string := PChar('resize');

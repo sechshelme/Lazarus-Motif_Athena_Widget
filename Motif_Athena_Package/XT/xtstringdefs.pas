@@ -95,7 +95,7 @@ const
   XtNvSpace = 'vSpace';
   XtNwidth = 'width';
   XtNwindow = 'window';
-  XtNx : PChar ='x';
+  XtNx  ='x';
   XtNy = 'y';
 
   XtCAccelerators = 'Accelerators';
