@@ -35,12 +35,7 @@ const
     margin_w, margin_h: cshort;
     cevent: PXConfigureEvent;
     Width, Height: cint;
-  //  x,y: PChar;
-  const y='y'+'';
-    x='x'+'';
   begin
-    WriteLn('resiz');
-
     cevent := PXConfigureEvent(event);
     Width := cevent^.Width;
     Height := cevent^.Height;
@@ -51,19 +46,9 @@ const
       XmNmarginHeight, @margin_h,
       nil);
 
-    WriteLn('w:', margin_w);
-    WriteLn('h:', margin_h);
-    WriteLn('w:', Width);
-    WriteLn('h:', Height);
-
-  //  x:=PChar('x');
-    //y:=PChar('y');
     XtVaSetValues(children[0],
-
           XmNx, margin_w, XmNy, margin_h,
-
       nil);
-
 
     XtVaGetValues(children[1], XmNwidth, @w_widht, nil);
     XtVaSetValues(children[1],
@@ -86,7 +71,19 @@ const
 
   procedure enter(w: TWidget; event: PXEvent; params: PString; num_params: PCardinal); cdecl;
   begin
+    XtVaSetValues(w, XmNbackground,$FF0000,nil);
     WriteLn('enter');
+  end;
+
+  procedure leave(w: TWidget; event: PXEvent; params: PString;    num_params: PCardinal); cdecl;
+  begin
+    XtVaSetValues(w, XmNbackground,$00FF00);
+    WriteLn('leave');
+  end;
+
+  procedure test(w: TWidget; event: PXEvent; params: PString;    num_params: PCardinal); cdecl;
+  begin
+    WriteLn('test');
   end;
 
   procedure main(argc: longint; argv: PPChar);
@@ -103,22 +100,24 @@ const
 
     toplevel := XtVaAppInitialize(@app, 'Demos', nil, 0, @argc, argv, nil, nil);
 
-    bboard := XtVaCreateManagedWidget('bboard', xmBulletinBoardWidgetClass, toplevel, PChar(XmNx), 100, nil);
-    //    bboard := XtVaCreateManagedWidget('bboard', xmBulletinBoardWidgetClass, toplevel, nil);
+    bboard := XtVaCreateManagedWidget('bboard', xmBulletinBoardWidgetClass, toplevel, XmNx, 100, nil);
 
-    SetLength(rec, 2);
+    SetLength(rec, 4);
     rec[0]._string := PChar('resize');
     rec[0].proc := @resize;
     rec[1]._string := PChar('enter');
     rec[1].proc := @enter;
+    rec[2]._string := PChar('leave');
+    rec[2].proc := @leave;
+    rec[3]._string := PChar('test');
+    rec[3].proc := @test;
 
-    XtAppAddActions(app, @rec[0], 2);
-    trans := XtParseTranslationTable('<ConfigureNotify>: resize() '#10' <EnterNotify>: enter()');
-    //    WriteLn(PtrUInt(trans));
+    XtAppAddActions(app, @rec[0], Length(rec));
+    trans := XtParseTranslationTable('<ConfigureNotify>: resize() '#10' <EnterNotify>: enter() '#10' <LeaveNotify>: leave() '#10' <Key>Return: test()');
     XtOverrideTranslations(bboard, trans);
 
     for i := 0 to Length(corners) - 1 do begin
-      XtVaCreateManagedWidget(corners[i], xmPushButtonWidgetClass, bboard, nil);
+      XtVaCreateManagedWidget(corners[i], xmPushButtonWidgetClass, bboard, nil, XmNtranslations, 'button1');
     end;
 
     XtRealizeWidget(toplevel);

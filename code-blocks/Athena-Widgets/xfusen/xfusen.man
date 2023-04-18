@@ -1,0 +1,21 @@
+.\"
+.\"	@(#)Copyright (c) 1998,2001, Kunihiko Hayashi.
+.\"	
+.\"	This is free software.	It comes with NO WARRANTY.
+.\"	
+.\"	Please send copies of changes and bug-fixes to:
+.\"	hayashi@dec.sakura.ne.jp
+.\"
+.Dd August 22, 2001
+.Dt XFUSEN 1
+.Os
+.Sh NAME
+.Nm xfusen
+.Nd display small windows with text strings.
+.Sh SYNOPSIS
+.Nm
+.Ar [-toolkitoptions ...]
+.Sh DESCRIPTION
+.Nm
+displays small windows such as ``fusen'' (in japanese),
+on which you can write text strings with several fonts and background colors.

@@ -1,0 +1,16 @@
+XCOMM
+XCOMM	XFusen -- Fusen on X Desktop
+XCOMM
+
+CC=cc
+CDEBUGFLAGS=-g
+
+HEADERS = xfusen.h resource.h
+   SRCS = main.c popup.c window.c file.c lock.c
+   OBJS = main.o popup.o window.o file.o lock.o
+ TARGET = xfusen
+
+LOCAL_LIBRARIES=XawClientLibs
+
+ComplexProgramTarget($(TARGET))
+InstallManPage($(TARGET),$(MANDIR))
