@@ -1161,8 +1161,8 @@ const
   XmNdecimal = 'decimal';  
   XmNdetail = 'detail';  
   XmCDetail = 'Detail';  
-//  XmNdetailCount = 'detailCount';  
-//  XmCDetailCount = 'DetailCount';  
+//  XmNdetailCount = 'detailCount';
+//  XmCDetailCount = 'DetailCount';
   XmNcontainerID = 'containerID';  
   XmCContainerID = 'ContainerID';  
   XmSCLIENT_WINDOW = 'CLIENT_WINDOW';  
@@ -1373,11 +1373,9 @@ const
   XmSPIXEL_SET_PROP = 'SDT Pixel Set';  
   XmS50_foreground = '50_foreground';  
   XmSunspecified_pixmap = 'unspecified_pixmap';  
-(* Const before type ignored *)
   var
     _XmStrings : Pchar;cvar;external libXm;
 //{$include <X11/StringDefs.h>}
-{ C++ extern C conditionnal removed }
 
 const
   XmSTRING_DEFAULT_CHARSET = XmS;  
@@ -1411,9 +1409,7 @@ const
   XmCArgv = XtCArgv;
   XmCBackground = XtCBackground;
   XmCBaseHeight = XtCBaseHeight;
-//  XmCBaseHeight = XtCBaseHeight;
   XmCBaseWidth = XtCBaseWidth;
-//  XmCBaseWidth = XtCBaseWidth;
   XmCBitmap = XtCBitmap;
   XmCBoolean = XtCBoolean;
   XmCBorderColor = XtCBorderColor;
@@ -1521,9 +1517,7 @@ const
   XmNbackground = XtNbackground;
   XmNbackgroundPixmap = XtNbackgroundPixmap;
   XmNbaseHeight = XtNbaseHeight;
-//  XmNbaseHeight = XtNbaseHeight;
   XmNbaseWidth = XtNbaseWidth;
-//  XmNbaseWidth = XtNbaseWidth;
   XmNbitmap = XtNbitmap;
   XmNborder = XtNborder;
   XmNborderColor = XtNborderColor;
@@ -1615,7 +1609,6 @@ const
   XmNtop = XtNtop;
   XmNtransient = XtNtransient;
   XmNtransientFor = XtNtransientFor;
-//  XmNtransientFor = XtNtransientFor;
   XmNtranslations = XtNtranslations;
   XmNupdate = XtNupdate;
   XmNuseBottom = XtNuseBottom;

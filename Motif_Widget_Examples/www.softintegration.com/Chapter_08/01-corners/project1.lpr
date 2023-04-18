@@ -35,6 +35,9 @@ const
     margin_w, margin_h: cshort;
     cevent: PXConfigureEvent;
     Width, Height: cint;
+  //  x,y: PChar;
+  const y='y'+'';
+    x='x'+'';
   begin
     WriteLn('resiz');
 
@@ -53,13 +56,14 @@ const
     WriteLn('w:', Width);
     WriteLn('h:', Height);
 
+  //  x:=PChar('x');
+    //y:=PChar('y');
     XtVaSetValues(children[0],
-      XmNbackground, random($FFFFFF),
-      XmNwidth, Width - 120, XmNheight, Height - 120,
-      //    XmNx, margin_w, XmNy, margin_h,
-      PChar(XmNx), 20, PChar(XmNy), 50,
+
+          XmNx, margin_w, XmNy, margin_h,
+
       nil);
-    exit;
+
 
     XtVaGetValues(children[1], XmNwidth, @w_widht, nil);
     XtVaSetValues(children[1],

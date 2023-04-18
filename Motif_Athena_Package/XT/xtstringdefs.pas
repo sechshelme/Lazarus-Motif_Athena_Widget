@@ -95,8 +95,8 @@ const
   XtNvSpace = 'vSpace';
   XtNwidth = 'width';
   XtNwindow = 'window';
-  XtNx  ='x';
-  XtNy = 'y';
+  XtNx  ='x'+'';
+  XtNy = 'y'+'';
 
   XtCAccelerators = 'Accelerators';
   XtCBackground = 'Background';
@@ -162,8 +162,8 @@ const
   XtCVSpace = 'VSpace';
   XtCWidth = 'Width';
   XtCWindow = 'Window';
-  XtCX = 'X';
-  XtCY = 'Y';
+  XtCX = 'X' + '';
+  XtCY = 'Y' + '';
   XtRAcceleratorTable = 'AcceleratorTable';
 
 const
