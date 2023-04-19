@@ -24,7 +24,7 @@ function XmIsDrawingArea(w : TWidget) : TBoolean;
 
 {*******    Public Function Declarations    ******* }
 
-function XmCreateDrawingArea(p:TWidget; name:TString; args:TArgList; n:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateDrawingArea(p:TWidget; name:TXtString; args:TArgList; n:TCardinal):TWidget;cdecl;external libXm;
 
 //function XmVaCreateDrawingArea(parent:TWidget; name:Pchar; args:array of const):TWidget;cdecl;external libXm;
 function XmVaCreateDrawingArea(parent:TWidget; name:Pchar):TWidget;cdecl; varargs external libXm;

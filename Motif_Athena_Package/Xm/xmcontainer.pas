@@ -31,7 +31,7 @@ function XmIsContainer(w : TWidget) : TBoolean;
 { XmIsContainer  }
 {*******    Public Function Declarations    ******* }
 
-function XmCreateContainer(parent:TWidget; name:TString; arglist:TArgList; argcount:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateContainer(parent:TWidget; name:TXtString; arglist:TArgList; argcount:TCardinal):TWidget;cdecl;external libXm;
 //function XmVaCreateContainer(parent:TWidget; name:Pchar; args:array of const):TWidget;cdecl;external libXm;
 function XmVaCreateContainer(parent:TWidget; name:Pchar):TWidget;cdecl; varargs external libXm;
 //function XmVaCreateManagedContainer(parent:TWidget; name:Pchar; args:array of const):TWidget;cdecl;external libXm;

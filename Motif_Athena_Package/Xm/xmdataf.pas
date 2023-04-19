@@ -30,7 +30,7 @@ type
  *                 args, num_args - the number and list of args.
  *      Returns: The Widget created.
   }
-function XmCreateDataField(para1:TWidget; para2:TString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateDataField(para1:TWidget; para2:TXtString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
 {
  * Variable argument list functions
   }
@@ -66,7 +66,7 @@ var
   PXmDataFieldCallbackStruct = ^TXmDataFieldCallbackStruct;
   TXmDataFieldCallbackStruct = record
       w : TWidget;
-      text : TString;
+      text : TXtString;
       accept : TBoolean;
     end;
 

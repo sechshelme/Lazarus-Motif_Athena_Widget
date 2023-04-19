@@ -53,7 +53,7 @@ function XmIsIconGadget(w : TWidget) : TBoolean;
 { XmIsIconGadget  }
 {*******    Public Function Declarations    ******* }
 
-function XmCreateIconGadget(parent:TWidget; name:TString; arglist:TArgList; argcount:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateIconGadget(parent:TWidget; name:TXtString; arglist:TArgList; argcount:TCardinal):TWidget;cdecl;external libXm;
 
 //function XmVaCreateIconGadget(parent:TWidget; name:Pchar; args:array of const):TWidget;cdecl;external libXm;
 function XmVaCreateIconGadget(parent:TWidget; name:Pchar):TWidget;cdecl; varargs external libXm;

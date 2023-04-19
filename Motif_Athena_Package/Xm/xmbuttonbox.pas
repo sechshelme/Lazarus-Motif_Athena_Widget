@@ -59,7 +59,7 @@ uses
  *	Returns: The Widget created.
   }
 
-function XmCreateButtonBox(para1:TWidget; para2:TString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateButtonBox(para1:TWidget; para2:TXtString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
 {
  * Variable argument list functions
   }

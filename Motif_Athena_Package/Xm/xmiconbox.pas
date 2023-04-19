@@ -57,7 +57,7 @@ function XmIconBoxIsCellEmpty(para1:TWidget; para2:TPosition; para3:TPosition; p
  *	Returns: The Widget created.
   }
 
-function XmCreateIconBox(para1:TWidget; para2:TString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateIconBox(para1:TWidget; para2:TXtString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
 {***********************************************************
 *	EXTERNAL DECLARATIONS
 ************************************************************ }

@@ -41,7 +41,7 @@ uses
  *	Returns: The Widget created.
   }
 
-function XmCreateOutline(para1:TWidget; para2:TString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateOutline(para1:TWidget; para2:TXtString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
   var
     xmOutlineWidgetClass : TWidgetClass;cvar;external libXm;
 

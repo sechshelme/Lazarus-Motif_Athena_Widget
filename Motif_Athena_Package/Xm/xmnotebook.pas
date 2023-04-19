@@ -54,7 +54,7 @@ type
 
 function XmIsNotebook(w : TWidget) : TBoolean;
 
-function XmCreateNotebook(parent:TWidget; name:TString; arglist:TArgList; argcount:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateNotebook(parent:TWidget; name:TXtString; arglist:TArgList; argcount:TCardinal):TWidget;cdecl;external libXm;
 function XmNotebookGetPageInfo(notebook:TWidget; page_number:longint; page_info:PXmNotebookPageInfo):TXmNotebookPageStatus;cdecl;external libXm;
 //function XmVaCreateNotebook(parent:TWidget; name:Pchar; args:array of const):TWidget;cdecl;external libXm;
 function XmVaCreateNotebook(parent:TWidget; name:Pchar):TWidget;cdecl; varargs external libXm;

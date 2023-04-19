@@ -28,9 +28,9 @@ function XmIsSelectionBox(w : TWidget) : TBoolean;
 
 function XmSelectionBoxGetChild(sb:TWidget; which:byte):TWidget;cdecl;external libXm;
 {#endif /* NeedWidePrototypes */ }
-function XmCreateSelectionBox(p:TWidget; name:TString; args:TArgList; n:TCardinal):TWidget;cdecl;external libXm;
-function XmCreateSelectionDialog(ds_p:TWidget; name:TString; sb_args:TArgList; sb_n:TCardinal):TWidget;cdecl;external libXm;
-function XmCreatePromptDialog(ds_p:TWidget; name:TString; sb_args:TArgList; sb_n:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateSelectionBox(p:TWidget; name:TXtString; args:TArgList; n:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateSelectionDialog(ds_p:TWidget; name:TXtString; sb_args:TArgList; sb_n:TCardinal):TWidget;cdecl;external libXm;
+function XmCreatePromptDialog(ds_p:TWidget; name:TXtString; sb_args:TArgList; sb_n:TCardinal):TWidget;cdecl;external libXm;
 {
  * Variable argument list functions
   }

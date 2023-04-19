@@ -39,7 +39,7 @@ function XmIsDragIconObjectClass(w : TWidget) : TBoolean;
     xmDragIconObjectClass : TWidgetClass;cvar;external libXm;
 {*******    Public Function Declarations    ******* }
 
-function XmCreateDragIcon(parent:TWidget; name:TString; argList:TArgList; argCount:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateDragIcon(parent:TWidget; name:TXtString; argList:TArgList; argCount:TCardinal):TWidget;cdecl;external libXm;
 {*******    End Public Function Declarations    ******* }
 
 implementation

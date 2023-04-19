@@ -27,7 +27,7 @@ function XmIsTabStack(w : TWidget) : TBoolean;
 
 { XmIsTabStack  }
 
-function XmCreateTabStack(para1:TWidget; para2:TString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateTabStack(para1:TWidget; para2:TXtString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
 function XmTabStackGetSelectedTab(para1:TWidget):TWidget;cdecl;external libXm;
 procedure XmTabStackSelectTab(para1:TWidget; para2:TBoolean);cdecl;external libXm;
 function XmTabStackIndexToWidget(para1:TWidget; para2:longint):TWidget;cdecl;external libXm;

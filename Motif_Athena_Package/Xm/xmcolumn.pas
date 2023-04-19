@@ -22,7 +22,7 @@ uses
 
 function XmIsColumn(w : TWidget) : TBoolean;
 
-function XmCreateColumn(para1:TWidget; para2:TString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateColumn(para1:TWidget; para2:TXtString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
 {
  * Variable argument list functions
   }

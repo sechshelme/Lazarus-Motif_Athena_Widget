@@ -40,7 +40,7 @@ uses
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
   }
-function XmCreateFontSelector(para1:TWidget; para2:TString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateFontSelector(para1:TWidget; para2:TXtString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
   var
     xmFontSelectorWidgetClass : TWidgetClass;cvar;external libXm;
 

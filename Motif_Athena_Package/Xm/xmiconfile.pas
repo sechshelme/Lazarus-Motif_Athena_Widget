@@ -20,7 +20,7 @@ const
   XmTINY_ICON_SIZE = 4;  
 {*******    Public Function Declarations for IconFile.c    ******* }
 
-function XmGetIconFileName(screen:PScreen; imageInstanceName:TString; imageClassName:TString; hostPrefix:TString; size:dword):TString;cdecl;external libXm;
+function XmGetIconFileName(screen:PScreen; imageInstanceName:TXtString; imageClassName:TXtString; hostPrefix:TXtString; size:dword):TXtString;cdecl;external libXm;
 
 implementation
 

@@ -37,7 +37,7 @@ function XmCreateDropDown(parent:TWidget; name:Pchar; args:TArgList; argCount:TC
  *	Arguments:     w - the combination box.
  *	Returns:       The value in the text widget.
   }
-function XmDropDownGetValue(w:TWidget):TString;cdecl;external libXm;
+function XmDropDownGetValue(w:TWidget):TXtString;cdecl;external libXm;
 {
  * Variable argument list functions
   }

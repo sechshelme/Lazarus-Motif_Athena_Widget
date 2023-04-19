@@ -117,7 +117,7 @@ type
 
   PXawListReturnStruct = ^TXawListReturnStruct;
   TXawListReturnStruct = record
-      _string : TString;
+      _string : TXtString;
       list_index : longint;
     end;
 

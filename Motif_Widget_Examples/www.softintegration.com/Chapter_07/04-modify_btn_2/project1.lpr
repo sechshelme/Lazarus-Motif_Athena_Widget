@@ -158,7 +158,10 @@ uses
     toplevel := XtVaAppInitialize(@app, 'Demos', nil, 0, @argc, argv, nil,
       XmNwidth, 320, XmNheight, 200, nil);
 
-    rc := XtVaCreateWidget('rowcol', xmRowColumnWidgetClass, toplevel, nil);
+    rc := XtVaCreateWidget('rowcol', xmRowColumnWidgetClass, toplevel,
+      XmNpacking, XmPACK_COLUMN,
+      XmNnumColumns, 1,
+      nil);
 
     button1 := XtVaCreateManagedWidget('PushMe 1', xmPushButtonWidgetClass, rc, nil);
     XtAddCallback(button1, XmNactivateCallback, @pushed, nil);

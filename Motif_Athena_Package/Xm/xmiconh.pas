@@ -27,7 +27,7 @@ function XmIsIconHeader(w : TWidget) : TBoolean;
 
 {*******    Public Function Declarations    ******* }
 
-function XmCreateIconHeader(parent:TWidget; name:TString; arglist:TArgList; argcount:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateIconHeader(parent:TWidget; name:TXtString; arglist:TArgList; argcount:TCardinal):TWidget;cdecl;external libXm;
 {*******    End Public Function Declarations    ******* }
 
 implementation

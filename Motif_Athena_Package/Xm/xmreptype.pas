@@ -19,7 +19,7 @@ type
 
   PXmRepTypeEntryRec = ^TXmRepTypeEntryRec;
   TXmRepTypeEntryRec = record
-      rep_type_name : TString;
+      rep_type_name : TXtString;
       value_names : PString;
       values : Pbyte;
       num_values : byte;
@@ -34,7 +34,7 @@ type
   PXmRepTypeList = ^TXmRepTypeList;
 {*******    Public Function Declarations    ******* }
 
-function XmRepTypeRegister(rep_type:TString; value_names:PString; values:Pbyte; num_values:byte):TXmRepTypeId;cdecl;external libXm;
+function XmRepTypeRegister(rep_type:TXtString; value_names:PString; values:Pbyte; num_values:byte):TXmRepTypeId;cdecl;external libXm;
 procedure XmRepTypeAddReverse(rep_type_id:TXmRepTypeId);cdecl;external libXm;
 
 { NeedWidePrototypes  }
@@ -42,7 +42,7 @@ procedure XmRepTypeAddReverse(rep_type_id:TXmRepTypeId);cdecl;external libXm;
 function XmRepTypeValidValue(rep_type_id:TXmRepTypeId; test_value:byte; enable_default_warning:TWidget):TBoolean;cdecl;external libXm;
 function XmRepTypeGetRegistered:TXmRepTypeList;cdecl;external libXm;
 function XmRepTypeGetRecord(rep_type_id:TXmRepTypeId):TXmRepTypeEntry;cdecl;external libXm;
-function XmRepTypeGetId(rep_type:TString):TXmRepTypeId;cdecl;external libXm;
+function XmRepTypeGetId(rep_type:TXtString):TXmRepTypeId;cdecl;external libXm;
 function XmRepTypeGetNameList(rep_type_id:TXmRepTypeId; use_uppercase_format:TBoolean):PString;cdecl;external libXm;
 procedure XmRepTypeInstallTearOffModelConverter;cdecl;external libXm;
 {*******    End Public Function Declarations    ******* }

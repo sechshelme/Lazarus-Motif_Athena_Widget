@@ -25,8 +25,8 @@ function XmIsBulletinBoard(w : TWidget) : TBoolean;
 
 {*******    Public Function Declarations    ******* }
 
-function XmCreateBulletinBoard(p:TWidget; name:TString; args:TArgList; n:TCardinal):TWidget;cdecl;external libXm;
-function XmCreateBulletinBoardDialog(ds_p:TWidget; name:TString; bb_args:TArgList; bb_n:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateBulletinBoard(p:TWidget; name:TXtString; args:TArgList; n:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateBulletinBoardDialog(ds_p:TWidget; name:TXtString; bb_args:TArgList; bb_n:TCardinal):TWidget;cdecl;external libXm;
 {
  * Variable argument list functions
   }

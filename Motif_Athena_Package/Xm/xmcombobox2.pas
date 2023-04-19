@@ -34,7 +34,7 @@ uses
  *	Returns:       The value in the text widget.
   }
 
-function XmCombinationBox2GetValue(w:TWidget):TString;cdecl;external libXm;
+function XmCombinationBox2GetValue(w:TWidget):TXtString;cdecl;external libXm;
 {	Function Name: XmCreateCombinationBox2
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.

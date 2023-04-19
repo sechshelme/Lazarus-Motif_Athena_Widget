@@ -48,7 +48,7 @@ type
   TXmMultiListCallbackStruct = record
       reason : longint;
       event : PXEvent;
-      _string : TString;
+      _string : TXtString;
       column : longint;
       row : PXmMultiListRowInfo;
       wc_string : Pwchar_t;

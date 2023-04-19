@@ -24,7 +24,7 @@ procedure XawInitializeWidgetSet; cdecl; external libXaw;
 
 procedure XawInitializeDefaultConverters; cdecl; external libXaw;
 
-function XawOpenApplication(app_context_return: PXtAppContext; dpy: PDisplay; screen: PScreen; application_name: TString; application_class: TString; widget_class: TWidgetClass; argc: Plongint; argv: PXtString): TWidget; cdecl; external libXaw;
+function XawOpenApplication(app_context_return: PXtAppContext; dpy: PDisplay; screen: PScreen; application_name: TXtString; application_class: TXtString; widget_class: TWidgetClass; argc: Plongint; argv: PXtString): TWidget; cdecl; external libXaw;
 
 implementation
 

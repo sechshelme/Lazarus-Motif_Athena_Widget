@@ -34,7 +34,7 @@ uses
  *	Returns: The Widget created.
   }
 
-function XmCreateTree(para1:TWidget; para2:TString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateTree(para1:TWidget; para2:TXtString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
   var
     xmTreeWidgetClass : TWidgetClass;cvar;external libXm;
 {***********************************************************

@@ -32,8 +32,8 @@ function XmIsFileSelectionBox(w : TWidget) : TBoolean;
 function XmFileSelectionBoxGetChild(fs:TWidget; which:byte):TWidget;cdecl;external libXm;
 {#endif /* NeedWidePrototypes */ }
 procedure XmFileSelectionDoSearch(fs:TWidget; dirmask:TXmString);cdecl;external libXm;
-function XmCreateFileSelectionBox(p:TWidget; name:TString; args:TArgList; n:TCardinal):TWidget;cdecl;external libXm;
-function XmCreateFileSelectionDialog(ds_p:TWidget; name:TString; fsb_args:TArgList; fsb_n:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateFileSelectionBox(p:TWidget; name:TXtString; args:TArgList; n:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateFileSelectionDialog(ds_p:TWidget; name:TXtString; fsb_args:TArgList; fsb_n:TCardinal):TWidget;cdecl;external libXm;
 //function XmVaCreateFileSelectionBox(parent:TWidget; name:Pchar; args:array of const):TWidget;cdecl;external libXm;
 function XmVaCreateFileSelectionBox(parent:TWidget; name:Pchar):TWidget;cdecl; varargs external libXm;
 //function XmVaCreateManagedFileSelectionBox(parent:TWidget; name:Pchar; args:array of const):TWidget;cdecl;external libXm;

@@ -49,8 +49,8 @@ function XmExt18ListGetSelectedRows(w:TWidget):PPXm18RowInfo;cdecl;external libX
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
   }
-function XmCreateExtended18List(para1:TWidget; para2:TString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
-function XmCreateExt18List(para1:TWidget; para2:TString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateExtended18List(para1:TWidget; para2:TXtString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateExt18List(para1:TWidget; para2:TXtString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
 //function XmVaCreateExt18List(parent:TWidget; name:Pchar; args:array of const):TWidget;cdecl;external libXm;
 function XmVaCreateExt18List(parent:TWidget; name:Pchar):TWidget;cdecl; varargs external libXm;
 //function XmVaCreateManagedExt18List(parent:TWidget; name:Pchar; args:array of const):TWidget;cdecl;external libXm;

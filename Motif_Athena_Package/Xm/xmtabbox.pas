@@ -26,7 +26,7 @@ uses
 
 function XmIsTabBox(w : TWidget) : TBoolean;
 
-function XmCreateTabBox(para1:TWidget; para2:TString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateTabBox(para1:TWidget; para2:TXtString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
 function XmTabBoxGetIndex(para1:TWidget; para2:longint; para3:longint):longint;cdecl;external libXm;
 function XmTabBoxGetNumRows(para1:TWidget):longint;cdecl;external libXm;
 function XmTabBoxGetNumColumns(para1:TWidget):longint;cdecl;external libXm;

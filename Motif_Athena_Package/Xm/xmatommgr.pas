@@ -13,9 +13,9 @@ uses
 //{$include <Xm/Xm.h>}
 //{$include <X11/Xresource.h>}
 
-function XmInternAtom(display:PDisplay; name:TString; only_if_exists:TBoolean):TAtom;cdecl;external libXm;
+function XmInternAtom(display:PDisplay; name:TXtString; only_if_exists:TBoolean):TAtom;cdecl;external libXm;
 { X11r5's XGetAtomName equivalent  }
-function XmGetAtomName(display:PDisplay; atom:TAtom):TString;cdecl;external libXm;
+function XmGetAtomName(display:PDisplay; atom:TAtom):TXtString;cdecl;external libXm;
 
 implementation
 

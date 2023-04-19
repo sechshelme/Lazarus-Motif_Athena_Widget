@@ -43,7 +43,7 @@ function XmPanedGetPanes(para1:TWidget; para2:PWidgetList; para3:Plongint):longi
  *	Returns: The Widget created.
   }
 
-function XmCreatePaned(para1:TWidget; para2:TString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
+function XmCreatePaned(para1:TWidget; para2:TXtString; para3:TArgList; para4:TCardinal):TWidget;cdecl;external libXm;
 { Class record constant  }
   var
     xmPanedWidgetClass : TWidgetClass;cvar;external libXm;

@@ -1685,8 +1685,8 @@ type
   TXmSecondaryResourceDataRec = record
       base_proc : TXmResourceBaseProc;
       client_data : TXtPointer;
-      name : TString;
-      res_class : TString;
+      name : TXtString;
+      res_class : TXtString;
       resources : TXtResourceList;
       num_resources : TCardinal;
     end;
@@ -1744,7 +1744,7 @@ function XmCvtXmStringToUTF8String(_string:TXmString):Pchar;cdecl;external libXm
 {*******    End Public Function Declarations    ******* }
 {*******    Public Function Declarations for ResInd.c    ******* }
 
-function XmConvertStringToUnits(screen:PScreen; spec:TString; orientation:LongInt; to_type:LongInt; parse_error:PXtEnum):LongInt;cdecl;external libXm;
+function XmConvertStringToUnits(screen:PScreen; spec:TXtString; orientation:LongInt; to_type:LongInt; parse_error:PXtEnum):LongInt;cdecl;external libXm;
 function XmConvertUnits(widget:TWidget; dimension:LongInt; from_type:LongInt; from_val:LongInt; to_type:LongInt):LongInt;cdecl;external libXm;
 function XmCvtToHorizontalPixels(screen:PScreen; from_val:LongInt; from_type:LongInt):LongInt;cdecl;external libXm;
 function XmCvtToVerticalPixels(screen:PScreen; from_val:LongInt; from_type:LongInt):LongInt;cdecl;external libXm;
@@ -1758,27 +1758,27 @@ procedure XmSetMenuCursor(display:PDisplay; cursorId:TCursor);cdecl;external lib
 function XmGetMenuCursor(display:PDisplay):TCursor;cdecl;external libXm;
 {*******    End Public Function Declarations    ******* }
 {*******    Public Function Declarations for Simple.c    ******* }
-function XmCreateSimpleMenuBar(parent:TWidget; name:TString; args:TArgList; arg_count:TCardinal):TWidget;cdecl;external libXm;
-function XmCreateSimplePopupMenu(parent:TWidget; name:TString; args:TArgList; arg_count:TCardinal):TWidget;cdecl;external libXm;
-function XmCreateSimplePulldownMenu(parent:TWidget; name:TString; args:TArgList; arg_count:TCardinal):TWidget;cdecl;external libXm;
-function XmCreateSimpleOptionMenu(parent:TWidget; name:TString; args:TArgList; arg_count:TCardinal):TWidget;cdecl;external libXm;
-function XmCreateSimpleRadioBox(parent:TWidget; name:TString; args:TArgList; arg_count:TCardinal):TWidget;cdecl;external libXm;
-function XmCreateSimpleCheckBox(parent:TWidget; name:TString; args:TArgList; arg_count:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateSimpleMenuBar(parent:TWidget; name:TXtString; args:TArgList; arg_count:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateSimplePopupMenu(parent:TWidget; name:TXtString; args:TArgList; arg_count:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateSimplePulldownMenu(parent:TWidget; name:TXtString; args:TArgList; arg_count:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateSimpleOptionMenu(parent:TWidget; name:TXtString; args:TArgList; arg_count:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateSimpleRadioBox(parent:TWidget; name:TXtString; args:TArgList; arg_count:TCardinal):TWidget;cdecl;external libXm;
+function XmCreateSimpleCheckBox(parent:TWidget; name:TXtString; args:TArgList; arg_count:TCardinal):TWidget;cdecl;external libXm;
 {*******    End Public Function Declarations    ******* }
 {*******    Public Function Declarations for VaSimple.c   ******* }
-//function XmVaCreateSimpleMenuBar(parent:TWidget; name:TString; args:array of const):TWidget;cdecl;external libXm;
-function XmVaCreateSimpleMenuBar(parent:TWidget; name:TString):TWidget;cdecl;varargs external libXm;
-//function XmVaCreateSimplePopupMenu(parent:TWidget; name:TString; callback:TXtCallbackProc; args:array of const):TWidget;cdecl;external libXm;
-function XmVaCreateSimplePopupMenu(parent:TWidget; name:TString; callback:TXtCallbackProc):TWidget;cdecl; varargs external libXm;
-//function XmVaCreateSimplePulldownMenu(parent:TWidget; name:TString; post_from_button:LongInt; callback:TXtCallbackProc; args:array of const):TWidget;cdecl;external libXm;
-function XmVaCreateSimplePulldownMenu(parent:TWidget; name:TString; post_from_button:LongInt; callback:TXtCallbackProc):TWidget;cdecl;varargs external libXm;
-//function XmVaCreateSimpleOptionMenu(parent:TWidget; name:TString; option_label:TXmString; option_mnemonic:TKeySym; button_set:LongInt;            callback:TXtCallbackProc; args:array of const):TWidget;cdecl;external libXm;
-function XmVaCreateSimpleOptionMenu(parent:TWidget; name:TString; option_label:TXmString; option_mnemonic:TKeySym; button_set:LongInt; 
+//function XmVaCreateSimpleMenuBar(parent:TWidget; name:TXtString; args:array of const):TWidget;cdecl;external libXm;
+function XmVaCreateSimpleMenuBar(parent:TWidget; name:TXtString):TWidget;cdecl;varargs external libXm;
+//function XmVaCreateSimplePopupMenu(parent:TWidget; name:TXtString; callback:TXtCallbackProc; args:array of const):TWidget;cdecl;external libXm;
+function XmVaCreateSimplePopupMenu(parent:TWidget; name:TXtString; callback:TXtCallbackProc):TWidget;cdecl; varargs external libXm;
+//function XmVaCreateSimplePulldownMenu(parent:TWidget; name:TXtString; post_from_button:LongInt; callback:TXtCallbackProc; args:array of const):TWidget;cdecl;external libXm;
+function XmVaCreateSimplePulldownMenu(parent:TWidget; name:TXtString; post_from_button:LongInt; callback:TXtCallbackProc):TWidget;cdecl;varargs external libXm;
+//function XmVaCreateSimpleOptionMenu(parent:TWidget; name:TXtString; option_label:TXmString; option_mnemonic:TKeySym; button_set:LongInt;            callback:TXtCallbackProc; args:array of const):TWidget;cdecl;external libXm;
+function XmVaCreateSimpleOptionMenu(parent:TWidget; name:TXtString; option_label:TXmString; option_mnemonic:TKeySym; button_set:LongInt; 
            callback:TXtCallbackProc):TWidget;cdecl; varargs; external libXm;
-//function XmVaCreateSimpleRadioBox(parent:TWidget; name:TString; button_set:LongInt; callback:TXtCallbackProc; args:array of const):TWidget;cdecl;external libXm;
-function XmVaCreateSimpleRadioBox(parent:TWidget; name:TString; button_set:LongInt; callback:TXtCallbackProc):TWidget;cdecl; varargs external libXm;
-//function XmVaCreateSimpleCheckBox(parent:TWidget; name:TString; callback:TXtCallbackProc; args:array of const):TWidget;cdecl;external libXm;
-function XmVaCreateSimpleCheckBox(parent:TWidget; name:TString; callback:TXtCallbackProc):TWidget;cdecl; varargs external libXm;
+//function XmVaCreateSimpleRadioBox(parent:TWidget; name:TXtString; button_set:LongInt; callback:TXtCallbackProc; args:array of const):TWidget;cdecl;external libXm;
+function XmVaCreateSimpleRadioBox(parent:TWidget; name:TXtString; button_set:LongInt; callback:TXtCallbackProc):TWidget;cdecl; varargs external libXm;
+//function XmVaCreateSimpleCheckBox(parent:TWidget; name:TXtString; callback:TXtCallbackProc; args:array of const):TWidget;cdecl;external libXm;
+function XmVaCreateSimpleCheckBox(parent:TWidget; name:TXtString; callback:TXtCallbackProc):TWidget;cdecl; varargs external libXm;
 {*******    End Public Function Declarations    ******* }
 {*******    Public Function Declarations for TrackLoc.c    ******* }
 { NeedWidePrototypes  }
@@ -1805,7 +1805,7 @@ procedure XmChangeColor(widget:TWidget; background:TPixel);cdecl;external libXm;
 {*******    Public Function Declarations for XmString.c    ******* }
 function XmStringCreate(text:Pchar; charset:TXmStringCharSet):TXmString;cdecl;external libXm;
 function XmStringCreateSimple(text:Pchar):TXmString;cdecl;external libXm;
-function XmStringCreateLocalized(text:TString):TXmString;cdecl;external libXm;
+function XmStringCreateLocalized(text:TXtString):TXmString;cdecl;external libXm;
 {#if NeedWidePrototypes }
 {                        int direction) ; }
 {#else }
