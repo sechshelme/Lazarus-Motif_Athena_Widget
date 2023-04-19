@@ -9,7 +9,7 @@ uses
   procedure read_name(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var
     push_button: TWidget;
-    n: integer;
+    n: PtrUInt; // Es muss zwingend ein an die Plattform angepasster Wert sein !
   begin
     push_button := TWidget(client_data);
     WriteLn('push  ', PtrInt(push_button));

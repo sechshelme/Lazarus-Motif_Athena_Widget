@@ -39,7 +39,7 @@ uses
   procedure read_name(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var
     push_button: TWidget;
-    n: integer;
+    n: PtrUInt; // Es muss zwingend ein an die Plattform angepasster Wert sein !
     Text: PChar;
     cbs: PXmSelectionBoxCallbackStruct;
   begin
@@ -52,20 +52,14 @@ uses
     WriteLn('data  ', PtrInt(client_data));
 
     if n = 0 then begin
-      XtVaSetValues(client_data, XmNlabelString, cbs^.Value, nil);
-      //      XtVaSetValues(push_button, XmNlabelString, cbs^.Value, nil);
+            XtVaSetValues(push_button, XmNlabelString, cbs^.Value, nil);
     end else begin
       XmStringGetLtoR(cbs^.Value, XmFONTLIST_DEFAULT_TAG, @Text);
 
       XtVaSetValues(client_data,
         XtVaTypedArg, XmNforeground,
-        //        XmRString, Text, strlen(Text) + 1,
         XmRString, Text, 0,
         nil);
-      //XtVaSetValues(push_button,
-      //  XtVaTypedArg, XmNforeground,
-      //  XmRString, Text, strlen(Text),
-      //  nil);
       XtFree(Text);
     end;
   end;
