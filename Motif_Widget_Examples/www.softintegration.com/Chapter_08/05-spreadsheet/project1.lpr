@@ -44,7 +44,7 @@ const
     toplevel, parent, btn: TWidget;
     app: TXtAppContext;
     i, j: integer;
-    buf: string;
+    buf: array[0..ROWS - 1, 0..COLS - 1] of string;
 
   begin
     XtSetLanguageProc(nil, nil, nil);
@@ -59,12 +59,12 @@ const
 
     for i := 0 to COLS - 1 do begin
       for j := 0 to ROWS - 1 do begin
-        WriteStr(buf, i + 1, '-', j + 1);
+        WriteStr(buf[j, i], i + 1, '-', j + 1);
         if (i = 0) or (j = 0) then begin
-          XtVaCreateManagedWidget(@buf[1], xmLabelGadgetClass, parent, nil);
+          XtVaCreateManagedWidget(@buf[j, i][1], xmLabelGadgetClass, parent, nil);
         end else begin
           btn := XtVaCreateManagedWidget('', xmPushButtonWidgetClass, parent, nil);
-          XtAddCallback(btn, XmNactivateCallback, @Click_Button, @buf);
+          XtAddCallback(btn, XmNactivateCallback, @Click_Button, @buf[j, i]);
         end;
       end;
     end;
