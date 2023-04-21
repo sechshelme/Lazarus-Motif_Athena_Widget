@@ -28,7 +28,7 @@ uses
 
   procedure main(argc: longint; argv: PPChar);
   var
-    toplevel, mainform,btn1, btn2, btn3, btn4: TWidget;
+    toplevel, mainform,btn1, btn2, btn3, btn4, btn5: TWidget;
     app: TXtAppContext;
   begin
     XtSetLanguageProc(nil, nil, nil);
@@ -52,12 +52,22 @@ uses
     nil);
 
     btn4 := XtVaCreateManagedWidget('Button4', xmPushButtonWidgetClass, mainform,
-    XmNtopAttachment, XmATTACH_WIDGET,
-    XmNtopWidget, btn2,
     XmNrightAttachment,XmATTACH_FORM,
+    XmNbottomAttachment,XmATTACH_FORM,
+    nil);
+
+    btn5 := XtVaCreateManagedWidget('Button5', xmPushButtonWidgetClass, mainform,
+    XmNtopAttachment, XmATTACH_WIDGET,
+    XmNheight,50,
+    XmNtopWidget, btn2,
+
+    XmNrightAttachment,XmATTACH_FORM,
+
     XmNleftAttachment, XmATTACH_WIDGET,
     XmNleftWidget, btn1,
-    XmNbottomAttachment,XmATTACH_FORM,
+
+    XmNbottomWidget, XmATTACH_WIDGET,
+    XmNbottomWidget, btn4,
     nil);
 
 
