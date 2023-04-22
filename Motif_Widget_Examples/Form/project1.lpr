@@ -28,7 +28,7 @@ uses
 
   procedure main(argc: longint; argv: PPChar);
   var
-    toplevel, mainform,btn1, btn2, btn3, btn4, btn5: TWidget;
+    toplevel, mainform,btn1, btn2, btn3, btn4, btn5, btn6, textform1: TWidget;
     app: TXtAppContext;
   begin
     XtSetLanguageProc(nil, nil, nil);
@@ -57,19 +57,29 @@ uses
     nil);
 
     btn5 := XtVaCreateManagedWidget('Button5', xmPushButtonWidgetClass, mainform,
-    XmNtopAttachment, XmATTACH_WIDGET,
-    XmNheight,50,
-    XmNtopWidget, btn2,
-
-    XmNrightAttachment,XmATTACH_FORM,
-
-    XmNleftAttachment, XmATTACH_WIDGET,
-    XmNleftWidget, btn1,
-
-    XmNbottomWidget, XmATTACH_WIDGET,
-    XmNbottomWidget, btn4,
+    XmNrightAttachment,XmATTACH_WIDGET,
+    XmNrightWidget, btn4,
+    XmNbottomAttachment,XmATTACH_FORM,
     nil);
 
+    btn6 := XtVaCreateManagedWidget('Btn6', xmPushButtonWidgetClass, mainform,
+    XmNleftAttachment,XmATTACH_OPPOSITE_WIDGET,
+    XmNleftWidget, btn1,
+    XmNrightAttachment,XmATTACH_WIDGET,
+    XmNrightWidget, btn5,
+    XmNbottomAttachment,XmATTACH_FORM,
+    nil);
+
+    textform1 := XtVaCreateManagedWidget('text_form', xmTextWidgetClass, mainform,
+    XmNbackground,$FFFFFF,
+    XmNtopAttachment, XmATTACH_WIDGET,
+    XmNtopWidget, btn2,
+    XmNrightAttachment,XmATTACH_FORM,
+    XmNleftAttachment, XmATTACH_WIDGET,
+    XmNleftWidget, btn1,
+    XmNbottomAttachment, XmATTACH_WIDGET,
+    XmNbottomWidget, btn4,
+    nil);
 
     XtManageChild(mainform);
     XtRealizeWidget(toplevel);
