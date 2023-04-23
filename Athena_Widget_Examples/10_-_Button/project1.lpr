@@ -16,7 +16,7 @@ var
   var
     Caption: PChar;
     //    name:array[0..15] of Char;
-    Name: PChar;
+    Name: PChar=nil;
     s: string;
   begin
     XtVaGetValues(w, XtNlabel, @Caption, nil);
