@@ -66,38 +66,62 @@ uses
 
   procedure main(argc: longint; argv: PPChar);
   const
-    items: array of PChar = (
-      'choice0', 'choice1', 'choice2', 'choice3', 'choice4', 'choice5', 'choice6', 'choice7',
-      'choice8', 'choice9', 'choice10', 'choice11', 'choice12', 'choice13', 'choice14');
+    items: PChar = 'choice0, choice1, choice2, choice3,'#9' choice4, choice5, choice6, choice7, choice8, choice9, choice10, choice11, choice12, choice13, choice14';
+
+    //    items: array of PChar = (
+    //      'choice0', 'choice1', 'choice2', 'choice3', 'choice4', 'choice5', 'choice6', 'choice7',
+    //      'choice8', 'choice9', 'choice10', 'choice11', 'choice12', 'choice13', 'choice14');
+
+    // https://motif.ics.com/forum/developers/color-scheme
+// https://www.opengroup.org/infosrv/openmotif/R2.1.30/motif/tests/XmString/StringNext.c
+
   var
     toplevel, list_w, sb: TWidget;
     app: TXtAppContext;
     strArr: array of TXmString;
     i: integer;
+xms,    break_component: TXmString;
+    table: TXmStringTable = nil;
+    count: TCardinal;
 
   begin
     XtSetLanguageProc(nil, nil, nil);
 
     toplevel := XtVaAppInitialize(@app, 'Demos', nil, 0, @argc, argv, nil, nil);
 
-    SetLength(strArr, Length(items));
-    for i := 0 to Length(items) - 1 do begin
-      strArr[i] := XmStringCreate(items[i], XmFONTLIST_DEFAULT_TAG);
-    end;
+       xms:=       XmStringCreate(items, XmFONTLIST_DEFAULT_TAG);
+
+
+       break_component := XmStringComponentCreate(XmSTRING_COMPONENT_TAB, 2, pchar(', '));
+//       break_component := XmStringSeparatorCreate;
+ count:=   XmStringToXmStringTable(xms, break_component, @table);
+ WriteLn(count);
+
+ //halt;
+
+
+    //    SetLength(strArr, Length(items));
+    //    for i := 0 to Length(items) - 1 do begin
+    //      strArr[i] := XmStringCreate(items[i], XmFONTLIST_DEFAULT_TAG);
+    //    end;
 
     list_w := XmCreateScrolledList(toplevel, 'list_w', nil, 0);
     XtVaSetValues(list_w,
-//    XmNitems, @strArr[0],
-    XmNitems, PXmString(strArr),
-      XmNitemCount, Length(items),
+      XmNitems, table,
+      XmNitemCount, count,
+      //    XmNitems, PXmString(strArr),
+      //      XmNitemCount, Length(items),
+
+      //XmNitems, table,
+
       //      XtVaTypedArg, XmNitems, XmRString, items, strlen(items) + 1,
       //      XmNitemCount, 15,
       XmNvisibleItemCount, 5,
       nil);
 
-    for i := 0 to Length(items) - 1 do begin
-      XmStringFree(strArr[i]);
-    end;
+    //    for i := 0 to Length(items) - 1 do begin
+    //      XmStringFree(strArr[i]);
+    //    end;
 
     XtManageChild(list_w);
 

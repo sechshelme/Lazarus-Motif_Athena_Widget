@@ -774,6 +774,10 @@ function XtAppSetErrorHandler(para1: TXtAppContext; _X_NORETURN: TXtErrorHandler
 procedure XtSetErrorHandler(_X_NORETURN: TXtErrorHandler); cdecl; external libXt;
 function XtAppSetWarningHandler(para1: TXtAppContext; para2: TXtErrorHandler): TXtErrorHandler; cdecl; external libXt;
 procedure XtSetWarningHandler(para1: TXtErrorHandler); cdecl; external libXt;
+
+procedure XtAppError(para1:TXtAppContext; para2:TXtString);cdecl;external libXt;
+procedure XtError(para1:TXtString);cdecl;external libXt;
+
 procedure XtAppWarning(para1: TXtAppContext; _XtString: TXtString); cdecl; external libXt;
 procedure XtWarning(_XtString: TXtString); cdecl; external libXt;
 function XtAppGetErrorDatabase(para1: TXtAppContext): PXrmDatabase; cdecl; external libXt;
