@@ -38,6 +38,7 @@ const
 var
   gc: TGC;
   pixmap: TPixmap;
+  width,heigth:TDimension;
 
   procedure set_color(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var
@@ -72,11 +73,32 @@ var
       if num_params^ <> 1 then XtError('Wrong number of args!');
   end;
 
-  procedure main(argc: longint; argv: PPChar);
+  procedure redraw(w: TWidget; client_data: TXtPointer; call_data: TXtPointer);
+    cdecl;
+  begin
+
+  end;
+
+  procedure clear_it(w: TWidget; client_data: TXtPointer; call_data: TXtPointer
+    ); cdecl;
+  begin
+
+  end;
+
+// https://www.oreilly.com/library/view/volume-6a-motif/9780596000431/chapter-146.html
+
+//<Btn1Down>:   draw(down) ManagerGadgetArm()  0         <Btn1Up>:     draw(up)   ManagerGadgetActivate()  0         <Btn1Motion>: draw(motion) ManagerGadgetButtonMotion()";       XtSetLanguageProc (NULL, NULL, NULL
+
+//"<Btn1Down>: draw(down)  ManagerGadgetArm()\n\
+// <Btn1Up>:   draw(up)    ManagerGadgetActivate()\n\
+// <Btn1Motion>: draw(motion) ManagerGadgetButtonMotion()";
+
+procedure main(argc: longint; argv: PPChar);
   const
-    translation: PChar = ':   draw(down)'#10 +
-      ':     draw(up)  '#10 +
-      ': draw(motion)';
+    translation: PChar =
+      '<Btn1Down>:   draw(down)'#10 +
+      '<Btn1Up>:     draw(up)  '#10 +
+      '<Btn1Motion>: draw(motion)';
 
   var
     actions:TXtActionsRec;
@@ -144,6 +166,7 @@ var
 
     actions._string:='draw';
     actions.proc:=@draw;
+    XtAppAddActions(app, @actions,1);
 
     drawing_a:=XtVaCreateManagedWidget('drawing_a', xmDrawingAreaWidgetClass,sw,
        XmNtranslations, XtParseTranslationTable(translation),
@@ -152,6 +175,18 @@ var
        XmNheight,6000,
        XmNresizePolicy,XmNONE,
     nil);
+
+    XtAddCallback(drawing_a, XmNexposeCallback, @redraw, nil);
+    XtAddCallback(pb, XmNactivateCallback, @clear_it, nil);
+
+    XtVaSetValues(drawing_a,XmNunitType,XmPIXELS,nil);
+    XtVaGetValues(drawing_a,XmNwidth, @width,XmNheight, @heigth,nil);
+
+    pixmap:=XCreatePixmap(XtDisplay(drawing_a),RootWindowOfScreen(XtScreen(drawing_a)),width,heigth,DefaultDepthOfScreen(XtScreen(drawing_a)));
+
+    set_color(drawing_a,PChar('White'),nil);
+
+    XFillRectangle(XtDisplay(drawing_a),pixmap,gc,0,0,width,heigth);
 
     XtRealizeWidget(toplevel);
     XtAppMainLoop(app);
