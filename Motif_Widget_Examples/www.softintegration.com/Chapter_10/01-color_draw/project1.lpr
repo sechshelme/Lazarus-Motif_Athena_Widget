@@ -4,6 +4,7 @@ uses
   heaptrc,
   Unix,
   Strings,
+  ctypes,
   xlib,
   x,
   XmXm,
@@ -38,7 +39,7 @@ const
 var
   gc: TGC;
   pixmap: TPixmap;
-  width,heigth:TDimension;
+  Width, heigth: TDimension;
 
   procedure set_color(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var
@@ -60,21 +61,33 @@ var
     XSetForeground(dpy, gc, col.pixel);
   end;
 
-  procedure Exit1(w: TWidget; client_data: TXtPointer; call_data: TXtPointer);    cdecl;
+  procedure Exit1(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   begin
-         Halt(0);
+    Halt(0);
   end;
 
-  procedure draw(w: TWidget; event: PXEvent; params: PXtString;    num_params: PCardinal); cdecl;
+  procedure draw(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
   var
     bevent: PXButtonEvent;
+  const
+    x: TPosition = 0;
+    y: TPosition = 0;
   begin
-      bevent:=PXButtonEvent(event);
-      if num_params^ <> 1 then XtError('Wrong number of args!');
+    bevent := PXButtonEvent(event);
+    if num_params^ <> 1 then begin
+      XtError('Wrong number of args!');
+    end;
+    WriteLn('draw');
+    if strcomp(params[0], 'down') <> 0 then begin
+      XDrawLine(bevent^.display, bevent^.window, gc, x, y, bevent^.x, bevent^.y);
+      XDrawLine(bevent^.display, pixmap, gc, x, y, bevent^.x, bevent^.y);
+    end;
+    x := bevent^.x;
+    y := bevent^.y;
   end;
 
   procedure redraw(w: TWidget; client_data: TXtPointer; call_data: TXtPointer);
-    cdecl;
+  cdecl;
   begin
 
   end;
@@ -85,15 +98,15 @@ var
 
   end;
 
-// https://www.oreilly.com/library/view/volume-6a-motif/9780596000431/chapter-146.html
+  // https://www.oreilly.com/library/view/volume-6a-motif/9780596000431/chapter-146.html
 
-//<Btn1Down>:   draw(down) ManagerGadgetArm()  0         <Btn1Up>:     draw(up)   ManagerGadgetActivate()  0         <Btn1Motion>: draw(motion) ManagerGadgetButtonMotion()";       XtSetLanguageProc (NULL, NULL, NULL
+  //<Btn1Down>:   draw(down) ManagerGadgetArm()  0         <Btn1Up>:     draw(up)   ManagerGadgetActivate()  0         <Btn1Motion>: draw(motion) ManagerGadgetButtonMotion()";       XtSetLanguageProc (NULL, NULL, NULL
 
-//"<Btn1Down>: draw(down)  ManagerGadgetArm()\n\
-// <Btn1Up>:   draw(up)    ManagerGadgetActivate()\n\
-// <Btn1Motion>: draw(motion) ManagerGadgetButtonMotion()";
+  //"<Btn1Down>: draw(down)  ManagerGadgetArm()\n\
+  // <Btn1Up>:   draw(up)    ManagerGadgetActivate()\n\
+  // <Btn1Motion>: draw(motion) ManagerGadgetButtonMotion()";
 
-procedure main(argc: longint; argv: PPChar);
+  procedure main(argc: longint; argv: PPChar);
   const
     translation: PChar =
       '<Btn1Down>:   draw(down)'#10 +
@@ -101,7 +114,7 @@ procedure main(argc: longint; argv: PPChar);
       '<Btn1Motion>: draw(motion)';
 
   var
-    actions:TXtActionsRec;
+    actions: TXtActionsRec;
     toplevel, main_w, rc, pb, sw, drawing_a: TWidget;
     app: TXtAppContext;
     gcv: TXGCValues;
@@ -144,7 +157,7 @@ procedure main(argc: longint; argv: PPChar);
       XmNtopWidget, rc,
       nil);
 
-    XtAddCallback(pb, XmNactivateCallback, @Exit1,nil);
+    XtAddCallback(pb, XmNactivateCallback, @Exit1, nil);
 
     pb := XtVaCreateManagedWidget('Clear', xmPushButtonGadgetClass, main_w,
       XmNleftAttachment, XmATTACH_WIDGET,
@@ -153,40 +166,40 @@ procedure main(argc: longint; argv: PPChar);
       XmNtopWidget, rc,
       nil);
 
-    sw:=XtVaCreateManagedWidget('scrolled_win',xmScrolledWindowWidgetClass,main_w,
-       XmNwidth,300,
-       XmNscrollingPolicy,XmAUTOMATIC,
-       XmNscrollBarDisplayPolicy,XmAS_NEEDED,
-       XmNtopAttachment, XmATTACH_FORM,
-       XmNbottomAttachment, XmATTACH_FORM,
-       XmNleftAttachment, XmATTACH_WIDGET,
-       XmNleftWidget, rc,
-       XmNrightAttachment, XmATTACH_FORM,
-    nil);
+    sw := XtVaCreateManagedWidget('scrolled_win', xmScrolledWindowWidgetClass, main_w,
+      XmNwidth, 300,
+      XmNscrollingPolicy, XmAUTOMATIC,
+      XmNscrollBarDisplayPolicy, XmAS_NEEDED,
+      XmNtopAttachment, XmATTACH_FORM,
+      XmNbottomAttachment, XmATTACH_FORM,
+      XmNleftAttachment, XmATTACH_WIDGET,
+      XmNleftWidget, rc,
+      XmNrightAttachment, XmATTACH_FORM,
+      nil);
 
-    actions._string:='draw';
-    actions.proc:=@draw;
-    XtAppAddActions(app, @actions,1);
+    actions._string := 'draw';
+    actions.proc := @draw;
+    XtAppAddActions(app, @actions, 1);
 
-    drawing_a:=XtVaCreateManagedWidget('drawing_a', xmDrawingAreaWidgetClass,sw,
-       XmNtranslations, XtParseTranslationTable(translation),
-       XmNunitType,Xm1000TH_INCHES,
-       XmNwidth,5000,
-       XmNheight,6000,
-       XmNresizePolicy,XmNONE,
-    nil);
+    drawing_a := XtVaCreateManagedWidget('drawing_a', xmDrawingAreaWidgetClass, sw,
+      XmNtranslations, XtParseTranslationTable(translation),
+      XmNunitType, Xm1000TH_INCHES,
+      XmNwidth, 5000,
+      XmNheight, 6000,
+      XmNresizePolicy, XmNONE,
+      nil);
 
     XtAddCallback(drawing_a, XmNexposeCallback, @redraw, nil);
     XtAddCallback(pb, XmNactivateCallback, @clear_it, nil);
 
-    XtVaSetValues(drawing_a,XmNunitType,XmPIXELS,nil);
-    XtVaGetValues(drawing_a,XmNwidth, @width,XmNheight, @heigth,nil);
+    XtVaSetValues(drawing_a, XmNunitType, XmPIXELS, nil);
+    XtVaGetValues(drawing_a, XmNwidth, @Width, XmNheight, @heigth, nil);
 
-    pixmap:=XCreatePixmap(XtDisplay(drawing_a),RootWindowOfScreen(XtScreen(drawing_a)),width,heigth,DefaultDepthOfScreen(XtScreen(drawing_a)));
+    pixmap := XCreatePixmap(XtDisplay(drawing_a), RootWindowOfScreen(XtScreen(drawing_a)), Width, heigth, DefaultDepthOfScreen(XtScreen(drawing_a)));
 
-    set_color(drawing_a,PChar('White'),nil);
+    set_color(drawing_a, PChar('White'), nil);
 
-    XFillRectangle(XtDisplay(drawing_a),pixmap,gc,0,0,width,heigth);
+    XFillRectangle(XtDisplay(drawing_a), pixmap, gc, 0, 0, Width, heigth);
 
     XtRealizeWidget(toplevel);
     XtAppMainLoop(app);
