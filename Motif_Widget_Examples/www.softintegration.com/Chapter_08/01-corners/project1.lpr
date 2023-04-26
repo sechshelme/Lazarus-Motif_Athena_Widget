@@ -28,7 +28,7 @@ uses
 const
   corners: array of PChar = ('Top, Left', 'Top Right', 'Bottom Left', 'Bottom Right');
 
-  procedure resize(w: TWidget; event: PXEvent; params: PString; num_params: PCardinal); cdecl;
+  procedure resize(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
   var
     children: TWidgetList;
     w_widht, w_height: TDimension;
@@ -47,7 +47,7 @@ const
       nil);
 
     XtVaSetValues(children[0],
-          XmNx, margin_w, XmNy, margin_h,
+      XmNx, margin_w, XmNy, margin_h,
       nil);
 
     XtVaGetValues(children[1], XmNwidth, @w_widht, nil);
@@ -69,19 +69,19 @@ const
       nil);
   end;
 
-  procedure enter(w: TWidget; event: PXEvent; params: PString; num_params: PCardinal); cdecl;
+  procedure enter(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
   begin
-    XtVaSetValues(w, XmNbackground,$FF0000,nil);
+    XtVaSetValues(w, XmNbackground, $FF0000, nil);
     WriteLn('enter');
   end;
 
-  procedure leave(w: TWidget; event: PXEvent; params: PString;    num_params: PCardinal); cdecl;
+  procedure leave(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
   begin
-    XtVaSetValues(w, XmNbackground,$00FF00);
+    XtVaSetValues(w, XmNbackground, $00FF00);
     WriteLn('leave');
   end;
 
-  procedure test(w: TWidget; event: PXEvent; params: PString;    num_params: PCardinal); cdecl;
+  procedure test(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
   begin
     WriteLn('test');
   end;

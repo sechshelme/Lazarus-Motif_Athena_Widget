@@ -77,6 +77,9 @@ var
     if num_params^ <> 1 then begin
       XtError('Wrong number of args!');
     end;
+    WriteLn(num_params^);
+
+    WriteLn(params[0]);
 
     if strcomp(params[0], 'down') <> 0 then begin
       XDrawLine(bevent^.display, bevent^.window, gc, x, y, bevent^.x, bevent^.y);
@@ -114,9 +117,25 @@ var
   procedure main(argc: longint; argv: PPChar);
   const
     translation: PChar =
+      '<Key>:   draw(key)'#10 +
+      '<Enter>:   draw(enter)'#10 +
+      '<Leave>:   draw(leave)'#10 +
+
       '<Btn1Down>:   draw(down)'#10 +
       '<Btn1Up>:     draw(up)  '#10 +
-      '<Btn1Motion>: draw(motion)';
+      '<Btn1Motion>: draw(motion)'#10 +
+      '<Btn2Down>:   draw(down2)'#10 +
+      '<Btn2Up>:     draw(up2)  '#10 +
+      '<Btn2Motion>: draw(motion2)'#10 +
+      '<Btn3Down>:   draw(down3)'#10 +
+      '<Btn3Up>:     draw(up3)  '#10 +
+      '<Btn3Motion>: draw(motion3)'#10 +
+      '<Btn4Down>:   draw(down4)'#10 +
+      '<Btn4Up>:     draw(up4)  '#10 +
+      '<Btn4Motion>: draw(motion4)'#10 +
+      '<Btn5Down>:   draw(down5)'#10 +
+      '<Btn5Up>:     draw(up5)  '#10 +
+      '<Btn5Motion>: draw(motion5)';
 
   var
     actions: TXtActionsRec;
