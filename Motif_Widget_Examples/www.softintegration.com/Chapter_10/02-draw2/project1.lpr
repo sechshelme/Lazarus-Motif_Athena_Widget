@@ -31,17 +31,20 @@ uses
   XTIntrinsic;
 
 const
-  Width = 400;
-  Height = 300;
+  SWIDTH = 400;
+  SHEIGHT = 300;
 
-  var    pixmap: TPixmap;
+var
+  pixmap: TPixmap;
 
   procedure drawin_area_callback(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
+  const
+    x: cint = 0;
+    y: cint = 0;
   var
     cbs: PXmDrawingAreaCallbackStruct;
     event: PXEvent;
     dpy: PDisplay;
-    x, y: cint;
     gc: TGC;
   begin
     cbs := PXmDrawingAreaCallbackStruct(call_data);
@@ -55,11 +58,25 @@ const
         y := event^.xbutton.y;
       end else if event^.xany._type = ButtonRelease then begin
         XtVaGetValues(w, XmNuserData, @gc, nil);
-        XDrawLine(dpy,cbs^.window,gc,x,y,event^.xbutton.x,event^.xbutton.y);
-        XDrawLine(dpy,pixmap,gc,x,y,event^.xbutton.x,event^.xbutton.y);
-        x:=event^.xbutton.x;
-        y:=event^.xbutton.y;
+        XDrawLine(dpy, cbs^.window, gc, x, y, event^.xbutton.x, event^.xbutton.y);
+        XDrawLine(dpy, pixmap, gc, x, y, event^.xbutton.x, event^.xbutton.y);
+        x := event^.xbutton.x;
+        y := event^.xbutton.y;
       end;
+    end;
+
+    if (cbs^.reason = XmCR_EXPOSE) or (cbs^.reason = XmCR_ACTIVATE) then begin
+      if cbs^.reason = XmCR_ACTIVATE then begin
+        w := XtParent(w);
+      end;
+      XtVaGetValues(w, XmNuserData, @gc, nil);
+      if cbs^.reason = XmCR_ACTIVATE then begin
+        XSetForeground(dpy, gc, WhitePixelOfScreen(XtScreen(w)));
+        XFillRectangle(dpy, pixmap, gc, 0, 0, SWIDTH, SHEIGHT);
+        XSetForeground(dpy, gc, BlackPixelOfScreen(XtScreen(w)));
+      end;
+
+      XCopyArea(dpy, pixmap, event^.xany.window, gc, 0, 0, SWIDTH, SHEIGHT, 0, 0);
     end;
   end;
 
@@ -71,7 +88,10 @@ const
   begin
     XtSetLanguageProc(nil, nil, nil);
 
-    toplevel := XtVaAppInitialize(@app, 'Demos', nil, 0, @argc, argv, nil, nil);
+    toplevel := XtVaAppInitialize(@app, 'Demos', nil, 0, @argc, argv, nil,
+      XmNwidth, 320,
+      XmNheight, 200,
+      nil);
 
     drawing_a := XtVaCreateWidget('drawing_a', xmDrawingAreaWidgetClass, toplevel, nil);
 
@@ -80,12 +100,12 @@ const
 
     gc := XCreateGC(XtDisplay(drawing_a), RootWindowOfScreen(XtScreen(drawing_a)), 0, nil);
 
-    XtVaSetValues(drawing_a,XmNuserData,gc,nil);
-    XSetForeground(XtDisplay(drawing_a),gc,WhitePixelOfScreen(XtScreen(drawing_a)));
+    XtVaSetValues(drawing_a, XmNuserData, gc, nil);
+    XSetForeground(XtDisplay(drawing_a), gc, WhitePixelOfScreen(XtScreen(drawing_a)));
 
-    pixmap := XCreatePixmap(XtDisplay(drawing_a), RootWindowOfScreen(XtScreen(drawing_a)), Width, Height, DefaultDepthOfScreen(XtScreen(drawing_a)));
+    pixmap := XCreatePixmap(XtDisplay(drawing_a), RootWindowOfScreen(XtScreen(drawing_a)), SWIDTH, SHEIGHT, DefaultDepthOfScreen(XtScreen(drawing_a)));
 
-    XFillRectangle(XtDisplay(drawing_a), pixmap, gc, 0, 0, Width, Height);
+    XFillRectangle(XtDisplay(drawing_a), pixmap, gc, 0, 0, SWIDTH, SHEIGHT);
     XSetForeground(XtDisplay(drawing_a), gc, BlackPixelOfScreen(XtScreen(drawing_a)));
 
     pb := XtVaCreateManagedWidget('Clear', xmPushButtonGadgetClass, drawing_a, nil);
