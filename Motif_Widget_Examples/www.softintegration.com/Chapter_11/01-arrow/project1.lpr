@@ -38,73 +38,52 @@ uses
 
 type
   PMyDisplay = ^TMyDisplay;
-
-//  TMyDisplay = record
-////    ext_data:TXExtData;
-////    pri1: TXPrivate;
-//    pri1: Pointer;
-//    fd: longint;
-//    pr2: longint;
-//    pmv1: longint;
-//    pmv2: longint;
-//    vendoe: PChar;
-//    pri4: TXID;
-//    pri5: TXID;
-//    pri6: longint;
-//    ra: PXDisplay;
-//    bo: longint;
-//    bu: longint;
-//    bp: longint;
-//    bbo: longint;
-//    nformat: longint;
-//    pf: PScreenFormat;
-//    p8: longint;
-//    rel: longint;
-//    pri8, pri9: Pointer;
-//    qlen: longint;
-//    lrr: culong;
-//    req: culong;
-//    pri11: TXtPointer;
-//    pri12: TXtPointer;
-//    pri13: TXtPointer;
-//    pri14: TXtPointer;
-//    max_r: cunsigned;
-//    db: PXrmDatabase;
-//    d:array[0..11]of Pointer;
-//  end;
-
   TMyDisplay = record
-    ext_data:PXExtData;
-    pri1: PXPrivate;
-    fd: longint;
-    pr2: longint;
-    pmv1: longint;
-    pmv2: longint;
+    ext_data: PXExtData;
+    private1: PXPrivate;
+    fd: cint;
+    pr2: cint;
+    roto_major_version: cint;
+    roto_minor_version: cint;
     vendor: PChar;
-    pri3: TXID;
-    pri4: TXID;
-    pri5: TXID;
-    pri6: longint;
-    ra: PXDisplay;
-    bo: longint;
-    bu: longint;
-    bp: longint;
-    bbo: longint;
-    nformat: longint;
-    pf: PScreenFormat;
-    p8: longint;
-    rel: longint;
-    pri8, pri9: PXPrivate;
-    qlen: longint;
-    lrr: culong;
-    req: culong;
-    pri11: TXtPointer;
-    pri12: TXtPointer;
-    pri13: TXtPointer;
-    pri14: TXtPointer;
-    max_r: cunsigned;
+    private3: TXID;
+    private4: TXID;
+    private5: TXID;
+    private6: longint;
+    resource_alloc:
+    function(para1: PXDisplay): TXID; cdecl;
+    byte_order: cint;
+    bitmap_unit: cint;
+    bitmap_pad: cint;
+    bitmap_bit_order: cint;
+    nformats: cint;
+    pixel_format: PScreenFormat;
+    private8: cint;
+    Release: cint;
+    private9, private10: PXPrivate;
+    qlen: cint;
+    last_request_read: culong;
+    request: culong;
+    private11: TXtPointer;
+    private12: TXtPointer;
+    private13: TXtPointer;
+    private14: TXtPointer;
+    max_request_size: cunsigned;
     db: PXrmDatabase;
-    d:array[0..11]of Pointer;
+    private15:
+    function(para1: PXDisplay): longint; cdecl;
+    display_name: PChar;
+    default_screen: cint;
+    nscreens: cint;
+    screens: PScreen;
+    motion_buffer: culong;
+    private16: culong;
+    min_keycode: cint;
+    max_keycode: cint;
+    private17: TXPointer;
+    private18: TXPointer;
+    private19: cint;
+    xdefaults: PChar;
   end;
 
 
@@ -124,25 +103,20 @@ type
 
     dpy := XtDisplay(toplevel);
 
-    WriteLn(PtrInt(Mydpy));
-     WriteLn(PtrInt(dpy));
+    XrmPutStringResource(@Mydpy^.db, '*form*topAttachment', 'attach_position');
+    XrmPutStringResource(@Mydpy^.db, '*form*leftAttachment', 'attach_position');
+    XrmPutStringResource(@Mydpy^.db, '*form*rightAttachment', 'Attach_position');
+    XrmPutStringResource(@Mydpy^.db, '*form*bottomAttachment', 'attach_position');
+    XrmPutStringResource(@Mydpy^.db, '*form*background', 'Green');
+    XrmPutStringResource(@Mydpy^.db, '*form*foreground', '#FF8888');
 
-     XrmPutStringResource        (@Mydpy^.db, '*form*topAttachment', 'attach_position');
-     XrmPutStringResource        (@Mydpy^.db, '*form*leftAttachment', 'attach_position');
-     XrmPutStringResource        (@Mydpy^.db, '*form*rightAttachment', 'attach_position');
-     XrmPutStringResource        (@Mydpy^.db, '*form*bottomAttachment', 'attach_position');
-
-
-    //XrmPutStringResource(@Mydpy^.db, '*form*topAttachment', 'attach_position');
-    //XrmPutStringResource(@Mydpy^.db, '*form*leftAttachment', 'attach_position');
-    //XrmPutStringResource(@Mydpy^.db, '*form*rightAttachment', 'attach_position');
-    //XrmPutStringResource(@Mydpy^.db, '*form*bottomAttachment', 'attach_position');
-    //
     form := XtVaCreateWidget('form', xmFormWidgetClass, toplevel,
       XmNfractionBase, 3,
       nil);
 
     XtVaCreateManagedWidget('arrow1', xmArrowButtonGadgetClass, form,
+
+      //    XmNtopAttachment, XmATTACH_POSITION,
       XmNtopPosition, 0,
       XmNbottomPosition, 1,
       XmNleftPosition, 1,
@@ -173,7 +147,6 @@ type
       XmNrightPosition, 2,
       XmNarrowDirection, XmARROW_DOWN,
       nil);
-
 
     XtManageChild(form);
     XtRealizeWidget(toplevel);
