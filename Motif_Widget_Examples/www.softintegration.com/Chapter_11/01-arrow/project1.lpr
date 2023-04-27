@@ -64,10 +64,10 @@ type
     qlen: cint;
     last_request_read: culong;
     request: culong;
-    private11: TXtPointer;
-    private12: TXtPointer;
-    private13: TXtPointer;
-    private14: TXtPointer;
+    private11: TXPointer;
+    private12: TXPointer;
+    private13: TXPointer;
+    private14: TXPointer;
     max_request_size: cunsigned;
     db: PXrmDatabase;
     private15:
