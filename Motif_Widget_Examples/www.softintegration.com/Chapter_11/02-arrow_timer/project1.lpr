@@ -63,7 +63,7 @@ var
     end;
 
     Inc(range^.Value, incr);
-    WriteStr(buf, range^.Value);
+    WriteStr(buf, range^.Value,'  vincr: ', arrow_timer_id);
     XtVaSetValues(label1, XtVaTypedArg, XmNlabelString, XmRString, PChar(buf), Length(buf), nil);
 
     if PtrInt(id) = 1 then begin
@@ -119,8 +119,8 @@ var
     XtAddCallback(w, XmNdisarmCallback, @start_stop, Pointer(-1));
 
     range.Value := 0;
-    range.min := -100;
-    range.max := 10;
+    range.min := -1000;
+    range.max := 1000;
 
     label1 := XtVaCreateManagedWidget('label', xmLabelGadgetClass, rowcol,
       XtVaTypedArg, XmNlabelString, XmRString, '0   0', 3,
