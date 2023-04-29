@@ -42,25 +42,33 @@ uses
     newtext, Text: PChar;
     str1: TXmString;
     strlist: PXmString;
-    u_bound, i: PtrInt;
+    i: PtrInt;
+    u_bound: PtrInt= 0;
     l_bound: PtrInt = 0;
   begin
     list_w := TWidget(client_data);
     newtext := XmTextFieldGetString(w);
+
     if (newtext = nil) or (newtext^ = #0) then begin
       XtFree(newtext);
       Exit;
     end;
+
     XtVaGetValues(list_w,
       XmNitemCount, @u_bound,
       XmNitems, @strlist,
       nil);
     Dec(u_bound);
-    while not (u_bound >= l_bound) do begin             // Fehler
+
+    while (u_bound >= l_bound) do begin             // Fehler
       i := l_bound + (u_bound - l_bound) div 2;
-      if not XmStringGetLtoR(strlist[i], XmFONTLIST_DEFAULT_TAG, @Text) then begin
+
+      WriteLn(i);
+      if i>100 then Break;
+
+     if  not XmStringGetLtoR(strlist[i], XmFONTLIST_DEFAULT_TAG, @Text) then begin
         Break;
-      end;
+     end;
       if strcomp(Text, newtext) > 0 then begin
         u_bound := i - 1;
       end else begin
