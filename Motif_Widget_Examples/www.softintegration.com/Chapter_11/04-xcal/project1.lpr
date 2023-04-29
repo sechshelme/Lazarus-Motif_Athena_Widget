@@ -42,7 +42,7 @@ uses
 const
   months: array of PChar = ('Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember');
 var
-  year: integer;
+  year: word;
 
   procedure press_quit(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   begin
@@ -51,7 +51,7 @@ var
 
   function ArgvToXmStringTable(argc: longint; argv: PPChar): TXmStringTable;
   var
-    c_new: TXmStringTable=nil;
+    c_new: TXmStringTable = nil;
   begin
     c_new := TXmStringTable(XtMalloc((argc + 1) * SizeOf(TXmString)));
     if c_new = nil then begin
@@ -75,7 +75,7 @@ var
       XmStringFree(argv[i]);
       Inc(i);
     end;
-        XtFree(PChar( argv));
+    XtFree(PChar(argv));
   end;
 
   procedure set_month(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
@@ -114,8 +114,8 @@ var
     entry: TXmFontListEntry;
     fontlist: TXmFontList;
     dpy: PDisplay;
-    month_no, i: integer;
     strs: TXmStringTable;
+    month_no, day, dow: word;
 
   begin
     XtSetLanguageProc(nil, nil, nil);
@@ -136,14 +136,16 @@ var
     entry := XmFontListEntryCreate('tag2', XmFONT_IS_FONT, font);
     fontlist := XmFontListAppendEntry(fontlist, entry);
 
+    if fontlist = nil then begin
+      WriteLn('Kann Font nicht laden !');
+    end;
     XtFree(entry);
 
     if argc > 1 then begin
       month_no := 1;
       year := StrToInt(argv[1]);
     end else begin
-      year := 2022;
-      month_no := 11;
+      DecodeDateFully(now, year, month_no, day, dow);
     end;
 
     rowcol := XtVaCreateWidget('rowcol', xmRowColumnWidgetClass, toplevel,
@@ -168,7 +170,9 @@ var
       nil);
 
     FreeXmStringtable(strs);
-    //    XmFontListFree(fontlist);
+    if fontlist <> nil then  begin
+      XmFontListFree(fontlist);
+    end;
 
     XtAddCallback(w, XmNbrowseSelectionCallback, @set_month, label1);
     XtManageChild(w);

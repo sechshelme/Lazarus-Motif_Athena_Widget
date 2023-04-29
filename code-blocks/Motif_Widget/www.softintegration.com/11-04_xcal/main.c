@@ -106,7 +106,7 @@ char *argv[];
         NULL);
 
     FreeXmStringTable (strs);
-//    XmFontListFree (fontlist);
+    if (fontlist)  XmFontListFree (fontlist);
     XtAddCallback (w, XmNbrowseSelectionCallback, set_month, label);
     XtManageChild (w);
     XmListSelectPos (w, month_no, True); /* initialize month */
