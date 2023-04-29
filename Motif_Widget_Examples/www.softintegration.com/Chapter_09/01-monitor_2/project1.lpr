@@ -89,7 +89,7 @@ uses
     XtVaSetValues(list_w,
       //    XmNitems, @strArr[0],
       XmNitems, PXmString(strArr),
-      XmNitemCount, Length(items),
+      XmNitemCount, Length(strArr),
       //      XtVaTypedArg, XmNitems, XmRString, items, strlen(items) + 1,
       //      XmNitemCount, 15,
       XmNvisibleItemCount, 5,
