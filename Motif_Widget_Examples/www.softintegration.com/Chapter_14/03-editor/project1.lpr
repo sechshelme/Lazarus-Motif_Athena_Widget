@@ -109,7 +109,7 @@ var
   var
     cbs: PXmFileSelectionBoxCallbackStruct;
     reason: PtrInt;
-    filename: PChar=nil;
+    filename: PChar = nil;
     fd: cint;
     buf: string;
     text1: PChar;
@@ -130,15 +130,16 @@ var
     end;
 
     if reason = FILE_SAVE then begin
-      WriteLn(filename);
       fd := FpOpen(filename, O_WrOnly or O_Creat);
       if fd <= 0 then begin
         WriteStr(buf, 'Can''t save to ', filename);
-        XmTextSetString(text_output,PChar(buf));
+        XmTextSetString(text_output, PChar(buf));
       end;
-      text1:=XmTextGetString(text_edit);
-      len:=XmTextGetLastPosition(text_edit);
-      if FpWrite(fd,text1,len)<>len then WriteLn('Fehler beim speichern !');
+      text1 := XmTextGetString(text_edit);
+      len := XmTextGetLastPosition(text_edit);
+      if FpWrite(fd, text1, len) <> len then begin
+        WriteLn('Fehler beim speichern !');
+      end;
     end;
 
     FpClose(fd);
@@ -178,6 +179,11 @@ var
     end;
 
     dialog := XmCreateFileSelectionDialog(text_edit, 'Files', nil, 0);
+    XtVaSetValues(dialog,
+      XtVaTypedArg, XmNdirectory, XmRString, PChar('/home'), 0,
+      XtVaTypedArg, XmNdirMask, XmRString, PChar('*.txt'), 0,
+      nil);
+
     XtAddCallback(dialog, XmNcancelCallback, @popdown_cb, nil);
     XtAddCallback(dialog, XmNokCallback, @file_select_cb, TXtPointer(reason));
 
