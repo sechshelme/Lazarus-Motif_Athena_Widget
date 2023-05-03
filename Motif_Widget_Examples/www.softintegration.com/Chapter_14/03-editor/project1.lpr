@@ -39,7 +39,7 @@ uses
   XTIntrinsic;
 
 var
-  text_output, text_w: TWidget;
+  text_output, text_edit, search_text, replace_text: TWidget;
 
   procedure edit_cb(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var
@@ -69,17 +69,17 @@ var
     WriteLn(reason);
     case reason of
       0: begin
-        result1 := XmTextCut(text_w, when);
+        result1 := XmTextCut(text_edit, when);
       end;
       1: begin
-        result1 := XmTextCopy(text_w, when);
+        result1 := XmTextCopy(text_edit, when);
       end;
       2: begin
-        result1 := XmTextPaste(text_w);
-        XmTextClearSelection(text_w, when);
+        result1 := XmTextPaste(text_edit);
+        XmTextClearSelection(text_edit, when);
       end;
       3: begin
-        XmTextClearSelection(text_w, when);
+        XmTextClearSelection(text_edit, when);
       end;
     end;
     if result1 = False then begin
@@ -103,14 +103,14 @@ var
 
   procedure main(argc: longint; argv: PPChar);
   var
-    toplevel, rowcol_v, main_window, menubar: TWidget;
-    app: TXtAppContext;
+    toplevel, main_window, menubar, form, search_panel: TWidget;
+    app_context: TXtAppContext;
     file_m, cut_m, copy_m, clear_m, paste_m, edit_m, search_m, open_m,
     save_m, exit_m, exit_acc_m, next_m, find_m, replace_m: TXmString;
   begin
     XtSetLanguageProc(nil, nil, nil);
 
-    toplevel := XtVaAppInitialize(@app, 'Demos', nil, 0, @argc, argv, nil,
+    toplevel := XtVaAppInitialize(@app_context, 'Demos', nil, 0, @argc, argv, nil,
       nil);
 
     main_window := XtVaCreateWidget('main_window', xmMainWindowWidgetClass, toplevel, nil);
@@ -173,37 +173,53 @@ var
     XmStringFree(clear_m);
     XmStringFree(replace_m);
 
-
     XtManageChild(menubar);
 
-    // ------------------------
+    form := XtVaCreateWidget('form', xmFormWidgetClass, main_window, nil);
 
-    rowcol_v := XtVaCreateManagedWidget('rowcol_v', xmRowColumnWidgetClass, main_window,
+    search_panel := XtVaCreateWidget('search_panel', xmRowColumnWidgetClass, form,
+      XmNorientation, XmHORIZONTAL,
+      XmNpacking, XmPACK_TIGHT,
+      XmNtopAttachment, XmATTACH_FORM,
+      XmNleftAttachment, XmATTACH_FORM,
+      XmNrightAttachment, XmATTACH_FORM,
       nil);
 
-    text_output := XtVaCreateManagedWidget('text_output', xmTextWidgetClass, rowcol_v,
+    XtVaCreateManagedWidget('Search Pattern:', xmLabelGadgetClass, search_panel, nil);
+    search_text := XtVaCreateManagedWidget('search_text', xmTextFieldWidgetClass, search_panel, nil);
+    XtVaCreateManagedWidget('     Replace Pattern:', xmLabelGadgetClass, search_panel, nil);
+    replace_text := XtVaCreateManagedWidget('replace_text', xmTextFieldWidgetClass, search_panel, nil);
+
+    XtManageChild(search_panel);
+
+    text_output := XtVaCreateManagedWidget('text_output', xmTextWidgetClass, form,
       XmNeditable, False,
       XmNcursorPositionVisible, False,
       XmNshadowThickness, 0,
-      XmNhighlightThickness, 0,
-      XmNbackground, $DDDDDD,
+      XmNleftAttachment, XmATTACH_FORM,
+      XmNrightAttachment, XmATTACH_FORM,
+      XmNbottomAttachment, XmATTACH_FORM,
       nil);
 
-    text_w := XmCreateScrolledText(rowcol_v, 'text_w', nil, 0);
-    XtVaSetValues(text_w,
+    text_edit := XmCreateScrolledText(form, 'text_edit', nil, 0);
+    XtVaSetValues(text_edit,
       XmNbackground, $FFFFFF,
       XmNrows, 10,
       XmNcolumns, 80,
       XmNeditMode, XmMULTI_LINE_EDIT,
-      XmNscrollHorizontal, False,
-      XmNwordWrap, True,
+      XmNtopAttachment, XmATTACH_WIDGET,
+      XmNtopWidget, search_panel,
+      XmNleftAttachment, XmATTACH_FORM,
+      XmNrightAttachment, XmATTACH_FORM,
+      XmNbottomAttachment, XmATTACH_WIDGET,
+      XmNbottomWidget, text_output,
       nil);
-    XtManageChild(text_w);
+    XtManageChild(text_edit);
 
-    XtManageChild(rowcol_v);
+    XtManageChild(form);
     XtManageChild(main_window);
     XtRealizeWidget(toplevel);
-    XtAppMainLoop(app);
+    XtAppMainLoop(app_context);
   end;
 
 begin
