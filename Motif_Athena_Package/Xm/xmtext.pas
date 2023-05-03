@@ -3,6 +3,7 @@ unit XmText;
 interface
 
 uses
+  Unix,
   x,
   XTIntrinsic;
 
@@ -30,25 +31,24 @@ type
 
 // --- Ursprung: Xm.h
 type
-  TXmHighlightMode= LongInt;
+  TXmHighlightMode = longint;
+  TXmTextDirection = longint;
 
-  TXmTextPosition = LongInt;
-  TXmTextDirection=LongInt;
-  PXmTextPosition =TXmTextPosition;
+  PXmTextPosition = ^TXmTextPosition;
+  TXmTextPosition = clong;
 
-  Pwchar_t = PWideChar;
-// -----------------
+  Pwchar_t = pwidechar;
 
   var
     xmTextWidgetClass : TWidgetClass;cvar;external libXm;
-{ --------------------------------------- *
+{  --------------------------------------- *
  *  text widget fast subclassing fallback  *
  * ---------------------------------------  }
 
 function XmIsText(w : TWidget) : Boolean;
 
 { XmIsText  }
-{ ----------------------------------- *
+{  ----------------------------------- *
  *   text widget public functions      *
  * -----------------------------------  }
 {*******    Public Function Declarations    ******* }
@@ -71,18 +71,10 @@ procedure XmTextReplace(widget:TWidget; frompos:TXmTextPosition; topos:TXmTextPo
 procedure XmTextReplaceWcs(widget:TWidget; frompos:TXmTextPosition; topos:TXmTextPosition; value:Pwchar_t);cdecl;external libXm;
 procedure XmTextInsert(widget:TWidget; position:TXmTextPosition; value:Pchar);cdecl;external libXm;
 procedure XmTextInsertWcs(widget:TWidget; position:TXmTextPosition; wc_value:Pwchar_t);cdecl;external libXm;
-{#if NeedWidePrototypes }
-{                        int state); }
-{#else }
 procedure XmTextSetAddMode(widget:TWidget; state:TBoolean);cdecl;external libXm;
-{#endif /* NeedWidePrototypes */ }
 function XmTextGetAddMode(widget:TWidget):TBoolean;cdecl;external libXm;
 function XmTextGetEditable(widget:TWidget):TBoolean;cdecl;external libXm;
-{#if NeedWidePrototypes }
-{                        int editable); }
-{#else }
 procedure XmTextSetEditable(widget:TWidget; editable:TBoolean);cdecl;external libXm;
-{#endif /* NeedWidePrototypes */ }
 function XmTextGetMaxLength(widget:TWidget):longint;cdecl;external libXm;
 procedure XmTextSetMaxLength(widget:TWidget; max_length:longint);cdecl;external libXm;
 function XmTextGetTopCharacter(widget:TWidget):TXmTextPosition;cdecl;external libXm;
@@ -102,12 +94,7 @@ function XmTextGetSelectionWcs(widget:TWidget):Pwchar_t;cdecl;external libXm;
 procedure XmTextSetSelection(widget:TWidget; first:TXmTextPosition; last:TXmTextPosition; set_time:TTime);cdecl;external libXm;
 procedure XmTextClearSelection(widget:TWidget; clear_time:TTime);cdecl;external libXm;
 function XmTextGetSelectionPosition(widget:TWidget; left:PXmTextPosition; right:PXmTextPosition):TBoolean;cdecl;external libXm;
-{#if NeedWidePrototypes }
-{                        int x, }
-{                        int y); }
-{#else }
 function XmTextXYToPos(widget:TWidget; x:TPosition; y:TPosition):TXmTextPosition;cdecl;external libXm;
-{#endif /* NeedWidePrototypes */ }
 function XmTextPosToXY(widget:TWidget; position:TXmTextPosition; x:PPosition; y:PPosition):TBoolean;cdecl;external libXm;
 function XmTextGetSource(widget:TWidget):TXmTextSource;cdecl;external libXm;
 procedure XmTextSetSource(widget:TWidget; source:TXmTextSource; top_character:TXmTextPosition; cursor_position:TXmTextPosition);cdecl;external libXm;

@@ -66,7 +66,6 @@ var
       end;
     end;
 
-    WriteLn(reason);
     case reason of
       0: begin
         result1 := XmTextCut(text_w, when);
