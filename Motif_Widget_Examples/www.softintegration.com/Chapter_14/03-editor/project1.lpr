@@ -110,10 +110,9 @@ var
     cbs: PXmFileSelectionBoxCallbackStruct;
     reason: PtrInt;
     filename: PChar = nil;
-    fd: cint;
-    buf: string;
-    text1: PChar;
+    buf: string = '';
     len: TXmTextPosition;
+    f: file;
   begin
     reason := PtrInt(client_data);
     cbs := PXmFileSelectionBoxCallbackStruct(call_data);
@@ -129,20 +128,27 @@ var
       Exit;
     end;
 
+    Assign(f, filename);
     if reason = FILE_SAVE then begin
-      fd := FpOpen(filename, O_WrOnly or O_Creat);
-      if fd <= 0 then begin
-        WriteStr(buf, 'Can''t save to ', filename);
-        XmTextSetString(text_output, PChar(buf));
-      end;
-      text1 := XmTextGetString(text_edit);
+      Rewrite(f, 1);
       len := XmTextGetLastPosition(text_edit);
-      if FpWrite(fd, text1, len) <> len then begin
-        WriteLn('Fehler beim speichern !');
+      buf := XmTextGetString(text_edit);
+      if len > 0 then  begin
+        BlockWrite(f, buf[1], len);
       end;
+    end else begin
+      Reset(f, 1);
+      len := FileSize(f);
+      SetLength(buf, len);
+      if len > 0 then  begin
+        BlockRead(f, buf[1], len);
+      end;
+      XmTextSetString(text_edit, PChar(buf));
     end;
+    Close(f);
+    XtFree(filename);
 
-    FpClose(fd);
+    XtUnmanageChild(w);
   end;
 
   procedure popdown_cb(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
