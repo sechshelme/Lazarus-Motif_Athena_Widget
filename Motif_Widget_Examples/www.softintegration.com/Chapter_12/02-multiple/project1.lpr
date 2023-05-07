@@ -37,7 +37,7 @@ uses
   XTIntrinsic;
 
 const
-  months: array of PChar = ('Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember');
+  months: array of string = ('Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember');
 
   procedure sel_callback(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var
@@ -78,7 +78,7 @@ const
     n := Length(months);
     str_list := TXmStringTable(XtMalloc(n * SizeOf(PXmString)));
     for i := 0 to n - 1 do begin
-      str_list[i] := XmStringCreateLocalized(months[i]);
+      str_list[i] := XmStringCreateLocalized(PChar(months[i]));
     end;
 
     list_w := XmCreateScrolledList(toplevel, 'months', nil, 0);

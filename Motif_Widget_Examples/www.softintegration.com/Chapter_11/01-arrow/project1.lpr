@@ -115,7 +115,6 @@ type
       nil);
 
     XtVaCreateManagedWidget('arrow1', xmArrowButtonGadgetClass, form,
-
       //    XmNtopAttachment, XmATTACH_POSITION,
       XmNtopPosition, 0,
       XmNbottomPosition, 1,
