@@ -36,7 +36,6 @@ const
 
 type
   PXmClipboardPendingRec = ^TXmClipboardPendingRec;
-
   TXmClipboardPendingRec = record
     DataId: cslong;
     PrivateId: cslong;
@@ -60,11 +59,9 @@ function XmClipboardWithdrawFormat(display: PDisplay; window: TWindow; Data: lon
 function XmClipboardCopyByName(display: PDisplay; window: TWindow; Data: longint; buffer: TXtPointer; length: dword; private_id: longint): longint; cdecl; external libXm;
 function XmClipboardUndoCopy(display: PDisplay; window: TWindow): longint; cdecl; external libXm;
 function XmClipboardLock(display: PDisplay; window: TWindow): longint; cdecl; external libXm;
-{#if NeedWidePrototypes }
-{                        int all_levels) ; }
-{#else }
+
 function XmClipboardUnlock(display: PDisplay; window: TWindow; all_levels: TBoolean): longint; cdecl; external libXm;
-{#endif /* NeedWidePrototypes */ }
+
 function XmClipboardStartRetrieve(display: PDisplay; window: TWindow; timestamp: TTime): longint; cdecl; external libXm;
 function XmClipboardEndRetrieve(display: PDisplay; window: TWindow): longint; cdecl; external libXm;
 function XmClipboardRetrieve(display: PDisplay; window: TWindow; format: PChar; buffer: TXtPointer; length: dword; outlength: Pdword; private_id: Plongint): longint; cdecl; external libXm;

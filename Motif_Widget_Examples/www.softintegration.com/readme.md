@@ -1,6 +1,6 @@
 (https://www.softintegration.com/chhtml/toolkit/demos/X11/motif/)
 
-Written by Dan Heller and Paula Ferguson.  
+Written by Dan Heller and Paula Ferguson.
 Copyright 1994, O'Reilly & Associates, Inc.
 Permission to use, copy, and modify this program without
 restriction is hereby granted, as long as this copyright

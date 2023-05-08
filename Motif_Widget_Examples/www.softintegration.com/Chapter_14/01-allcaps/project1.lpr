@@ -62,7 +62,7 @@ uses
     toplevel := XtVaAppInitialize(@app, 'Demos', nil, 0, @argc, argv, nil,
       nil);
 
-    rowcol := XtVaCreateManagedWidget('rowcol', xmRowColumnWidgetClass, toplevel,
+    rowcol := XtVaCreateWidget('rowcol', xmRowColumnWidgetClass, toplevel,
       XmNorientation, XmHORIZONTAL,
       nil);
 
