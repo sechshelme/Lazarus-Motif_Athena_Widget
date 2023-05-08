@@ -121,6 +121,8 @@ var
 
     XSetErrorHandler(@x_error);
 
+    XmMainWindowSetAreas(main_window,nil,nil,nil,nil,rowcol);
+
     XtManageChild(rowcol);
     XtManageChild(main_window);
     XtRealizeWidget(toplevel);
