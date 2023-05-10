@@ -72,9 +72,10 @@ sudo apt install libmotif-dev
 - (https://github.com/freedesktop/libXmu)
 - (http://cgit.freedesktop.org/xorg/lib/libXmu)
 
-# Klassische Anwendungen
+# Klassische motif Anwendungen
 
 ## Nostalgie Desktop ( tkdesk )
+Sourcen: (https://tkdesk.sourceforge.net)
 ```
 apt install tkdesk 
 ```
