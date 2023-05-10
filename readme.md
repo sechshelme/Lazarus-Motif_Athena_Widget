@@ -72,8 +72,19 @@ sudo apt install libmotif-dev
 - (https://github.com/freedesktop/libXmu)
 - (http://cgit.freedesktop.org/xorg/lib/libXmu)
 
+# Klassische Anwendungen
+
+## Nostalgie Desktop ( tkdesk )
+```
+apt install tkdesk 
+```
+
+
+
 # Schlagwörter
 Lazarus fpc pascal XToolkit Toolkit libx x11 xserver linux Athena Widget Modif Motif OpenMotif
+
+
 
 
 
