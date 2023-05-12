@@ -35,7 +35,6 @@ const
   procedure DestroyWidget(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   begin
     XtDestroyWidget(w);
-
   end;
 
   function PostDialog(parent: TWidget; dialog_type: integer; msg: PChar): TWidget;
@@ -111,7 +110,6 @@ const
     items := PListItem(client_data);
     len := Length(items^.strings);
     str := PXmString(XtMalloc(len * SizeOf(TXmString)));
-    //    Getmem(str, len * SizeOf(TXmString));
 
     t := XmStringCreateLocalized(items^.label_);
     for i := 0 to len - 1 do begin

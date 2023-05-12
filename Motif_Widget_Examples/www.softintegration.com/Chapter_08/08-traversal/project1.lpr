@@ -36,8 +36,6 @@ uses
     cbs := PXmPushButtonCallbackStruct(call_data);
     XtVaGetValues(w, XmNuserData, @letter, nil);
     if letter <> 0 then begin
-// https://wiki.ubuntuusers.de/Soundausgabe_Systemlautsprecher/
-
       XBell(XtDisplayOfObject(w), 50);
       WriteLn('bell');
       exit;
