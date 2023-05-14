@@ -267,6 +267,8 @@ int                 *format_return;
     long        length;
     String      str;
 
+    sprintf()
+
     /* intern the Atoms for data targets */
     dpy = XtDisplay (widget);
     FILE_CONTENTS = XmInternAtom (dpy, "FILE_CONTENTS", False);
