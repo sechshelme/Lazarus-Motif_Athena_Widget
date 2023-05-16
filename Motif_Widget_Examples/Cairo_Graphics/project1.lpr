@@ -96,6 +96,7 @@ const
       nil);
 
     draw := XtVaCreateManagedWidget('draw', xmDrawingAreaWidgetClass, mainform,
+    XmNbackground,$FF88FF,
       XmNwidth, 320,
       XmNheight, 200,
       XmNtopAttachment, XmATTACH_WIDGET,

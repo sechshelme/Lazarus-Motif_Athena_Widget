@@ -657,6 +657,10 @@
         <Filename Value="Xm/xmvendors.pas"/>
         <UnitName Value="XmVendors"/>
       </Item>
+      <Item>
+        <Filename Value="Xmu/xmuatoms.pas"/>
+        <UnitName Value="XmuAtoms"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>

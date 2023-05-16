@@ -13,6 +13,9 @@
 #include  <stdio.h>
 
 
+#define X2tEcenter "center"
+#define X2tEcenter "cednter"
+
 
 void hello(Widget w, XtPointer *client, XtPointer call) {
     printf("Hello World\n");
@@ -30,7 +33,7 @@ printf("size: %i\n",sizeof( int));
 
     Widget toplevel, box, command;
 
-    toplevel = XtInitialize("Mein Fenster", "XClipboard", NULL, 0, &argc, argv);
+    toplevel = XtInitialize("Mein Fenster", "simple", NULL, 0, &argc, argv);
 
     box = XtCreateManagedWidget("Button Gruppe", boxWidgetClass, toplevel, NULL, 0);
 
