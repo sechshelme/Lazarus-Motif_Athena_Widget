@@ -1,6 +1,7 @@
 program project1;
 
 uses
+  Strings,
   ctypes,
   xlib,
   xatom,
@@ -10,6 +11,7 @@ uses
   xutil,
   XawCommand,
   XTStringdefs,
+  XawTextSrc,
   XawLabel,
   XawDialog,
   XawBox,
@@ -21,6 +23,23 @@ uses
   XtShell,
   XTIntrinsic;
 
+const
+  lib_stdio = 'c';
+
+
+  //  https://www.tutorialspoint.com/c_standard_library/c_function_calloc.htm
+  function calloc(nitems, size: SizeInt): Pointer; cdecl; external lib_stdio;
+  function malloc(size: SizeInt): Pointer; cdecl; external lib_stdio;
+  procedure Free(ptr: Pointer); cdecl; external lib_stdio Name 'free';
+  // https://cplusplus.com/reference/cstdio/snprintf/
+
+  function snprintf(restrict: PChar; maxlen: SizeInt; format: PChar): cint; varargs cdecl; external lib_stdio;
+
+  //  extern int snprintf (char *__restrict __s, size_t __maxlen,
+  //           const char *__restrict __format, ...)
+  //     __THROWNL __attribute__ ((__format__ (__printf__, 3, 4)));
+
+
 type
   PClipRec = ^TClipRec;
 
@@ -31,24 +50,44 @@ type
   end;
   TClipPtr = PClipRec;
 
-const
-  lib_stdio = 'c';
-
-
-  //  https://www.tutorialspoint.com/c_standard_library/c_function_calloc.htm
-  function calloc(nitems, size: SizeInt): Pointer; varargs cdecl; external lib_stdio;
-  // https://cplusplus.com/reference/cstdio/snprintf/
-
-  function snprintf(restrict: PChar; maxlen: SizeInt; format: PChar): cint; varargs cdecl; external lib_stdio;
-
-  //  extern int snprintf (char *__restrict __s, size_t __maxlen,
-  //           const char *__restrict __format, ...)
-  //     __THROWNL __attribute__ ((__format__ (__printf__, 3, 4)));
+var
+  fallback_resource: array of TXtString = ('*international: true', nil);
 
 
 var
   ManagetAtom, ClipboardAtom: TAtom;
 
+  function TextLenght(w: TWidget): clong;
+  begin
+    Result := XawTextSourceScan(XawTextGetSource(w), 0, XawstAll, XawsdRight, 1, True);
+  end;
+
+  procedure SaveClip(w: TWidget; clip: TClipPtr);
+  var
+    Data: PChar;
+    Source: TWidget;
+    args: array[0..0] of TArg;
+    len: SizeInt;
+  begin
+    Source := XawTextGetSource(w);
+    XtSetArg(args[0], XtNstring, @Data);
+    XtGetValues(Source, args, 1);
+    len := StrLen(Data);
+    if len >= clip^.avail then begin
+      if clip^.clip <> nil then begin
+        Free(clip^.clip);
+      end;
+      clip^.clip := malloc(len + 1);
+      if clip^.clip = nil then begin
+        clip^.avail := 0;
+      end else begin
+        clip^.avail := len + 1;
+      end;
+      if clip^.avail <> 0 then begin
+        strcopy(clip^.clip, Data);
+      end;
+    end;
+  end;
 
   function NewClip(w: TWidget; old: TClipPtr): TClipPtr;
   var
@@ -104,6 +143,53 @@ var
     XtSetValues(indexLabel, @arg, ONE);
   end;
 
+  procedure CenterWidgetAtPoint(w: TWidget; x, y: cint);
+  var
+    args: array[0..1] of TArg;
+    widht, heigth: TDimension;
+    scr_width, scr_height: cint;
+  begin
+    XtSetArg(args[0], XtNwidth, @widht);
+    XtSetArg(args[1], XtNheight, @heigth);
+    XtGetValues(w, args, 2);
+    x := x - widht div 2;
+    y := y - heigth div 2;
+
+    if x < 0 then begin
+      x := 0;
+    end else begin
+      scr_width := WidthOfScreen(XtScreen(w));
+      if x + widht > scr_width then begin
+        x := scr_width - widht;
+      end;
+    end;
+
+    if y < 0 then begin
+      y := 0;
+    end else begin
+      scr_height := HeightOfScreen(XtScreen(w));
+      if y + heigth > scr_height then begin
+        y := scr_height - heigth;
+      end;
+    end;
+
+    XtSetArg(args[0], XtNx, x);
+    XtSetArg(args[1], XtNy, y);
+    XtSetValues(w,args,2);
+  end;
+
+  procedure CenterWidgetOnWidget(w, wt: TWidget);
+  var
+    rootX, rootY: TPosition;
+    Width, Height: TDimension;
+    args: array [0..1] of TArg;
+  begin
+    XtSetArg(args[0], XtNwidth, @Width);
+    XtSetArg(args[1], XtNheight, @Height);
+    XtGetValues(wt, args, 2);
+    XtTranslateCoords(wt, Width div 2, Height div 2, @rootX, @rootY);
+    CenterWidgetAtPoint(w, rootX, rootY);
+  end;
 
   procedure NewCurrentChlip(w: TWidget; event: PXEvent; params: PXtString;
     num_params: PCardinal); cdecl;
@@ -166,6 +252,30 @@ var
   end;
 
 
+  procedure NewCurrentClipContents(Data: PChar; len: cint);
+  var
+    textBlock: TXawTextBlock;
+  begin
+
+    SaveClip(text1, currentClip);
+    while (currentClip <> nil) and (currentClip^.Next <> nil) do begin
+      currentClip := currentClip^.Next;
+    end;
+
+    if (currentClip = nil) or (strlen(currentClip^.clip) <> 0) then begin
+      currentClip := NewClip(text1, currentClip);
+    end;
+
+    textBlock.ptr := Data;
+    textBlock.firstPos := 0;
+    textBlock.length := len;
+    textBlock.format := FMT8BIT;
+
+    if XawTextReplace(text1, 0, TextLenght(text1), @textBlock) <> 0 then begin
+      XBell(XtDisplay(text1), 0);
+    end;
+    set_button_state;
+  end;
 
 
 var
@@ -182,11 +292,87 @@ var
     (_string: 'WMProtocols'; proc: @WMProtocols));
 
 
-
-
 var
   table: array of TXrmOptionDescRec = ((option: '-w'; specifier: 'warp'; argKind: XrmoptionNoArg; Value: 'on'));
-  fallback_resource: array of TXtString = ('*international: true', nil);
+
+  procedure LoseSelection(w: TWidget; selection: PAtom); cdecl; forward;
+
+  function ConvertSelection(w: TWidget; selection: PAtom; target: PAtom;
+    type_: PAtom; Value: PXtPointer; para6: pculong; para7: pcint): TBoolean;
+  cdecl;
+  begin
+    ///////////////////////////////////////////////////////////////7
+  end;
+
+
+
+  procedure InsertClipboard(w: TWidget; client_data: TXtPointer; selction: PAtom; type_: PAtom; Value: TXtPointer; len: pculong; format: pcint); cdecl;
+  var
+    d: PDisplay;
+    convert_failed: boolean;
+    list: PPChar;
+    i, ret, Count: cint;
+    prop: TXTextProperty;
+    target: TAtom;
+    arg: TArg;
+  begin
+    d := XtDisplay(w);
+    target := TAtom(client_data);
+    convert_failed := type_^ = XT_CONVERT_FAIL;
+    if not convert_failed then begin
+      prop.Value := Value;
+      prop.nitems := len^;
+      prop.format := format^;
+      prop.encoding := type_^;
+      ret := XmbTextPropertyToTextList(d, @prop, @list, @Count);
+      if ret >= Success then begin
+        for i := 0 to Count - 1 do begin
+          NewCurrentClipContents(list[i], strlen(list[i]));
+        end;
+        XFreeStringList(list);
+      end else begin
+        convert_failed := True;
+      end;
+      XFree(Value);
+    end;
+
+    if convert_failed then begin
+      if target = XA_UTF8_STRING(d) then begin
+        XtGetSelectionValue(w, selction^, XA_COMPOUND_TEXT(d), @InsertClipboard, TXtPointer(XA_COMPOUND_TEXT(d)), CurrentTime);
+        Exit;
+      end else if target = XA_COMPOUND_TEXT(d) then begin
+        XtGetSelectionValue(w, selction^, XA_STRING, @InsertClipboard, nil, CurrentTime);
+        Exit;
+      end;
+    end else begin
+      XtSetArg(arg, XtNlabel, 'CLIPBOARD selection conversion failed');
+      XtSetValues(failDialog, @arg, 1);
+      CenterWidgetOnWidget(failDialogShell, text1);
+
+      XtPopup(failDialogShell, XtGrabNone);
+      XBell(d, 0);
+    end;
+
+    XtOwnSelection(top, ClipboardAtom, CurrentTime, @ConvertSelection, @LoseSelection, nil);
+  end;
+
+  procedure LoseSelection(w: TWidget; selection: PAtom); cdecl;
+  var
+    d: PDisplay;
+  begin
+    d := XtDisplay(w);
+    XtGetSelectionValue(w, selection^, XA_UTF8_STRING(d), @InsertClipboard, TXtPointer(XA_UTF8_STRING(d)), CurrentTime);
+  end;
+
+  function RefuseSelection(w: TWidget; selection: PAtom; target: PAtom; type_: PAtom; Value: PXtPointer; para6: pculong; para7: pcint): TBoolean; cdecl;
+  begin
+    Result := False;
+  end;
+
+  procedure LoseManager(w: TWidget; selectino: PAtom); cdecl;
+  begin
+    XtError('another clipboard has taken over control'#10);
+  end;
 
 type
   TResourceData = record
@@ -200,50 +386,6 @@ var
     resource_size: sizeof(boolean);
     resource_offset: 0;    // xtoffTCardinal;
     default_type: XtRImmediate; default_addr: TXtPointer(False)));
-
-  procedure InsertClipboard(w: TWidget; client_data: TXtPointer; selction: PAtom; type_: PAtom; Value: TXtPointer; len: pculong; format: pcint); cdecl;
-  var
-    d: PDisplay;
-    convert_failed: boolean;
-    list: PPChar;
-    i, ret, Count: cint;
-    prop: TXTextProperty;
-    target: TAtom;
-  begin
-    d := XtDisplay(w);
-    target := TAtom(client_data);
-    convert_failed := type_^ = XT_CONVERT_FAIL;
-    if not convert_failed then begin
-      prop.Value := Value;
-      prop.nitems := len^;
-      prop.format := format^;
-      prop.encoding := type_^;
-      ret := XmbTextPropertyToTextList(d, @prop, @list, @Count);
-      if ret >= Success then begin
-        for i := 0 to Count - 1 do begin
-                    newcu;
-        end;
-        XFreeStringList(list);
-      end else begin
-        convert_failed := True;
-      end;
-      XFree(Value);
-    end;
-    // ----------------------
-  end;
-
-  procedure LoseManager(w: TWidget; atom: PAtom); cdecl;
-  var
-    d: PDisplay;
-  begin
-    d := XtDisplay(w);
-    XtGetSelectionValue(w, atom^, XA_UTF8_STRING(d), @InsertClipboard, TXtPointer(XA_UTF8_STRING(d)), CurrentTime);
-  end;
-
-  function RefuseSelection(w: TWidget; selection: PAtom; target: PAtom; type_: PAtom; Value: PXtPointer; para6: pculong; para7: pcint): TBoolean; cdecl;
-  begin
-    Result := False;
-  end;
 
   procedure main;
   var

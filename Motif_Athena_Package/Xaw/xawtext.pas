@@ -3,6 +3,7 @@ unit XawText;
 interface
 
 uses
+  ctypes,
   XTIntrinsic,
   xresource,
   XTStringdefs;
@@ -44,7 +45,8 @@ uses
  }
 type
   PXawTextPosition = ^TXawTextPosition;
-  TXawTextPosition = longint;
+  TXawTextPosition = clong;
+
 type
   PXawTextScrollMode = ^TXawTextScrollMode;
   TXawTextScrollMode =  Longint;
@@ -112,7 +114,7 @@ type
       firstPos : longint;
       length : longint;
       ptr : Pchar;
-      format : dword;
+      format : culong;
     end;
   TXawTextBlockPtr = PXawTextBlock;
   PXawTextBlockPtr = ^TXawTextBlockPtr;
@@ -204,9 +206,9 @@ const
 function XawTextFormat(tw,fmt : PtrUInt) : TBoolean;
 
   var
-    FMT8BIT : dword;cvar;external libXaw;
-    XawFmt8Bit : dword;cvar;external libXaw;
-    XawFmtWide : dword;cvar;external libXaw;
+    FMT8BIT : culong;cvar;external libXaw;
+    XawFmt8Bit : culong;cvar;external libXaw;
+    XawFmtWide : culong;cvar;external libXaw;
     textWidgetClass : TWidgetClass;cvar;external libXaw;
 type
 //  PTextWidgetClass = ^TTextWidgetClass;
