@@ -1,6 +1,7 @@
 program project1;
 
 uses
+  ctypes,
   xlib,
   xatom,
   XmuAtoms,
@@ -10,11 +11,94 @@ uses
   XTStringdefs,
   XawLabel,
   XawBox,
+  XawCardinals,
   XawText,
   XawAsciiText,
   XawForm,
   XawAsciiSrc,
   XTIntrinsic;
+
+type
+  PClipRec = ^TClipRec;
+
+  TClipRec = record
+    Next, Prev: PClipRec;
+    clip, filename: PChar;
+    avail: SizeInt;
+  end;
+  TClipPtr = PClipRec;
+
+const
+  lib_stdio = 'c';
+
+
+//  https://www.tutorialspoint.com/c_standard_library/c_function_calloc.htm
+  function calloc(nitems, size: SizeInt): Pointer; varargs cdecl; external lib_stdio;
+  // https://cplusplus.com/reference/cstdio/snprintf/
+
+  function snprintf(restrict: PChar; maxlen: SizeInt; format: PChar): cint; varargs cdecl; external lib_stdio;
+
+  //  extern int snprintf (char *__restrict __s, size_t __maxlen,
+  //           const char *__restrict __format, ...)
+  //     __THROWNL __attribute__ ((__format__ (__printf__, 3, 4)));
+
+
+var
+  ManagetAtom, ClipboardAtom: TAtom;
+
+
+  function NewClip(w: TWidget; old: TClipPtr): TClipPtr;
+  var
+    newClip1: TClipPtr;
+  begin
+    newClip1 := calloc(1, SizeOf(TClipRec));
+    if newClip1 = nil then begin
+      Result := newClip1;
+      Exit;
+    end;
+    newClip1^.Prev := old;
+    if old <> nil then begin
+      newClip1^.Next := old^.Next;
+      old^.Next := newClip1;
+    end;
+    Result := newClip1;
+  end;
+
+
+var
+  currentClip: TClipPtr;
+  top, parent, nextButton, indexLabel, prevButton, text1,
+  fileDialog, failDialog: TWidget;
+
+  function IndexCurrentClip: cint;
+  var
+    i: cint = 0;
+    clip: TClipPtr;
+  begin
+    clip := currentClip;
+    while clip <> nil do begin
+      clip := clip^.Prev;
+      Inc(i);
+    end;
+    Result:=i;
+  end;
+
+  procedure set_button_state;
+  var
+    prevvalid, nextvalid: Tboolean;
+    arg: TArg;
+    labelString: array[0..11] of char;
+  begin
+    prevvalid := currentClip^.Prev <> nil;
+    nextvalid := currentClip^.Next <> nil;
+    XtSetArg(arg, XtNsensitive, prevvalid);
+    XtSetValues(prevButton, @arg, ONE);
+    XtSetArg(arg, XtNsensitive, nextvalid);
+    XtSetValues(nextButton, @arg, ONE);
+    snprintf(labelString, SizeOf(labelString), '%d', IndexCurrentClip);
+    XtSetArg(arg, XtNlabel, labelString);
+    XtSetValues(indexLabel, @arg, ONE);
+  end;
 
 
   procedure NewCurrentChlip(w: TWidget; event: PXEvent; params: PXtString;
@@ -93,7 +177,6 @@ var
     (_string: 'Quit'; proc: @Quit),
     (_string: 'WMProtocols'; proc: @WMProtocols));
 
-  ManagetAtom, ClipboardAtom: TAtom;
 
 
 
@@ -117,7 +200,6 @@ var
 
   procedure main;
   var
-    top, parent, nextButton, indexLabel, prevButton, text1: TWidget;
     xtcontext: TXtAppContext;
     args: array[0..7] of TArg;
   begin
@@ -150,6 +232,10 @@ var
     XtSetArg(args[1], XtNscrollHorizontal, False);
 
     text1 := XtCreateManagedWidget('text', asciiTextWidgetClass, parent, args, 4);
+
+    currentClip := NewClip(text1, TClipPtr(0));
+
+    set_button_state;
 
 
     //    XtVaSetValues(parent, XtNorientation, XtEhorizontal, nil);

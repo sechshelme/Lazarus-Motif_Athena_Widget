@@ -39,7 +39,9 @@ var
     box := XtCreateManagedWidget('box', boxWidgetClass, toplevel, nil, 0);
     XtVaSetValues(box, XtNorientation, XtEhorizontal, nil);
 
-    button1 := XtCreateManagedWidget('Buttton 1', commandWidgetClass, box, nil, 0);
+    button1 := XtVaCreateManagedWidget('Buttton 1', commandWidgetClass, box,
+      XtNborderWidth,20,
+    nil);
     XtAddCallback(button1, XtNcallback, @On_Click, nil);
 
     button2 := XtCreateManagedWidget('Buttton 2', commandWidgetClass, box, nil, 0);
