@@ -413,16 +413,16 @@ type
   PXtRequestId = ^TXtRequestId;
   TXtRequestId = TXtPointer;
 
-  TXtConvertSelectionProc = function(para1: TWidget; para2: PAtom; para3: PAtom; para4: PAtom; para5: PXtPointer; para6: pcslong; para7: PLongInt): TBoolean; cdecl;
-  TXtLoseSelectionProc = procedure(para1: TWidget; para2: PAtom); cdecl;
-  TXtSelectionDoneProc = procedure(para1: TWidget; para2: PAtom; para3: PAtom); cdecl;
-  TXtSelectionCallbackProc = procedure(para1: TWidget; para2: TXtPointer; para3: PAtom; para4: PAtom; para5: TXtPointer; para6: pculong; para7: PLongInt); cdecl;
-  TXtLoseSelectionIncrProc = procedure(para1: TWidget; para2: PAtom; para3: TXtPointer); cdecl;
-  TXtSelectionDoneIncrProc = procedure(para1: TWidget; para2: PAtom; para3: PAtom; para4: PXtRequestId; para5: TXtPointer); cdecl;
-  TXtConvertSelectionIncrProc = function(para1: TWidget; para2: PAtom; para3: PAtom; para4: PAtom; para5: PXtPointer; para6: PLongInt; para7: pculong; para8: pculong; para9: TXtPointer; para10: PXtRequestId): TBoolean; cdecl;
-  TXtCancelConvertSelectionProc = procedure(para1: TWidget; para2: PAtom; para3: PAtom; para4: PXtRequestId; para5: TXtPointer); cdecl;
-  TXtEventDispatchProc = function(para1: PXEvent): TBoolean; cdecl;
-  TXtExtensionSelectProc = procedure(para1: TWidget; para2: PLongInt; para3: PXtPointer; para4: LongInt; para5: TXtPointer); cdecl;
+  TXtConvertSelectionProc = function(w: TWidget; selection: PAtom; target: PAtom; type_: PAtom; value: PXtPointer; para6: pculong; para7: pcint): TBoolean; cdecl;
+  TXtLoseSelectionProc = procedure(w: TWidget;  atom: PAtom); cdecl;
+  TXtSelectionDoneProc = procedure(w: TWidget;  atom: PAtom; para3: PAtom); cdecl;
+  TXtSelectionCallbackProc = procedure(w: TWidget; client_data: TXtPointer; selction: PAtom; type_: PAtom; value: TXtPointer; len: pculong; format: pcint); cdecl;
+  TXtLoseSelectionIncrProc = procedure(w: TWidget;  atom: PAtom; para3: TXtPointer); cdecl;
+  TXtSelectionDoneIncrProc = procedure(w: TWidget;  atom: PAtom; para3: PAtom; para4: PXtRequestId; para5: TXtPointer); cdecl;
+  TXtConvertSelectionIncrProc = function(w: TWidget;  atom: PAtom; para3: PAtom; para4: PAtom; para5: PXtPointer; para6: pculong; para7: pcint; para8: pculong; para9: TXtPointer; para10: PXtRequestId): TBoolean; cdecl;
+  TXtCancelConvertSelectionProc = procedure(w: TWidget;  atom: PAtom; para3: PAtom; para4: PXtRequestId; para5: TXtPointer); cdecl;
+  TXtEventDispatchProc = function(ev: PXEvent): TBoolean; cdecl;
+  TXtExtensionSelectProc = procedure(w: TWidget; para2: pcint; para3: PXtPointer; para4: cint; para5: TXtPointer); cdecl;
 
 {**************************************************************
  *
@@ -431,26 +431,26 @@ type
  *************************************************************** }
 
 
-function XtCallConverter(para1: PDisplay; para2: TXtTypeConverter; para3: TXrmValuePtr; para4: TCardinal; para5: TXrmValuePtr; para6: PXrmValue; para7: PXtCacheRef): TBoolean; cdecl; external libXt;
-function XtDispatchEvent(para1: PXEvent): TBoolean; cdecl; external libXt;
-function XtCallAcceptFocus(para1: TWidget; para2: PTime): TBoolean; cdecl; external libXt;
-function XtPeekEvent(para1: PXEvent): TBoolean; cdecl; external libXt;
-function XtAppPeekEvent(para1: TXtAppContext; para2: PXEvent): TBoolean; cdecl; external libXt;
+function XtCallConverter(dis: PDisplay; para2: TXtTypeConverter; para3: TXrmValuePtr; para4: TCardinal; para5: TXrmValuePtr; para6: PXrmValue; para7: PXtCacheRef): TBoolean; cdecl; external libXt;
+function XtDispatchEvent(ev: PXEvent): TBoolean; cdecl; external libXt;
+function XtCallAcceptFocus(w: TWidget; para2: PTime): TBoolean; cdecl; external libXt;
+function XtPeekEvent(ev: PXEvent): TBoolean; cdecl; external libXt;
+function XtAppPeekEvent(para1: TXtAppContext; ev: PXEvent): TBoolean; cdecl; external libXt;
 function XtIsSubclass(para1: TWidget; para2: TWidgetClass): TBoolean; cdecl; external libXt;
 function XtIsObject(para1: TWidget): TBoolean; cdecl; external libXt;
-function _XtCheckSubclassFlag(para1: TWidget; para2: TXtXtEnum): TBoolean; cdecl; external libXt;
-function _XtIsSubclassOf(para1: TWidget; para2: TWidgetClass; para3: TWidgetClass; para4: TXtXtEnum): TBoolean; cdecl; external libXt;
-function XtIsManaged(para1: TWidget): TBoolean; cdecl; external libXt;
-function XtIsRealized(para1: TWidget): TBoolean; cdecl; external libXt;
-function XtIsSensitive(para1: TWidget): TBoolean; cdecl; external libXt;
-function XtOwnSelection(para1: TWidget; para2: TAtom; para3: TTime; para4: TXtConvertSelectionProc; para5: TXtLoseSelectionProc; para6: TXtSelectionDoneProc): TBoolean; cdecl; external libXt;
-function XtOwnSelectionIncremental(para1: TWidget; para2: TAtom; para3: TTime; para4: TXtConvertSelectionIncrProc; para5: TXtLoseSelectionIncrProc; para6: TXtSelectionDoneIncrProc; para7: TXtCancelConvertSelectionProc; para8: TXtPointer): TBoolean; cdecl; external libXt;
-function XtMakeResizeRequest(para1: TWidget; para2: TXtDimension; para3: TXtDimension; para4: PDimension; para5: PDimension): TXtGeometryResult; cdecl; external libXt;
-procedure XtTranslateCoords(para1: TWidget; para2: TXtPosition; para3: TXtPosition; para4: PPosition; para5: PPosition); cdecl; external libXt;
-function XtGetKeysymTable(para1: PDisplay; para2: PKeyCode; para3: PLongInt): PKeySym; cdecl; external libXt;
-procedure XtKeysymToKeycodeList(para1: PDisplay; para2: TKeySym; para3: PPKeyCode; para4: PCardinal); cdecl; external libXt;
+function _XtCheckSubclassFlag(w: TWidget; para2: TXtXtEnum): TBoolean; cdecl; external libXt;
+function _XtIsSubclassOf(w: TWidget; wc: TWidgetClass; para3: TWidgetClass; para4: TXtXtEnum): TBoolean; cdecl; external libXt;
+function XtIsManaged(w: TWidget): TBoolean; cdecl; external libXt;
+function XtIsRealized(w: TWidget): TBoolean; cdecl; external libXt;
+function XtIsSensitive(w: TWidget): TBoolean; cdecl; external libXt;
+function XtOwnSelection(w: TWidget; atom: TAtom; time: TTime; para4: TXtConvertSelectionProc; para5: TXtLoseSelectionProc; para6: TXtSelectionDoneProc): TBoolean; cdecl; external libXt;
+function XtOwnSelectionIncremental(w: TWidget; atom: TAtom; time: TTime; para4: TXtConvertSelectionIncrProc; para5: TXtLoseSelectionIncrProc; para6: TXtSelectionDoneIncrProc; para7: TXtCancelConvertSelectionProc; para8: TXtPointer): TBoolean; cdecl; external libXt;
+function XtMakeResizeRequest(w: TWidget; para2: TXtDimension; para3: TXtDimension; para4: PDimension; para5: PDimension): TXtGeometryResult; cdecl; external libXt;
+procedure XtTranslateCoords(w: TWidget; para2: TXtPosition; para3: TXtPosition; para4: PPosition; para5: PPosition); cdecl; external libXt;
+function XtGetKeysymTable(dis: PDisplay; para2: PKeyCode; para3: PLongInt): PKeySym; cdecl; external libXt;
+procedure XtKeysymToKeycodeList(dis: PDisplay; para2: TKeySym; para3: PPKeyCode; para4: PCardinal); cdecl; external libXt;
 procedure XtStringConversionWarning(_XtString: TXtString; __XtString: TXtString); cdecl; external libXt;
-procedure XtDisplayStringConversionWarning(para1: PDisplay; _XtString: TXtString; __XtString: TXtString); cdecl; external libXt;
+procedure XtDisplayStringConversionWarning(dis: PDisplay; _XtString: TXtString; __XtString: TXtString); cdecl; external libXt;
 
   var
     colorConvertArgs : PXtConvertArgRec;cvar;external libXt;
@@ -460,7 +460,7 @@ procedure XtAppAddConverter(para1: TXtAppContext; _XtString: TXtString; __XtStri
 procedure XtAddConverter(_XtString: TXtString; __XtString: TXtString; para3: TXtConverter; para4: TXtConvertArgList; para5: TCardinal); cdecl; external libXt;
 procedure XtSetTypeConverter(_XtString: TXtString; __XtString: TXtString; para3: TXtTypeConverter; para4: TXtConvertArgList; para5: TCardinal; para6: TXtCacheType; para7: TXtDestructor); cdecl; external libXt;
 procedure XtAppSetTypeConverter(para1: TXtAppContext; _XtString: TXtString; __XtString: TXtString; para4: TXtTypeConverter; para5: TXtConvertArgList; para6: TCardinal; para7: TXtCacheType; para8: TXtDestructor); cdecl; external libXt;
-procedure XtConvert(para1: TWidget; _XtString: TXtString; para3: PXrmValue; __XtString: TXtString; para5: PXrmValue); cdecl; external libXt;
+procedure XtConvert(w: TWidget; _XtString: TXtString; para3: PXrmValue; __XtString: TXtString; para5: PXrmValue); cdecl; external libXt;
 procedure XtDirectConvert(para1: TXtConverter; para2: TXrmValuePtr; para3: TCardinal; para4: TXrmValuePtr; para5: PXrmValue); cdecl; external libXt;
 
 {***************************************************************

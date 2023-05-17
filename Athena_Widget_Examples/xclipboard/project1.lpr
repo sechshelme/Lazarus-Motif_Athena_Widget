@@ -7,15 +7,18 @@ uses
   XmuAtoms,
   xresource,
   x,
+  xutil,
   XawCommand,
   XTStringdefs,
   XawLabel,
+  XawDialog,
   XawBox,
   XawCardinals,
   XawText,
   XawAsciiText,
   XawForm,
   XawAsciiSrc,
+  XtShell,
   XTIntrinsic;
 
 type
@@ -32,7 +35,7 @@ const
   lib_stdio = 'c';
 
 
-//  https://www.tutorialspoint.com/c_standard_library/c_function_calloc.htm
+  //  https://www.tutorialspoint.com/c_standard_library/c_function_calloc.htm
   function calloc(nitems, size: SizeInt): Pointer; varargs cdecl; external lib_stdio;
   // https://cplusplus.com/reference/cstdio/snprintf/
 
@@ -68,7 +71,7 @@ var
 var
   currentClip: TClipPtr;
   top, parent, nextButton, indexLabel, prevButton, text1,
-  fileDialog, failDialog: TWidget;
+  fileDialog, fileDialogShell, failDialog, failDialogShell: TWidget;
 
   function IndexCurrentClip: cint;
   var
@@ -80,7 +83,7 @@ var
       clip := clip^.Prev;
       Inc(i);
     end;
-    Result:=i;
+    Result := i;
   end;
 
   procedure set_button_state;
@@ -96,6 +99,7 @@ var
     XtSetArg(arg, XtNsensitive, nextvalid);
     XtSetValues(nextButton, @arg, ONE);
     snprintf(labelString, SizeOf(labelString), '%d', IndexCurrentClip);
+    WriteLn(labelString);
     XtSetArg(arg, XtNlabel, labelString);
     XtSetValues(indexLabel, @arg, ONE);
   end;
@@ -197,6 +201,49 @@ var
     resource_offset: 0;    // xtoffTCardinal;
     default_type: XtRImmediate; default_addr: TXtPointer(False)));
 
+  procedure InsertClipboard(w: TWidget; client_data: TXtPointer; selction: PAtom; type_: PAtom; Value: TXtPointer; len: pculong; format: pcint); cdecl;
+  var
+    d: PDisplay;
+    convert_failed: boolean;
+    list: PPChar;
+    i, ret, Count: cint;
+    prop: TXTextProperty;
+    target: TAtom;
+  begin
+    d := XtDisplay(w);
+    target := TAtom(client_data);
+    convert_failed := type_^ = XT_CONVERT_FAIL;
+    if not convert_failed then begin
+      prop.Value := Value;
+      prop.nitems := len^;
+      prop.format := format^;
+      prop.encoding := type_^;
+      ret := XmbTextPropertyToTextList(d, @prop, @list, @Count);
+      if ret >= Success then begin
+        for i := 0 to Count - 1 do begin
+                    newcu;
+        end;
+        XFreeStringList(list);
+      end else begin
+        convert_failed := True;
+      end;
+      XFree(Value);
+    end;
+    // ----------------------
+  end;
+
+  procedure LoseManager(w: TWidget; atom: PAtom); cdecl;
+  var
+    d: PDisplay;
+  begin
+    d := XtDisplay(w);
+    XtGetSelectionValue(w, atom^, XA_UTF8_STRING(d), @InsertClipboard, TXtPointer(XA_UTF8_STRING(d)), CurrentTime);
+  end;
+
+  function RefuseSelection(w: TWidget; selection: PAtom; target: PAtom; type_: PAtom; Value: PXtPointer; para6: pculong; para7: pcint): TBoolean; cdecl;
+  begin
+    Result := False;
+  end;
 
   procedure main;
   var
@@ -237,24 +284,21 @@ var
 
     set_button_state;
 
+    fileDialogShell := XtCreatePopupShell('fileDialogShell', transientShellWidgetClass, top, nil, 0);
+    fileDialog := XtCreateManagedWidget('fileDialog', dialogWidgetClass, fileDialogShell, nil, 0);
+    XawDialogAddButton(fileDialog, 'accept', nil, nil);
+    XawDialogAddButton(fileDialog, 'cancel', nil, nil);
 
-    //    XtVaSetValues(parent, XtNorientation, XtEhorizontal, nil);
-
-    //button1 := XtCreateManagedWidget('Buttton 1', commandWidgetClass, parent, nil, 0);
-    //XtAddCallback(button1, XtNcallback, @On_Click, nil);
-    //
-    //button2 := XtCreateManagedWidget('Buttton 2', commandWidgetClass, parent, nil, 0);
-    //XtVaSetValues(button2, XtNbackground, $FF8888, XtNname, PChar('1234'), nil);
-    //XtAddCallback(button2, XtNcallback, @On_Click, nil);
-    //
-    //button3 := XtCreateManagedWidget('Buttton 3', commandWidgetClass, parent, nil, 0);
-    //XtAddCallback(button3, XtNcallback, @On_Click, nil);
-    //
-    //label1 := XtCreateManagedWidget('', labelWidgetClass, parent, nil, 0);
-    //XtVaSetValues(label1, XtNborderWidth, 0, XtNforeground, $FF0000, nil);
+    failDialogShell := XtCreatePopupShell('failDialogShell', transientShellWidgetClass, top, nil, 0);
+    failDialog := XtCreateManagedWidget('failDialog', dialogWidgetClass, failDialogShell, nil, 0);
+    XawDialogAddButton(failDialog, 'continue', nil, nil);
 
     XtRealizeWidget(top);
-    //  XtMainLoop;
+    XtRealizeWidget(fileDialogShell);
+    XtRealizeWidget(failDialogShell);
+
+    XtOwnSelection(top, ManagetAtom, CurrentTime, @RefuseSelection, @LoseManager, nil);
+
     XtAppMainLoop(xtcontext);
   end;
 
