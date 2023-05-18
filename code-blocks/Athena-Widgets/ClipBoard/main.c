@@ -687,8 +687,7 @@ main(int argc, char *argv[])
     top = XtAppInitialize( &xtcontext, "XClipboard", table, XtNumber(table),
 			  &argc, argv, fallback_resources, NULL, 0);
 
-    XtGetApplicationResources(top, (XtPointer)&userOptions, resources,
-			      XtNumber(resources), NULL, 0);
+    XtGetApplicationResources(top, (XtPointer)&userOptions, resources,			      XtNumber(resources), NULL, 0);
 
     XtAppAddActions (xtcontext,
 		     xclipboard_actions, XtNumber (xclipboard_actions));

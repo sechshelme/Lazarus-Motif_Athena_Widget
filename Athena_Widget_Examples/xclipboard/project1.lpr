@@ -403,7 +403,6 @@ var
     ManagetAtom := XInternAtom(XtDisplay(top), 'CLIPBOARD_MANAGER', False);
     ClipboardAtom := XA_CLIPBOARD(XtDisplay(top));
 
-
     parent := XtCreateManagedWidget('form', formWidgetClass, top, nil, 0);
 
     XtCreateManagedWidget('quit', commandWidgetClass, parent, nil, 0);
