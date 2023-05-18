@@ -34,14 +34,14 @@ var
     toplevel, button1, button2, box, button3: TWidget;
     app: TXtAppContext;
   begin
-//    toplevel := XtVaAppInitialize(@app, 'XClipboard', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
     toplevel := XtVaAppInitialize(@app, 'XClipboard', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
+//    toplevel := XtVaAppInitialize(@app, 'XCalc', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
 
     box := XtCreateManagedWidget('box', boxWidgetClass, toplevel, nil, 0);
     XtVaSetValues(box, XtNorientation, XtEhorizontal, nil);
 
     button1 := XtVaCreateManagedWidget('Buttton 1', commandWidgetClass, box,
-      XtNborderWidth,20,
+//      XtNborderWidth,20,
     nil);
     XtAddCallback(button1, XtNcallback, @On_Click, nil);
 
