@@ -5,58 +5,66 @@ uses
   XTStringdefs,
   XawLabel,
   XawBox,
+  XTCore,
   XTIntrinsic,
-  plot;
+  plot, xlib, x;
 
-// https://www.oreilly.com/openbook/motif/vol6a/Vol6a_html/ch02.html
-
+const
+  lib_stdio='c';
 var
-  label1: TWidget;
+  stdin :TFILE;cvar;external lib_stdio;
+  stdout :TFILE;cvar;external lib_stdio;
+  stderr :TFILE;cvar;external lib_stdio;
 
-  procedure On_Click(w: TWidget; client: TXtPointer; call: TXtPointer); cdecl;
-  var
-    Caption: PChar;
-    //    name:array[0..15] of Char;
-    Name: PChar=nil;
-    s: string;
+
+var     display: PDisplay;
+    window: TWindow;
+    plotter: PplPlotter;
+
+  procedure re_draw2(para1: TWidget; para2: TXtPointer; para3: PXEvent;
+    para4: PBoolean); cdecl;
   begin
-    XtVaGetValues(w, XtNlabel, @Caption, nil);
-    XtVaGetValues(w, XtNname, Name, nil);
-    s := 'Es wurde der Button: "' + Caption + '" gedrueckt';
-    WriteLn(s);
-    //    WriteLn(name);
-    //    WriteLn(Length(name));
-    XtVaSetValues(label1, XtNlabel, PChar(s));
+    WriteLn('plot');
+      pl_pencolorname_r(plotter,'green');
+      pl_fmove_r(plotter,600,300);
+
+      pl_fcontrel_r(plotter,100,100);
+
+      pl_endpath_r(plotter);
+
   end;
 
   procedure main;
-  var
-    toplevel, button1, button2, box, button3: TWidget;
-    app: TXtAppContext;
-  begin
-    toplevel := XtVaAppInitialize(@app, 'XClipboard', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
-//    toplevel := XtVaAppInitialize(@app, 'XCalc', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
+  const
+bg_colorname :PChar= 'white';
 
-    box := XtCreateManagedWidget('box', boxWidgetClass, toplevel, nil, 0);
+  var
+    toplevel, box: TWidget;
+    app: TXtAppContext;
+    plotter_params: PplPlotterParams;
+  begin
+    toplevel := XtVaAppInitialize(@app, 'plot', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
+
+    box := XtCreateManagedWidget('box', coreWidgetClass, toplevel, nil, 0);
     XtVaSetValues(box, XtNorientation, XtEhorizontal, nil);
 
-    button1 := XtVaCreateManagedWidget('Buttton 1', commandWidgetClass, box,
-//      XtNborderWidth,20,
-    nil);
-    XtAddCallback(button1, XtNcallback, @On_Click, nil);
+    XtAddEventHandler(box, ExposureMask, False, @re_draw2, nil);
 
-    button2 := XtCreateManagedWidget('Buttton 2', commandWidgetClass, box, nil, 0);
-    XtVaSetValues(button2, XtNbackground, $FF8888, XtNname, PChar('1234'), nil);
-    XtAddCallback(button2, XtNcallback, @On_Click, nil);
-
-    button3 := XtCreateManagedWidget('Buttton 3', commandWidgetClass, box, nil, 0);
-    XtAddCallback(button3, XtNcallback, @On_Click, nil);
-
-    label1 := XtCreateManagedWidget('', labelWidgetClass, box, nil, 0);
-    XtVaSetValues(label1, XtNborderWidth, 0, XtNforeground, $FF0000, nil);
 
     XtRealizeWidget(toplevel);
-    //  XtMainLoop;
+
+    plotter_params:=pl_newplparams;
+    display:=XtDisplay(box);
+    window:=XtWindow(box);
+
+    pl_setplparam (plotter_params, 'XDRAWABLE_DISPLAY', display);
+    pl_setplparam (plotter_params, 'XDRAWABLE_DRAWABLE1', @window);
+    pl_setplparam (plotter_params, 'BG_COLOR', bg_colorname);
+    plotter:=pl_newpl_r('Xdrawable',nil,nil,stderr,plotter_params);
+    pl_openpl_r(plotter);
+    pl_fspace_r(plotter,0,0,1000,1000);
+    pl_flinewidth_r(plotter,0.25);
+
     XtAppMainLoop(app);
   end;
 
