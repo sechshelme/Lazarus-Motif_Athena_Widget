@@ -21,19 +21,16 @@ var     display: PDisplay;
     window: TWindow;
     plotter: PplPlotter;
 
-  procedure re_draw2(para1: TWidget; para2: TXtPointer; para3: PXEvent;
-    para4: PBoolean); cdecl;
-  begin
-    WriteLn('plot');
-      pl_pencolorname_r(plotter,'green');
-      pl_fmove_r(plotter,600,300);
+procedure re_draw2(para1: TWidget; para2: TXtPointer; para3: PXEvent; para4: PBoolean); cdecl;
+begin
+  WriteLn('plot');
+  pl_pencolorname_r(plotter, 'green');
+  pl_fmove_r(plotter, 100, 100);
 
-      pl_fcontrel_r(plotter,100,100);
+  pl_fcontrel_r(plotter, 500, 500);
 
-      pl_endpath_r(plotter);
-
-  end;
-
+  pl_endpath_r(plotter);
+end;
   procedure main;
   const
 bg_colorname :PChar= 'white';

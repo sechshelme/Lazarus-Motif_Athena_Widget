@@ -40,26 +40,26 @@ var
     box := XtCreateManagedWidget('box', boxWidgetClass, toplevel, nil, 0);
     XtVaSetValues(box, XtNorientation, XtEhorizontal, nil);
 
-    button0 := XtVaCreateManagedWidget('Buttton 0', commandWidgetClass, box,
+    button0 := XtVaCreateManagedWidget('Button 0', commandWidgetClass, box,
       XtNborderWidth,5,
       XtNshapeStyle,XawShapeRectangle,
     nil);
     XtAddCallback(button0, XtNcallback, @On_Click, nil);
 
-    button1 := XtVaCreateManagedWidget('Buttton 1', commandWidgetClass, box,
+    button1 := XtVaCreateManagedWidget('Button 1', commandWidgetClass, box,
       XtNborderWidth,5,
       XtNshapeStyle,XawShapeOval,
     nil);
     XtAddCallback(button1, XtNcallback, @On_Click, nil);
 
-    button2 := XtVaCreateManagedWidget('Buttton 2', commandWidgetClass, box,
+    button2 := XtVaCreateManagedWidget('Button 2', commandWidgetClass, box,
     XtNborderWidth,5,
     XtNshapeStyle,XawShapeEllipse,
     nil);
     XtVaSetValues(button2, XtNbackground, $FF8888, XtNname, PChar('1234'), nil);
     XtAddCallback(button2, XtNcallback, @On_Click, nil);
 
-    button3 := XtVaCreateManagedWidget('Buttton 3', commandWidgetClass, box,
+    button3 := XtVaCreateManagedWidget('Button 3', commandWidgetClass, box,
     XtNborderWidth,5,
     XtNshapeStyle,XawShapeRectangle,
     nil);
