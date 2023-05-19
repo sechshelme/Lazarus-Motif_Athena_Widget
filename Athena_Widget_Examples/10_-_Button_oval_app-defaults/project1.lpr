@@ -33,7 +33,7 @@ var
     toplevel, button1, button2, box, button3, button0: TWidget;
     app: TXtAppContext;
   begin
-    toplevel := XtVaAppInitialize(@app, 'noname', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
+    toplevel := XtVaAppInitialize(@app, 'myapp', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
 //    toplevel := XtVaAppInitialize(@app, 'XClipboard', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
 //    toplevel := XtVaAppInitialize(@app, 'noname', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
 

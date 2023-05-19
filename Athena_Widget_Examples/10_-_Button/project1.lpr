@@ -16,7 +16,7 @@ var
   var
     Caption: PChar;
     //    name:array[0..15] of Char;
-    Name: PChar=nil;
+    Name: PChar = nil;
     s: string;
   begin
     XtVaGetValues(w, XtNlabel, @Caption, nil);
@@ -33,32 +33,29 @@ var
     toplevel, button1, button2, box, button3: TWidget;
     app: TXtAppContext;
   begin
-//    toplevel := XtVaAppInitialize(@app, 'XClipboard', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
-//    toplevel := XtVaAppInitialize(@app, 'XClipboard', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
-    toplevel := XtVaAppInitialize(@app, 'xXCalc', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
+    toplevel := XtVaAppInitialize(@app, 'myapp', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
 
     box := XtCreateManagedWidget('box', boxWidgetClass, toplevel, nil, 0);
     XtVaSetValues(box, XtNorientation, XtEhorizontal, nil);
 
-    button1 := XtVaCreateManagedWidget('Buttton 1', commandWidgetClass, box,
-      XtNborderWidth,20,
-
-      XtNshapeStyle,XawShapeOval,
-    nil);
+    button1 := XtVaCreateManagedWidget('Button 1', commandWidgetClass, box,
+      nil);
     XtAddCallback(button1, XtNcallback, @On_Click, nil);
 
-    button2 := XtCreateManagedWidget('Buttton 2', commandWidgetClass, box, nil, 0);
-    XtVaSetValues(button2, XtNbackground, $FF8888, XtNname, PChar('1234'), nil);
+    button2 := XtVaCreateManagedWidget('Button 2', commandWidgetClass, box,
+      XtNbackground, $FF8888,
+      nil);
+    XtVaSetValues(button2, XtNname, PChar('1234'), nil);
     XtAddCallback(button2, XtNcallback, @On_Click, nil);
 
-    button3 := XtCreateManagedWidget('Buttton 3', commandWidgetClass, box, nil, 0);
+    button3 := XtVaCreateManagedWidget('Button 3', commandWidgetClass, box,
+      nil);
     XtAddCallback(button3, XtNcallback, @On_Click, nil);
 
     label1 := XtCreateManagedWidget('', labelWidgetClass, box, nil, 0);
     XtVaSetValues(label1, XtNborderWidth, 0, XtNforeground, $FF0000, nil);
 
     XtRealizeWidget(toplevel);
-    //  XtMainLoop;
     XtAppMainLoop(app);
   end;
 
