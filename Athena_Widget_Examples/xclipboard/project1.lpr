@@ -51,6 +51,7 @@ type
   TClipPtr = PClipRec;
 
 var
+  wm_delete_window, wm_protocols: TAtom;
   fallback_resource: array of TXtString = ('*international: true', nil);
 
 
@@ -175,7 +176,14 @@ var
 
     XtSetArg(args[0], XtNx, x);
     XtSetArg(args[1], XtNy, y);
-    XtSetValues(w,args,2);
+    XtSetValues(w, args, 2);
+  end;
+
+  procedure Quit(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
+  begin
+   XtCloseDisplay(XtDisplay(text1));
+    WriteLn('quit');
+   Halt(0);
   end;
 
   procedure CenterWidgetOnWidget(w, wt: TWidget);
@@ -233,23 +241,27 @@ var
 
   end;
 
-  procedure FailContinue(w: TWidget; event: PXEvent; params: PXtString;
-    num_params: PCardinal); cdecl;
+  procedure FailContinue(w: TWidget; event: PXEvent; params: PXtString;    num_params: PCardinal); cdecl;
   begin
-
+      XtPopdown(failDialogShell);
   end;
 
-  procedure Quit(w: TWidget; event: PXEvent; params: PXtString;
-    num_params: PCardinal); cdecl;
+  procedure WMProtocols(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
   begin
-
+    if (event^._type = ClientMessage) and (event^.xclient.message_type = wm_protocols) and (event^.xclient.Data.l[0] = clong(wm_delete_window)) then begin
+      while (w <> nil) and not XtIsShell(w) do begin
+        w := XtParent(w);
+      end;
+    end;
+    if w = top then begin
+      Quit(w, event, params, num_params);
+    end else if w = fileDialogShell then begin
+      CancelSaveFile(w, event, params, num_params);
+    end else if w = failDialogShell then begin
+      FailContinue(w, event, params, num_params);
+    end;
   end;
 
-  procedure WMProtocols(w: TWidget; event: PXEvent; params: PXtString;
-    num_params: PCardinal); cdecl;
-  begin
-
-  end;
 
 
   procedure NewCurrentClipContents(Data: PChar; len: cint);
@@ -439,6 +451,13 @@ var
     XtRealizeWidget(failDialogShell);
 
     XtOwnSelection(top, ManagetAtom, CurrentTime, @RefuseSelection, @LoseManager, nil);
+
+    wm_delete_window := XInternAtom(XtDisplay(top), 'WM_DELETE_WINDOW', False);
+    wm_protocols := XInternAtom(XtDisplay(top), 'WM_PROTOCOLS', False);
+
+    XSetWMProtocols(XtDisplay(top), XtWindow(top), @wm_delete_window, 1);
+    XSetWMProtocols(XtDisplay(top), XtWindow(fileDialogShell), @wm_delete_window, 1);
+    XSetWMProtocols(XtDisplay(top), XtWindow(failDialogShell), @wm_delete_window, 1);
 
     XtAppMainLoop(xtcontext);
   end;
