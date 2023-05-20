@@ -13,10 +13,10 @@ uses
 
 // https://www.oreilly.com/openbook/motif/vol6a/Vol6a_html/ch02.html
 
+// Für den Umweg über absolute
 type
-  PMyDisplay = ^TMyDisplay;
-
-  TMyDisplay = record
+  PMyXDisplay = ^TMyXDisplay;
+  TMyXDisplay = record
     ext_data: PXExtData;
     private1: PXPrivate;
     fd: cint;
@@ -86,24 +86,29 @@ var
   var
     toplevel, box: TWidget;
     app: TXtAppContext;
-    dpy: PDisplay;
-    Mydpy: PMyDisplay absolute dpy;
-    button: array of TWidget;
+    dis: PDisplay;
+    MyDis: PMyXDisplay absolute dis;
+    button: array of TWidget = nil;
     i: integer;
     s: string;
+    db: PXrmDatabase;
   begin
     toplevel := XtVaAppInitialize(@app, 'myapp', nil, 0, @argc, argv, nil,
-          XtNwidth, 640, XtNheight, 400,
+      XtNwidth, 640, XtNheight, 400,
       nil);
 
-    dpy := XtDisplay(toplevel);
-    XrmPutStringResource(@Mydpy^.db, '*box*background', 'Green');
-    XrmPutStringResource(@Mydpy^.db, '*box*foreground', 'red');
-    XrmPutStringResource(@Mydpy^.db, '*box*borderColor', 'blue');
-    XrmPutStringResource(@Mydpy^.db, '*box*Button*background', 'yellow');
-    XrmPutStringResource(@Mydpy^.db, '*box*ShapeStyle', 'Ellipse');
-    XrmPutStringResource(@Mydpy^.db, '*box*borderWidth', '10');
+    // --- Direkt
+    dis := XtDisplay(toplevel);
+    // 200 ist das Offset von "db: PXrmDatabase" in der TDisplay struct.
+    db := PXrmDatabase(dis + 200);
+    XrmPutStringResource(db, '*box*foreground', 'red');
+    XrmPutStringResource(db, '*box*borderColor', 'blue');
+    XrmPutStringResource(db, '*box*Button*background', 'yellow');
+    XrmPutStringResource(db, '*box*ShapeStyle', 'Ellipse');
+    XrmPutStringResource(db, '*box*borderWidth', '10');
 
+    // --- Über den Umweg record und absolute
+    XrmPutStringResource(@MyDis^.db, '*box*background', 'Green');
 
     box := XtCreateManagedWidget('box', boxWidgetClass, toplevel, nil, 0);
     XtVaSetValues(box, XtNorientation, XtEhorizontal, nil);
