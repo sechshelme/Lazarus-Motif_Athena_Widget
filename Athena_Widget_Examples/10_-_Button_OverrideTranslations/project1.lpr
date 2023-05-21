@@ -1,6 +1,7 @@
 program project1;
 
 uses
+  sysutils,
   x,
   xlib,
   ctypes,
@@ -23,8 +24,7 @@ var
   begin
     XtVaGetValues(w, XtNlabel, @Caption, nil);
     s := 'Es wurde der Button: "' + Caption + '" gedrueckt';
-    WriteLn();
-    XtVaSetValues(label1, XtNlabel, PChar(s));
+    XtVaSetValues(label1, XtNlabel, PChar(s), nil);
   end;
 
   procedure resize(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
@@ -95,14 +95,16 @@ type
 
   procedure main;
   const
-    rec: TXtActionsRecs = nil;
+    BTN_COUNT = 11;
   var
-    toplevel, button1, button2, box, button3, button_quit: TWidget;
+    rec: TXtActionsRecs = nil;
+    toplevel, box, button_quit: TWidget;
+    button: array of TWidget = nil;
     app: TXtAppContext;
-    trans: TXtTranslations;
     wm_delete_window, wm_protocols: TAtom;
     dis: PDisplay;
-    scr: cint;
+    i: integer;
+    s:String;
   begin
     toplevel := XtVaAppInitialize(@app, 'myapp', nil, 0, @argc, argv, nil,
       XtNwidth, 320, XtNheight, 200,
@@ -112,7 +114,6 @@ type
     XtVaSetValues(box, XtNorientation, XtEhorizontal, nil);
 
     dis := XtDisplay(box);
-    scr := DefaultScreen(dis);
 
     AddActionsRec(rec, 'resize', @resize);
     AddActionsRec(rec, 'enter', @enter);
@@ -139,23 +140,14 @@ type
 
       '<Key>Return: test()'));
 
-
-    button1 := XtVaCreateManagedWidget('btn1', commandWidgetClass, box,
-      XtNlabel, 'Button 1',
-      nil);
-
-    button2 := XtVaCreateManagedWidget('btn2', commandWidgetClass, box,
-      XtNbackground, $FF8888,
-      XtNlabel, 'Button 2',
-      nil);
-
-    button3 := XtVaCreateManagedWidget('btn3', commandWidgetClass, box,
-      XtNlabel, 'Button 3',
-      nil);
-
-    XtOverrideTranslations(button1, XtParseTranslationTable('<Btn1Down>,<Btn1Up>:button_click(123)'));
-    XtOverrideTranslations(button2, XtParseTranslationTable('<Btn1Down>,<Btn1Up>:button_click(345)'));
-    XtOverrideTranslations(button3, XtParseTranslationTable('<Btn1Down>,<Btn1Up>:button_click(567)'));
+    SetLength(button,BTN_COUNT);
+    for i := 0 to Length(button) - 1 do begin
+      button[i] := XtVaCreateManagedWidget('btn1', commandWidgetClass, box,
+        XtNlabel, PChar('Button '+i.ToString),
+        XtNbackground, $FFFFFF div BTN_COUNT * i,
+        nil);
+      XtOverrideTranslations(button[i], XtParseTranslationTable('<Btn1Down>,<Btn1Up>:button_click()'));
+    end;
 
     button_quit := XtVaCreateManagedWidget('quit', commandWidgetClass, box,
       XtNlabel, 'Quit',
