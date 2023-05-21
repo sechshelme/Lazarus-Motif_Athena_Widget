@@ -316,31 +316,104 @@ var
     req: PXSelectionRequestEvent;
     targetP, std_targets: PAtom;
     std_length: culong;
+    temp: pclong;
+    ret: cint;
+    style: TXICCEncodingStyle;
+    Data: PChar;
+    args: array[0..0] of TArg;
+    Source: TWidget;
+    prop: TXTextProperty;
   begin
     d := XtDisplay(w);
     req := XtGetSelectionRequest(w, selection^, nil);
 
     if target^ = XA_TARGETS(d) then begin
-      XmuConvertStandardSelection(w, req^.time, selection, target, type_, TXtPointer(@std_targets), @std_length, format);
-      Value^:=XtMalloc(SizeOf(TAtom)*(std_length+7));
-      targetP:=PPAtom(Value)^;
-      targetP^:=XA_STRING;Inc(targetP);
-      targetP^:=XA_TEXT(d);Inc(targetP);
-      targetP^:=XA_UTF8_STRING(d);Inc(targetP);
-      targetP^:=XA_COMPOUND_TEXT(d);Inc(targetP);
-      targetP^:=XA_LENGTH(d);Inc(targetP);
-      targetP^:=XA_LIST_LENGTH(d);Inc(targetP);
-      targetP^:=XA_CHARACTER_POSITION(d);Inc(targetP);
-      len^:=std_length+(targetP-(PPAtom(Value)^));
-      Move(PChar(targetP),PChar(std_targets), SizeOf(TAtom)*std_length);
+      XmuConvertStandardSelection(w, req^.time, selection, target, type_, PXPointer(@std_targets), @std_length, format);
+      Value^ := XtMalloc(SizeOf(TAtom) * (std_length + 7));
+      targetP := PPAtom(Value)^;
+      targetP^ := XA_STRING;
+      Inc(targetP);
+      targetP^ := XA_TEXT(d);
+      Inc(targetP);
+      targetP^ := XA_UTF8_STRING(d);
+      Inc(targetP);
+      targetP^ := XA_COMPOUND_TEXT(d);
+      Inc(targetP);
+      targetP^ := XA_LENGTH(d);
+      Inc(targetP);
+      targetP^ := XA_LIST_LENGTH(d);
+      Inc(targetP);
+      targetP^ := XA_CHARACTER_POSITION(d);
+      Inc(targetP);
+      len^ := std_length + (targetP - (PPAtom(Value)^));
+      Move(PChar(targetP), PChar(std_targets), SizeOf(TAtom) * std_length);
       XtFree(PChar(std_targets));
-      type_^:=XA_ATOM;
-      format^:=32;
-      Result:=True;
+      type_^ := XA_ATOM;
+      format^ := 32;
+      Result := True;
       Exit;
     end;
 
-    ///////////////////////////////////////////////////////////////7
+    if target^ = XA_LIST_LENGTH(d) then begin
+      temp := pclong(XtMalloc(SizeOf(clong)));
+      if target^ = XA_LIST_LENGTH(d) then begin
+        temp^ := 1;
+      end else begin
+        temp^ := TextLenght(text1);
+      end;
+      Value^ := TXtPointer(temp);
+      type_^ := XA_INTEGER;
+      len^ := 1;
+      format^ := 32;
+      Result := True;
+      Exit;
+    end;
+
+    if target^ = XA_CHARACTER_POSITION(d) then begin
+      temp := pclong(XtMalloc(2 * SizeOf(clong)));
+      temp[0] := 0;
+      temp[1] := TextLenght(text1);
+      Value^ := TXtPointer(temp);
+      type_^ := XA_SPAN(d);
+      len^ := 2;
+      format^ := 32;
+      Result := True;
+      Exit;
+    end;
+
+    if (target^ = XA_STRING) or (target^ = XA_TEXT(d)) or (target^ = XA_UTF8_STRING(d)) or (target^ = XA_COMPOUND_TEXT(d)) then begin
+      style := XStdICCTextStyle;
+      XtSetArg(args[0], XtNstring, @Data);
+      XtSetValues(Source, args, 1);
+
+      if target^ = XA_UTF8_STRING(d) then begin
+        style := XUTF8StringStyle;
+      end else if target^ = XA_COMPOUND_TEXT(d) then begin
+        style := XCompoundTextStyle;
+      end else if target^ = XA_STRING then begin
+        style := XStringStyle;
+      end;
+
+      ret := XmbTextListToTextProperty(d, @Data, 1, style, @prop);
+      if ret >= Success then begin
+        len^ := prop.nitems;
+        Value^ := prop.Value;
+        type_^ := prop.encoding;
+        format^ := prop.format;
+        Result := True;
+        Exit;
+      end else begin
+        Result := False;
+        Exit;
+      end;
+    end;
+
+    if XmuConvertStandardSelection(w, req^.time, selection, target, type_, PXPointer(Value), len, format) then begin
+      Result := True;
+      Exit;
+    end;
+
+    Result:=False;
   end;
 
   procedure InsertClipboard(w: TWidget; client_data: TXtPointer; selction: PAtom; type_: PAtom; Value: TXtPointer; len: pculong; format: pcint); cdecl;
