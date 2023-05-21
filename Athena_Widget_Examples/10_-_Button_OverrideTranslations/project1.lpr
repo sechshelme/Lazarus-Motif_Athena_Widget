@@ -10,24 +10,20 @@ uses
   XawBox,
   XTIntrinsic;
 
-// https://www.oreilly.com/openbook/motif/vol6a/Vol6a_html/ch02.html
+// https://www.x.org/releases/X11R7.7/doc/libXt/intrinsics.html
+// Appendix B. Translation Table Syntax
 
 var
-  label1: TWidget;
+  label1: TWidget = nil;
 
-  procedure On_Click(w: TWidget; client: TXtPointer; call: TXtPointer); cdecl;
+  procedure On_Button_Click(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
   var
-    Caption: PChar;
-    //    name:array[0..15] of Char;
-    Name: PChar = nil;
+    Caption: PChar = nil;
     s: string;
   begin
     XtVaGetValues(w, XtNlabel, @Caption, nil);
-    XtVaGetValues(w, XtNname, Name, nil);
     s := 'Es wurde der Button: "' + Caption + '" gedrueckt';
-    WriteLn(s);
-    //    WriteLn(name);
-    //    WriteLn(Length(name));
+    WriteLn();
     XtVaSetValues(label1, XtNlabel, PChar(s));
   end;
 
@@ -67,19 +63,39 @@ var
     WriteLn('Up');
   end;
 
-  procedure Press_x(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
+  procedure Press_Quit(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
   begin
-    WriteLn('Press (x)');
+    if num_params^ > 0 then begin
+      if params[0] = 'x' + '' then  begin
+        WriteLn('Press (x)');
+      end;
+    end else begin
+      WriteLn('Press Quit');
+    end;
+    Halt(0);
   end;
 
-  procedure quit(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
+type
+  TXtActionsRecs = array of TXtActionsRec;
+
+  procedure AddActionsRec(var rec: TXtActionsRecs; Name: TXtString; proc: TXtActionProc);
+  var
+    len: SizeInt;
   begin
-    Halt(0);
+    len := Length(rec);
+    SetLength(rec, len + 1);
+    rec[len]._string := Name;
+    rec[len].proc := proc;
+  end;
+
+  procedure dblClick(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
+  begin
+    WriteLn('Doppel Klick');
   end;
 
   procedure main;
   const
-    rec: array of TXtActionsRec = nil;
+    rec: TXtActionsRecs = nil;
   var
     toplevel, button1, button2, box, button3, button_quit: TWidget;
     app: TXtAppContext;
@@ -87,7 +103,6 @@ var
     wm_delete_window, wm_protocols: TAtom;
     dis: PDisplay;
     scr: cint;
-    rootWin: TWindow;
   begin
     toplevel := XtVaAppInitialize(@app, 'myapp', nil, 0, @argc, argv, nil,
       XtNwidth, 320, XtNheight, 200,
@@ -98,76 +113,54 @@ var
 
     dis := XtDisplay(box);
     scr := DefaultScreen(dis);
-    rootWin := XRootWindow(dis, scr);
 
-    SetLength(rec, 7);
-    rec[0]._string := PChar('resize');
-    rec[0].proc := @resize;
-    rec[1]._string := PChar('enter');
-    rec[1].proc := @enter;
-    rec[2]._string := PChar('leave');
-    rec[2].proc := @leave;
-    rec[3]._string := PChar('btn1down');
-    rec[3].proc := @BtnDown;
-    rec[4]._string := PChar('btn1up');
-    rec[4].proc := @BtnUp;
-    rec[5]._string := PChar('quit');
-    rec[5].proc := @Press_x;
-    rec[6]._string := PChar('test');
-    rec[6].proc := @button_click;
+    AddActionsRec(rec, 'resize', @resize);
+    AddActionsRec(rec, 'enter', @enter);
+    AddActionsRec(rec, 'leave', @leave);
+    AddActionsRec(rec, 'btn1click', @BtnDown);
+    AddActionsRec(rec, 'btn1up', @BtnUp);
+    AddActionsRec(rec, 'dblclick', @dblClick);
+    AddActionsRec(rec, 'quit', @Press_Quit);
+    AddActionsRec(rec, 'test', @button_click);
+    AddActionsRec(rec, 'button_click', @On_Button_Click);
 
     XtAppAddActions(app, @rec[0], Length(rec));
 
 
-    trans := XtParseTranslationTable(
+    XtOverrideTranslations(box, XtParseTranslationTable(
       '<ConfigureNotify>: resize()'#10 +
       '<EnterNotify>: enter()'#10 +
       '<LeaveNotify>: leave()'#10 +
 
-      //      '<Btn1Down>: btn1down()'#10 +
-      //      '<Btn1Up>: btn1up()'#10 +
+      '<Btn1Down>,<Btn1Up>: btn1click(abc,def,ghi) btn1up() test()'#10 +
+      '<Btn3Down>,<Btn3Up>: btn1click(rechts) btn1up() test()'#10 +
 
-      '<Btn1Down>,<Btn1Up>: btn1down(abc,def,ghi) btn1up() test()'#10 +
-      '<Btn3Down>,<Btn3Up>: btn1down(rechts) btn1up() test()'#10 +
+      '<Btn1Up>(2): dblclick(abc,def,ghi)'#10 +
 
-      //'#override <Btn2Down>: btn1down(rechte_taste)'#10 +
-      //'#btn1 <Btn1Down>: btn1down(rechte_taste)'#10 +
+      '<Key>Return: test()'));
 
-
-      //     'btn1.translations:    #override'#10+
-      //        '<Btn1Down>,<Btn1Up>:test() unset()'#10 +
-      '<Key>Return: test()');
-    XtOverrideTranslations(box, trans);
 
     button1 := XtVaCreateManagedWidget('btn1', commandWidgetClass, box,
       XtNlabel, 'Button 1',
       nil);
-    //    XtAddCallback(button1, XtNcallback, @On_Click, nil);
 
     button2 := XtVaCreateManagedWidget('btn2', commandWidgetClass, box,
       XtNbackground, $FF8888,
       XtNlabel, 'Button 2',
       nil);
-    XtVaSetValues(button2, XtNname, PChar('1234'), nil);
-    XtAddCallback(button2, XtNcallback, @On_Click, nil);
 
     button3 := XtVaCreateManagedWidget('btn3', commandWidgetClass, box,
       XtNlabel, 'Button 3',
       nil);
-    XtAddCallback(button3, XtNcallback, @On_Click, nil);
 
-    XtOverrideTranslations(button1, XtParseTranslationTable(
-                  '<Btn1Down>,<Btn1Up>:btn1down(Buttton_1)'));
-    XtOverrideTranslations(button2, XtParseTranslationTable(
-                  '<Btn1Down>,<Btn1Up>:btn1down(Buttton_2)'));
-    XtOverrideTranslations(button3, XtParseTranslationTable(
-                  '<Btn1Down>,<Btn1Up>:btn1down(Buttton_3)'));
-
+    XtOverrideTranslations(button1, XtParseTranslationTable('<Btn1Down>,<Btn1Up>:button_click(123)'));
+    XtOverrideTranslations(button2, XtParseTranslationTable('<Btn1Down>,<Btn1Up>:button_click(345)'));
+    XtOverrideTranslations(button3, XtParseTranslationTable('<Btn1Down>,<Btn1Up>:button_click(567)'));
 
     button_quit := XtVaCreateManagedWidget('quit', commandWidgetClass, box,
       XtNlabel, 'Quit',
       nil);
-    XtAddCallback(button_quit, XtNcallback, @quit, nil);
+    XtOverrideTranslations(button_quit, XtParseTranslationTable('<Btn1Down>,<Btn1Up>:quit()'));
 
     label1 := XtCreateManagedWidget('', labelWidgetClass, box, nil, 0);
     XtVaSetValues(label1, XtNborderWidth, 0, XtNforeground, $FF0000, nil);
@@ -177,9 +170,7 @@ var
     wm_delete_window := XInternAtom(XtDisplay(toplevel), 'WM_DELETE_WINDOW', False);
     XSetWMProtocols(XtDisplay(toplevel), XtWindow(toplevel), @wm_delete_window, 1);
 
-    XtOverrideTranslations(toplevel, XtParseTranslationTable(
-      '<Message>WM_PROTOCOLS: quit()'));
-
+    XtOverrideTranslations(toplevel, XtParseTranslationTable('<Message>WM_PROTOCOLS: quit(x)'));
 
     XtAppMainLoop(app);
   end;
