@@ -6,6 +6,7 @@ uses
   xlib,
   xatom,
   XmuAtoms,
+  XmuStdSel,
   xresource,
   x,
   xutil,
@@ -181,9 +182,9 @@ var
 
   procedure Quit(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
   begin
-   XtCloseDisplay(XtDisplay(text1));
+    XtCloseDisplay(XtDisplay(text1));
     WriteLn('quit');
-   Halt(0);
+    Halt(0);
   end;
 
   procedure CenterWidgetOnWidget(w, wt: TWidget);
@@ -241,9 +242,9 @@ var
 
   end;
 
-  procedure FailContinue(w: TWidget; event: PXEvent; params: PXtString;    num_params: PCardinal); cdecl;
+  procedure FailContinue(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
   begin
-      XtPopdown(failDialogShell);
+    XtPopdown(failDialogShell);
   end;
 
   procedure WMProtocols(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
@@ -309,14 +310,38 @@ var
 
   procedure LoseSelection(w: TWidget; selection: PAtom); cdecl; forward;
 
-  function ConvertSelection(w: TWidget; selection: PAtom; target: PAtom;
-    type_: PAtom; Value: PXtPointer; para6: pculong; para7: pcint): TBoolean;
-  cdecl;
+  function ConvertSelection(w: TWidget; selection: PAtom; target: PAtom; type_: PAtom; Value: PXtPointer; len: pculong; format: pcint): TBoolean; cdecl;
+  var
+    d: PDisplay;
+    req: PXSelectionRequestEvent;
+    targetP, std_targets: PAtom;
+    std_length: culong;
   begin
+    d := XtDisplay(w);
+    req := XtGetSelectionRequest(w, selection^, nil);
+
+    if target^ = XA_TARGETS(d) then begin
+      XmuConvertStandardSelection(w, req^.time, selection, target, type_, TXtPointer(@std_targets), @std_length, format);
+      Value^:=XtMalloc(SizeOf(TAtom)*(std_length+7));
+      targetP:=PPAtom(Value)^;
+      targetP^:=XA_STRING;Inc(targetP);
+      targetP^:=XA_TEXT(d);Inc(targetP);
+      targetP^:=XA_UTF8_STRING(d);Inc(targetP);
+      targetP^:=XA_COMPOUND_TEXT(d);Inc(targetP);
+      targetP^:=XA_LENGTH(d);Inc(targetP);
+      targetP^:=XA_LIST_LENGTH(d);Inc(targetP);
+      targetP^:=XA_CHARACTER_POSITION(d);Inc(targetP);
+      len^:=std_length+(targetP-(PPAtom(Value)^));
+      Move(PChar(targetP),PChar(std_targets), SizeOf(TAtom)*std_length);
+      XtFree(PChar(std_targets));
+      type_^:=XA_ATOM;
+      format^:=32;
+      Result:=True;
+      Exit;
+    end;
+
     ///////////////////////////////////////////////////////////////7
   end;
-
-
 
   procedure InsertClipboard(w: TWidget; client_data: TXtPointer; selction: PAtom; type_: PAtom; Value: TXtPointer; len: pculong; format: pcint); cdecl;
   var

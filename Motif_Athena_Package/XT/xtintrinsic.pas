@@ -413,7 +413,7 @@ type
   PXtRequestId = ^TXtRequestId;
   TXtRequestId = TXtPointer;
 
-  TXtConvertSelectionProc = function(w: TWidget; selection: PAtom; target: PAtom; type_: PAtom; value: PXtPointer; para6: pculong; para7: pcint): TBoolean; cdecl;
+  TXtConvertSelectionProc = function(w: TWidget; selection: PAtom; target: PAtom; type_: PAtom; value: PXtPointer; len: pculong; format: pcint): TBoolean; cdecl;
   TXtLoseSelectionProc = procedure(w: TWidget;  atom: PAtom); cdecl;
   TXtSelectionDoneProc = procedure(w: TWidget;  atom: PAtom; para3: PAtom); cdecl;
   TXtSelectionCallbackProc = procedure(w: TWidget; client_data: TXtPointer; selction: PAtom; type_: PAtom; value: TXtPointer; len: pculong; format: pcint); cdecl;

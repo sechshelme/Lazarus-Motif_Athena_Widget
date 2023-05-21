@@ -35,7 +35,7 @@ in this Software without prior written authorization from The Open Group.
 #include <X11/Intrinsic.h>
 #include <X11/Xfuncproto.h>
 
-_XFUNCPROTOBEGIN
+//_XFUNCPROTOBEGIN
 
 Boolean XmuConvertStandardSelection
 (
@@ -49,6 +49,6 @@ Boolean XmuConvertStandardSelection
  int			*format_return
  );
 
-_XFUNCPROTOEND
+//_XFUNCPROTOEND
 
 #endif /* _XMU_SELECTION_H_ */

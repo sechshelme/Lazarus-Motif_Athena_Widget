@@ -661,6 +661,10 @@
         <Filename Value="Xmu/xmuatoms.pas"/>
         <UnitName Value="XmuAtoms"/>
       </Item>
+      <Item>
+        <Filename Value="Xmu/xmustdsel.pas"/>
+        <UnitName Value="XmuStdSel"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>

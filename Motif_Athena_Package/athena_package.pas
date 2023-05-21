@@ -33,7 +33,8 @@ uses
   XmXmfuncs, XmXmIm, Xmxmlist, XmXmStrDefs22, XmXmStrDefs23, XmAccTextT, 
   XmDragIcon, XmGadget, XmGrabShell, XmIconH, XmManager, XmMenuShell, 
   XmPointInT, XmPrimitive, XmScreen, XmSpecRendert, XmTabBox, XmTakesDefT, 
-  XmTransfer, XmTravCont, XmTxtPropCv, XmVendors, XmuAtoms, LazarusPackageIntf;
+  XmTransfer, XmTravCont, XmTxtPropCv, XmVendors, XmuAtoms, XmuStdSel, 
+  LazarusPackageIntf;
 
 implementation
 

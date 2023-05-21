@@ -52,6 +52,7 @@ uses
   XawPorthole,
   XawStripChart,
   XmuWidgetNode,
+  XmuStdSel,
   awScrollBar,
   awList,
   awDialog,
