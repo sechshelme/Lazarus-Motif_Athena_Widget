@@ -34,9 +34,9 @@ const
   function malloc(size: SizeInt): Pointer; cdecl; external lib_stdio;
   procedure Free(ptr: Pointer); cdecl; external lib_stdio Name 'free';
 
-  function memmove(dest:Pointer; src:Pointer;size:SizeInt):Pointer; cdecl; external lib_stdio;
+  function memmove(dest: Pointer; src: Pointer; size: SizeInt): Pointer; cdecl; external lib_stdio;
 
-//  extern void *memmove (void *__dest, const void *__src, size_t __n)       __THROW __nonnull ((1, 2));
+  //  extern void *memmove (void *__dest, const void *__src, size_t __n)       __THROW __nonnull ((1, 2));
   // https://cplusplus.com/reference/cstdio/snprintf/
 
   function snprintf(restrict: PChar; maxlen: SizeInt; format: PChar): cint; varargs cdecl; external lib_stdio;
@@ -44,6 +44,8 @@ const
   //  extern int snprintf (char *__restrict __s, size_t __maxlen,
   //           const char *__restrict __format, ...)
   //     __THROWNL __attribute__ ((__format__ (__printf__, 3, 4)));
+
+  const INFINITY=   10000000;
 
 
 type
@@ -96,6 +98,16 @@ var
     end;
   end;
 
+  procedure RestoreClip(w: TWidget; clip: TClipPtr);
+  var
+    Source: TWidget;
+    args: array[0..0] of TArg;
+  begin
+    Source := XawTextGetSource(w);
+    XtSetArg(args[0], XtNstring, clip^.clip);
+    XtSetValues(Source, args, 1);
+  end;
+
   function NewClip(w: TWidget; old: TClipPtr): TClipPtr;
   var
     newClip1: TClipPtr;
@@ -113,11 +125,33 @@ var
     Result := newClip1;
   end;
 
+  procedure DeleteClip(w: TWidget; clip: TClipPtr);
+  begin
+    if clip^.Prev<>nil then begin
+      clip^.Prev^.Next := clip^.Next;
+    end;
+    if clip^.Next<>nil then begin
+      clip^.Next^.Prev := clip^.Prev;
+    end;
+    if clip^.clip<>nil then Free(clip^.clip);
+    Free(PChar(clip));
+  end;
 
 var
   currentClip: TClipPtr;
   top, parent, nextButton, indexLabel, prevButton, text1,
   fileDialog, fileDialogShell, failDialog, failDialogShell: TWidget;
+
+  procedure EraseTextwidget;
+  var
+    block: TXawTextBlock;
+  begin
+    block.ptr:='';
+    block.length:=0;
+    block.firstPos:=0;
+    block.format:=FMT8BIT;
+    XawTextReplace(text1,0,INFINITY,@block);
+  end;
 
   function IndexCurrentClip: cint;
   var
@@ -148,6 +182,26 @@ var
     WriteLn(labelString);
     XtSetArg(arg, XtNlabel, labelString);
     XtSetValues(indexLabel, @arg, ONE);
+  end;
+
+  procedure NextCurrentChlip(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
+  begin
+    if currentClip^.Next <> nil then begin
+      SaveClip(text1, currentClip);
+      currentClip := currentClip^.Next;
+      RestoreClip(text1, currentClip);
+      set_button_state;
+    end;
+  end;
+
+  procedure PrevCurrentChlip(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
+  begin
+    if currentClip^.Prev <> nil then begin
+      SaveClip(text1, currentClip);
+      currentClip := currentClip^.Prev;
+      RestoreClip(text1, currentClip);
+      set_button_state;
+    end;
   end;
 
   procedure CenterWidgetAtPoint(w: TWidget; x, y: cint);
@@ -205,70 +259,6 @@ var
     CenterWidgetAtPoint(w, rootX, rootY);
   end;
 
-  procedure NewCurrentChlip(w: TWidget; event: PXEvent; params: PXtString;
-    num_params: PCardinal); cdecl;
-  begin
-
-  end;
-
-  procedure NextCurrentChlip(w: TWidget; event: PXEvent; params: PXtString;
-    num_params: PCardinal); cdecl;
-  begin
-
-  end;
-
-  procedure PrevCurrentChlip(w: TWidget; event: PXEvent; params: PXtString;
-    num_params: PCardinal); cdecl;
-  begin
-
-  end;
-
-  procedure DeleteCurrentChlip(w: TWidget; event: PXEvent; params: PXtString;
-    num_params: PCardinal); cdecl;
-  begin
-
-  end;
-
-  procedure SaveToFile(w: TWidget; event: PXEvent; params: PXtString;
-    num_params: PCardinal); cdecl;
-  begin
-
-  end;
-
-  procedure AccceptSaveFile(w: TWidget; event: PXEvent; params: PXtString;
-    num_params: PCardinal); cdecl;
-  begin
-
-  end;
-
-  procedure CancelSaveFile(w: TWidget; event: PXEvent; params: PXtString;    num_params: PCardinal); cdecl;
-  begin
-    XtPopdown(fileDialogShell);
-  end;
-
-  procedure FailContinue(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
-  begin
-    XtPopdown(failDialogShell);
-  end;
-
-  procedure WMProtocols(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
-  begin
-    if (event^._type = ClientMessage) and (event^.xclient.message_type = wm_protocols) and (event^.xclient.Data.l[0] = clong(wm_delete_window)) then begin
-      while (w <> nil) and not XtIsShell(w) do begin
-        w := XtParent(w);
-      end;
-    end;
-    if w = top then begin
-      Quit(w, event, params, num_params);
-    end else if w = fileDialogShell then begin
-      CancelSaveFile(w, event, params, num_params);
-    end else if w = failDialogShell then begin
-      FailContinue(w, event, params, num_params);
-    end;
-  end;
-
-
-
   procedure NewCurrentClipContents(Data: PChar; len: cint);
   var
     textBlock: TXawTextBlock;
@@ -294,6 +284,65 @@ var
     set_button_state;
   end;
 
+  procedure NewCurrentChlip(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
+  begin
+    NewCurrentClipContents('', 0);
+  end;
+
+  procedure DeleteCurrentChlip(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
+  var
+    newCurrent: TClipPtr;
+  begin
+    if currentClip^.Prev<>nil then begin
+      newCurrent := currentClip^.Prev;
+    end else begin
+      newCurrent := currentClip^.Next;
+    end;
+    if newCurrent <> nil then begin
+      DeleteClip(text1,currentClip);
+      currentClip:=newCurrent;
+      RestoreClip(text1,currentClip);
+    end else EraseTextwidget;
+    set_button_state;
+  end;
+
+  procedure SaveToFile(w: TWidget; event: PXEvent; params: PXtString;
+    num_params: PCardinal); cdecl;
+  begin
+
+  end;
+
+  procedure AccceptSaveFile(w: TWidget; event: PXEvent; params: PXtString;
+    num_params: PCardinal); cdecl;
+  begin
+
+  end;
+
+  procedure CancelSaveFile(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
+  begin
+    XtPopdown(fileDialogShell);
+  end;
+
+  procedure FailContinue(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
+  begin
+    XtPopdown(failDialogShell);
+  end;
+
+  procedure WMProtocols(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
+  begin
+    if (event^._type = ClientMessage) and (event^.xclient.message_type = wm_protocols) and (event^.xclient.Data.l[0] = clong(wm_delete_window)) then begin
+      while (w <> nil) and not XtIsShell(w) do begin
+        w := XtParent(w);
+      end;
+    end;
+    if w = top then begin
+      Quit(w, event, params, num_params);
+    end else if w = fileDialogShell then begin
+      CancelSaveFile(w, event, params, num_params);
+    end else if w = failDialogShell then begin
+      FailContinue(w, event, params, num_params);
+    end;
+  end;
 
 var
   xclipboard_actions: array of TXtActionsRec = (
@@ -350,7 +399,7 @@ var
       targetP^ := XA_CHARACTER_POSITION(d);
       Inc(targetP);
       len^ := std_length + (targetP - (PPAtom(Value)^));
-//      Move(PChar(targetP), PChar(std_targets), SizeOf(TAtom) * std_length);
+      //      Move(PChar(targetP), PChar(std_targets), SizeOf(TAtom) * std_length);
       memmove(PChar(targetP), PChar(std_targets), SizeOf(TAtom) * std_length);
       XtFree(PChar(std_targets));
       type_^ := XA_ATOM;
@@ -389,7 +438,7 @@ var
     if (target^ = XA_STRING) or (target^ = XA_TEXT(d)) or (target^ = XA_UTF8_STRING(d)) or (target^ = XA_COMPOUND_TEXT(d)) then begin
       style := XStdICCTextStyle;
 
-      Source:=XawTextGetSource(text1);
+      Source := XawTextGetSource(text1);
       XtSetArg(args[0], XtNstring, @Data);
       XtGetValues(Source, args, 1);
 
@@ -573,6 +622,6 @@ var
   end;
 
 begin
-  SetExceptionMask([exDenormalized, exInvalidOp, exOverflow, exPrecision, exUnderflow, exZeroDivide]);
+//  SetExceptionMask([exDenormalized, exInvalidOp, exOverflow, exPrecision, exUnderflow, exZeroDivide]);
   main;
 end.
