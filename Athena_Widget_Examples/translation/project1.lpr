@@ -27,6 +27,7 @@ type
     rec[len].proc := proc;
   end;
 
+// XtGetActionList
 
   procedure OnBtnClick(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
   var
