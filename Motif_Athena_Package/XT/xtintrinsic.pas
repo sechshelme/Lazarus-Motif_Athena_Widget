@@ -469,16 +469,16 @@ procedure XtDirectConvert(para1: TXtConverter; para2: TXrmValuePtr; para3: TCard
 
 function XtParseTranslationTable(_XtString: TXtString): TXtTranslations; cdecl; external libXt;
 function XtParseAcceleratorTable(_XtString: TXtString): TXtAccelerators; cdecl; external libXt;
-procedure XtOverrideTranslations(para1: TWidget; para2: TXtTranslations); cdecl; external libXt;
-procedure XtAugmentTranslations(para1: TWidget; para2: TXtTranslations); cdecl; external libXt;
-procedure XtInstallAccelerators(para1: TWidget; para2: TWidget); cdecl; external libXt;
-procedure XtInstallAllAccelerators(para1: TWidget; para2: TWidget); cdecl; external libXt;
-procedure XtUninstallTranslations(para1: TWidget); cdecl; external libXt;
+procedure XtOverrideTranslations(w: TWidget; para2: TXtTranslations); cdecl; external libXt;
+procedure XtAugmentTranslations(w: TWidget; para2: TXtTranslations); cdecl; external libXt;
+procedure XtInstallAccelerators(w: TWidget; para2: TWidget); cdecl; external libXt;
+procedure XtInstallAllAccelerators(w: TWidget; para2: TWidget); cdecl; external libXt;
+procedure XtUninstallTranslations(w1: TWidget); cdecl; external libXt;
 procedure XtAppAddActions(para1: TXtAppContext; para2: TXtActionList; para3: TCardinal); cdecl; external libXt;
 procedure XtAddActions(para1: TXtActionList; para2: TCardinal); cdecl; external libXt;
 function XtAppAddActionHook(para1: TXtAppContext; para2: TXtActionHookProc; para3: TXtPointer): TXtActionHookId; cdecl; external libXt;
 procedure XtRemoveActionHook(para1: TXtActionHookId); cdecl; external libXt;
-procedure XtGetActionList(para1: TWidgetClass; para2: PXtActionList; para3: PCardinal); cdecl; external libXt;
+procedure XtGetActionList(wc: TWidgetClass; actions_return: PXtActionList; num_actions_return: PCardinal); cdecl; external libXt;
 procedure XtCallActionProc(para1: TWidget; _XtString: TXtString; para3: PXEvent; para4: PXtString; para5: TCardinal); cdecl; external libXt;
 procedure XtRegisterGrabAction(para1: TXtActionProc; para2: TXtBoolean; para3: DWord; para4: LongInt; para5: LongInt); cdecl; external libXt;
 procedure XtSetMultiClickTime(para1: PDisplay; para2: LongInt); cdecl; external libXt;
