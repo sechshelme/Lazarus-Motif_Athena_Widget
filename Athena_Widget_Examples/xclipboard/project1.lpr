@@ -1,6 +1,7 @@
 program project1;
 
 uses
+  Math,
   Strings,
   ctypes,
   xlib,
@@ -32,6 +33,10 @@ const
   function calloc(nitems, size: SizeInt): Pointer; cdecl; external lib_stdio;
   function malloc(size: SizeInt): Pointer; cdecl; external lib_stdio;
   procedure Free(ptr: Pointer); cdecl; external lib_stdio Name 'free';
+
+  function memmove(dest:Pointer; src:Pointer;size:SizeInt):Pointer; cdecl; external lib_stdio;
+
+//  extern void *memmove (void *__dest, const void *__src, size_t __n)       __THROW __nonnull ((1, 2));
   // https://cplusplus.com/reference/cstdio/snprintf/
 
   function snprintf(restrict: PChar; maxlen: SizeInt; format: PChar): cint; varargs cdecl; external lib_stdio;
@@ -236,10 +241,9 @@ var
 
   end;
 
-  procedure CancelSaveFile(w: TWidget; event: PXEvent; params: PXtString;
-    num_params: PCardinal); cdecl;
+  procedure CancelSaveFile(w: TWidget; event: PXEvent; params: PXtString;    num_params: PCardinal); cdecl;
   begin
-
+    XtPopdown(fileDialogShell);
   end;
 
   procedure FailContinue(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
@@ -346,12 +350,13 @@ var
       targetP^ := XA_CHARACTER_POSITION(d);
       Inc(targetP);
       len^ := std_length + (targetP - (PPAtom(Value)^));
-      Move(PChar(targetP), PChar(std_targets), SizeOf(TAtom) * std_length);
+//      Move(PChar(targetP), PChar(std_targets), SizeOf(TAtom) * std_length);
+      memmove(PChar(targetP), PChar(std_targets), SizeOf(TAtom) * std_length);
       XtFree(PChar(std_targets));
       type_^ := XA_ATOM;
       format^ := 32;
       Result := True;
-      Exit;
+      exit;
     end;
 
     if target^ = XA_LIST_LENGTH(d) then begin
@@ -383,8 +388,10 @@ var
 
     if (target^ = XA_STRING) or (target^ = XA_TEXT(d)) or (target^ = XA_UTF8_STRING(d)) or (target^ = XA_COMPOUND_TEXT(d)) then begin
       style := XStdICCTextStyle;
+
+      Source:=XawTextGetSource(text1);
       XtSetArg(args[0], XtNstring, @Data);
-      XtSetValues(Source, args, 1);
+      XtGetValues(Source, args, 1);
 
       if target^ = XA_UTF8_STRING(d) then begin
         style := XUTF8StringStyle;
@@ -413,7 +420,7 @@ var
       Exit;
     end;
 
-    Result:=False;
+    Result := False;
   end;
 
   procedure InsertClipboard(w: TWidget; client_data: TXtPointer; selction: PAtom; type_: PAtom; Value: TXtPointer; len: pculong; format: pcint); cdecl;
@@ -453,16 +460,15 @@ var
       end else if target = XA_COMPOUND_TEXT(d) then begin
         XtGetSelectionValue(w, selction^, XA_STRING, @InsertClipboard, nil, CurrentTime);
         Exit;
+      end else begin
+        XtSetArg(arg, XtNlabel, 'CLIPBOARD selection conversion failed');
+        XtSetValues(failDialog, @arg, 1);
+        CenterWidgetOnWidget(failDialogShell, text1);
+
+        XtPopup(failDialogShell, XtGrabNone);
+        XBell(d, 0);
       end;
-    end else begin
-      XtSetArg(arg, XtNlabel, 'CLIPBOARD selection conversion failed');
-      XtSetValues(failDialog, @arg, 1);
-      CenterWidgetOnWidget(failDialogShell, text1);
-
-      XtPopup(failDialogShell, XtGrabNone);
-      XBell(d, 0);
     end;
-
     XtOwnSelection(top, ClipboardAtom, CurrentTime, @ConvertSelection, @LoseSelection, nil);
   end;
 
@@ -526,8 +532,8 @@ var
     XtSetArg(args[0], XtNtype, XawAsciiString);
     XtSetArg(args[1], XtNeditType, XawtextEdit);
     //    if userOptions.wrap ;
-    XtSetArg(args[0], XtNwrap, XawtextWrapWord);
-    XtSetArg(args[1], XtNscrollHorizontal, False);
+    XtSetArg(args[2], XtNwrap, XawtextWrapWord);
+    XtSetArg(args[3], XtNscrollHorizontal, False);
 
     text1 := XtCreateManagedWidget('text', asciiTextWidgetClass, parent, args, 4);
 
@@ -550,6 +556,12 @@ var
 
     XtOwnSelection(top, ManagetAtom, CurrentTime, @RefuseSelection, @LoseManager, nil);
 
+    if XGetSelectionOwner(XtDisplay(top), ClipboardAtom) <> 0 then begin
+      LoseSelection(top, @ClipboardAtom);
+    end else begin
+      XtOwnSelection(top, ClipboardAtom, CurrentTime, @ConvertSelection, @LoseSelection, nil);
+    end;
+
     wm_delete_window := XInternAtom(XtDisplay(top), 'WM_DELETE_WINDOW', False);
     wm_protocols := XInternAtom(XtDisplay(top), 'WM_PROTOCOLS', False);
 
@@ -561,5 +573,6 @@ var
   end;
 
 begin
+  SetExceptionMask([exDenormalized, exInvalidOp, exOverflow, exPrecision, exUnderflow, exZeroDivide]);
   main;
 end.
