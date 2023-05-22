@@ -1,7 +1,6 @@
 program project1;
 
 uses
-  Math,
   Strings,
   ctypes,
   xlib,
@@ -35,18 +34,14 @@ const
   procedure Free(ptr: Pointer); cdecl; external lib_stdio Name 'free';
 
   function memmove(dest: Pointer; src: Pointer; size: SizeInt): Pointer; cdecl; external lib_stdio;
+  function strdup(s: PChar): PChar; cdecl; external lib_stdio;
 
-  //  extern void *memmove (void *__dest, const void *__src, size_t __n)       __THROW __nonnull ((1, 2));
   // https://cplusplus.com/reference/cstdio/snprintf/
 
   function snprintf(restrict: PChar; maxlen: SizeInt; format: PChar): cint; varargs cdecl; external lib_stdio;
 
-  //  extern int snprintf (char *__restrict __s, size_t __maxlen,
-  //           const char *__restrict __format, ...)
-  //     __THROWNL __attribute__ ((__format__ (__printf__, 3, 4)));
-
-  const INFINITY=   10000000;
-
+const
+  INFINITY = 10000000;
 
 type
   PClipRec = ^TClipRec;
@@ -127,13 +122,15 @@ var
 
   procedure DeleteClip(w: TWidget; clip: TClipPtr);
   begin
-    if clip^.Prev<>nil then begin
+    if clip^.Prev <> nil then begin
       clip^.Prev^.Next := clip^.Next;
     end;
-    if clip^.Next<>nil then begin
+    if clip^.Next <> nil then begin
       clip^.Next^.Prev := clip^.Prev;
     end;
-    if clip^.clip<>nil then Free(clip^.clip);
+    if clip^.clip <> nil then begin
+      Free(clip^.clip);
+    end;
     Free(PChar(clip));
   end;
 
@@ -146,11 +143,11 @@ var
   var
     block: TXawTextBlock;
   begin
-    block.ptr:='';
-    block.length:=0;
-    block.firstPos:=0;
-    block.format:=FMT8BIT;
-    XawTextReplace(text1,0,INFINITY,@block);
+    block.ptr := '';
+    block.length := 0;
+    block.firstPos := 0;
+    block.format := FMT8BIT;
+    XawTextReplace(text1, 0, INFINITY, @block);
   end;
 
   function IndexCurrentClip: cint;
@@ -246,6 +243,11 @@ var
     Halt(0);
   end;
 
+  procedure CenterWidgerOnEvent(w: TWidget; e: PXEvent);
+  begin
+    CenterWidgetAtPoint(w, e^.xbutton.x_root, e^.xbutton.y_root);
+  end;
+
   procedure CenterWidgetOnWidget(w, wt: TWidget);
   var
     rootX, rootY: TPosition;
@@ -293,29 +295,59 @@ var
   var
     newCurrent: TClipPtr;
   begin
-    if currentClip^.Prev<>nil then begin
+    if currentClip^.Prev <> nil then begin
       newCurrent := currentClip^.Prev;
     end else begin
       newCurrent := currentClip^.Next;
     end;
     if newCurrent <> nil then begin
-      DeleteClip(text1,currentClip);
-      currentClip:=newCurrent;
-      RestoreClip(text1,currentClip);
-    end else EraseTextwidget;
+      DeleteClip(text1, currentClip);
+      currentClip := newCurrent;
+      RestoreClip(text1, currentClip);
+    end else begin
+      EraseTextwidget;
+    end;
     set_button_state;
   end;
 
-  procedure SaveToFile(w: TWidget; event: PXEvent; params: PXtString;
-    num_params: PCardinal); cdecl;
+  procedure SaveToFile(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
+  var
+    args: array [0..0] of TArg;
+    filename: PChar;
   begin
-
+    filename:='clipboard';
+    if currentClip^.filename <> nil then begin
+      filename := currentClip^.filename;
+    end;
+    XtSetArg(args[0], XtNvalue, filename);
+    XtSetValues(fileDialog, args, 1);
+    CenterWidgerOnEvent(fileDialogShell, event);
+    XtPopup(fileDialogShell, XtGrabNone);
   end;
 
-  procedure AccceptSaveFile(w: TWidget; event: PXEvent; params: PXtString;
-    num_params: PCardinal); cdecl;
+  procedure AccceptSaveFile(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
+  var
+    args: array [0..0] of TArg;
+    filename: PChar;
+    failMessage: TXtString;
+    success: TBool;
   begin
-
+    filename := XawDialogGetValueString(fileDialog);
+    success := XawAsciiSaveAsFile(XawTextGetSource(text1), filename);
+    XtPopdown(fileDialogShell);
+    if success = 0 then begin
+      XtAsprintf(@failMessage, 'Can''t open file "%s', filename);
+      XtSetArg(args[0], XtNlabel, failMessage);
+      XtSetValues(failDialog, args, 1);
+      CenterWidgerOnEvent(failDialogShell, event);
+      XtPopup(failDialogShell, XtGrabNone);
+      XtFree(failMessage);
+    end else begin
+      if currentClip^.filename <> nil then begin
+        Free(currentClip^.filename);
+      end;
+      currentClip^.filename := strdup(filename);
+    end;
   end;
 
   procedure CancelSaveFile(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
@@ -334,13 +366,13 @@ var
       while (w <> nil) and not XtIsShell(w) do begin
         w := XtParent(w);
       end;
-    end;
-    if w = top then begin
-      Quit(w, event, params, num_params);
-    end else if w = fileDialogShell then begin
-      CancelSaveFile(w, event, params, num_params);
-    end else if w = failDialogShell then begin
-      FailContinue(w, event, params, num_params);
+      if w = top then begin
+        Quit(w, event, params, num_params);
+      end else if w = fileDialogShell then begin
+        CancelSaveFile(w, event, params, num_params);
+      end else if w = failDialogShell then begin
+        FailContinue(w, event, params, num_params);
+      end;
     end;
   end;
 
@@ -399,8 +431,9 @@ var
       targetP^ := XA_CHARACTER_POSITION(d);
       Inc(targetP);
       len^ := std_length + (targetP - (PPAtom(Value)^));
-      //      Move(PChar(targetP), PChar(std_targets), SizeOf(TAtom) * std_length);
-      memmove(PChar(targetP), PChar(std_targets), SizeOf(TAtom) * std_length);
+
+//            Move( targetP[0], std_targets[0], SizeOf(TAtom) * std_length);
+      memmove(targetP, std_targets, SizeOf(TAtom) * std_length);
       XtFree(PChar(std_targets));
       type_^ := XA_ATOM;
       format^ := 32;
@@ -549,6 +582,7 @@ var
 
   resources: array of TXtResource = ((resource_name: 'warp'; resource_class: 'warp'; resource_type: XtRBoolean;
     resource_size: sizeof(boolean);
+//    resource_offset:    XtOffsetOf(TResourceData, userOptions.wrap;
     resource_offset: 0;    // xtoffTCardinal;
     default_type: XtRImmediate; default_addr: TXtPointer(False)));
 
@@ -556,6 +590,7 @@ var
   var
     xtcontext: TXtAppContext;
     args: array[0..7] of TArg;
+    i: cint = 0;
   begin
     top := XtVaAppInitialize(@xtcontext, 'XClipboard', TXrmOptionDescList(table), Length(table), @argc, argv, PPChar(fallback_resource),
       XtNwidth, 320, XtNheight, 200,
@@ -580,9 +615,13 @@ var
 
     XtSetArg(args[0], XtNtype, XawAsciiString);
     XtSetArg(args[1], XtNeditType, XawtextEdit);
-    //    if userOptions.wrap ;
-    XtSetArg(args[2], XtNwrap, XawtextWrapWord);
-    XtSetArg(args[3], XtNscrollHorizontal, False);
+    if userOptions.wrap then begin
+      XtSetArg(args[2], XtNwrap, XawtextWrapWord);
+      XtSetArg(args[3], XtNscrollHorizontal, False);
+      i := 4;
+    end else begin
+      i := 2;
+    end;
 
     text1 := XtCreateManagedWidget('text', asciiTextWidgetClass, parent, args, 4);
 
@@ -622,6 +661,5 @@ var
   end;
 
 begin
-//  SetExceptionMask([exDenormalized, exInvalidOp, exOverflow, exPrecision, exUnderflow, exZeroDivide]);
   main;
 end.

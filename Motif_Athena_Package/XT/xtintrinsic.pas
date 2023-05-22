@@ -200,8 +200,6 @@ type
   TXtActionProc = procedure(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
 
   PXtBoundActions = ^TXtBoundActions;
-//  TXtBoundActions = record
-//  end; //PXtActionProc;
   TXtBoundActions = Pointer;
 
   PXtActionsRec = ^TXtActionsRec;
@@ -603,9 +601,10 @@ function XtGetClassExtension(para1: TWidgetClass; para2: TCardinal; para3: TXrmQ
  *************************************************************** }
 
 procedure XtSetArg(out arg: TArg; n: TXtString; pc: PChar); overload; inline;
-procedure XtSetArg(out arg: TArg; n: TXtString; p: Pointer); overload; inline;
+//procedure XtSetArg(out arg: TArg; n: TXtString; p: Pointer); overload; inline;
 procedure XtSetArg(out arg: TArg; n: TXtString; int: PtrInt); overload; inline;
 procedure XtSetArg(out arg: TArg; n: TXtString; bol: TBoolean); overload; inline;
+//procedure XtSetArg(out arg: TArg; n: TXtString; const p); overload; inline;
 
 function XtMergeArgLists(para1: TArgList; para2: TCardinal; para3: TArgList; para4: TCardinal): TArgList; cdecl; external libXt;
 {**************************************************************
@@ -725,9 +724,6 @@ const
 
 //      #define XtOffset(p_type,field) \
 //        ((Cardinal) (((char *) (&(((p_type)NULL)->field))) - ((char *) NULL)))
-
-// function XtOffset(p_type,field : LongInt) : TCardinal;
-
 
  {************************************************************
  *
@@ -1025,12 +1021,12 @@ begin
   arg.valuePC := pc;
 end;
 
-procedure XtSetArg(out arg: TArg; n: TXtString; p: Pointer);
-begin
-  arg.Name := n;
-  arg.valueP := p;
-end;
-
+//procedure XtSetArg(out arg: TArg; n: TXtString; p: Pointer);
+//begin
+//  arg.Name := n;
+//  arg.valueP := p;
+//end;
+//
 procedure XtSetArg(out arg: TArg; n: TXtString; int: PtrInt);
 begin
   arg.Name := n;
