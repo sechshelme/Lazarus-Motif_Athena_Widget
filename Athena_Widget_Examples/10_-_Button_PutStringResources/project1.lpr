@@ -16,6 +16,7 @@ uses
 // Für den Umweg über absolute
 type
   PMyXDisplay = ^TMyXDisplay;
+
   TMyXDisplay = record
     ext_data: PXExtData;
     private1: PXPrivate;
@@ -100,6 +101,7 @@ var
     // --- Direkt
     dis := XtDisplay(toplevel);
     // 200 ist das Offset von "db: PXrmDatabase" in der TDisplay struct.
+    // Achtung, nur bei 64Bit !
     db := PXrmDatabase(dis + 200);
     XrmPutStringResource(db, '*box*foreground', 'red');
     XrmPutStringResource(db, '*box*borderColor', 'blue');

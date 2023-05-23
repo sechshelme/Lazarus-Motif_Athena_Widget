@@ -12,7 +12,8 @@ uses
 // https://www.oreilly.com/openbook/motif/vol6a/Vol6a_html/ch02.html
 // https://lesstif.sourceforge.net/doc/super-ux/g1ae03e/part1/chap10.html
 
-var label2:TWidget;
+var
+  label2: TWidget;
 
 type
   TXtActionsRecs = array of TXtActionsRec;
@@ -27,7 +28,23 @@ type
     rec[len].proc := proc;
   end;
 
-// XtGetActionList
+  procedure Print_ActionList(wc: TWidgetClass);
+  var
+    ActionList: TXtActionList;
+    len: TCardinal;
+    i: integer;
+    p: Pointer;
+    ch: PChar;
+  begin
+    p := wc;
+    Inc(p, sizeof(PtrUInt));
+    ch := PChar(p^);
+    XtGetActionList(wc, @ActionList, @len);
+    WriteLn('Widget Name: "', ch, '"   Count: ', len);
+    for i := 0 to len - 1 do begin
+      WriteLn(ActionList[i]._string);
+    end;
+  end;
 
   procedure OnBtnClick(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
   var
@@ -44,11 +61,16 @@ type
     end;
   end;
 
+  procedure OnBtnQuitClick(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
+  begin
+    Halt();
+  end;
+
   procedure main;
   var
-    toplevel, button1, button2, box, button3, label1 : TWidget;
+    toplevel, button1, button2, box, button3, label1, button_quit: TWidget;
     app: TXtAppContext;
-    rec: TXtActionsRecs;
+    rec: TXtActionsRecs = nil;
   begin
     toplevel := XtVaAppInitialize(@app, 'bnoname', nil, 0, @argc, argv, nil,
       XtNwidth, 320,
@@ -59,8 +81,9 @@ type
       XtNbackground, $FFFFCC,
       nil);
 
+    AddActionsRec(rec, 'btn_quit', @OnBtnQuitClick);
     AddActionsRec(rec, 'btn_click', @OnBtnClick);
-    XtAppAddActions(app, @rec[0], Length(rec));
+    XtAppAddActions(app, TXtActionList(rec), Length(rec));
 
     label1 := XtVaCreateManagedWidget('Bitte druecke eine Taste', labelWidgetClass, box,
       XtNborderWidth, 0,
@@ -86,7 +109,7 @@ type
       XtNborderWidth, 3,
       XtNfromHoriz, button1,
       XtNfromVert, label1,
-          XtNtranslations, XtParseTranslationTable('#augment <Btn1Down>,<Btn1Up>:btn_click(2) unset()'),
+      XtNtranslations, XtParseTranslationTable('#augment <Btn1Down>,<Btn1Up>:btn_click(2) unset()'),
       nil);
 
     button3 := XtVaCreateManagedWidget('btn3', commandWidgetClass, box,
@@ -99,6 +122,16 @@ type
       XtNtranslations, XtParseTranslationTable('#augment <Btn1Down>,<Btn1Up>:btn_click(3) unset()'),
       nil);
 
+    button_quit := XtVaCreateManagedWidget('quit', commandWidgetClass, box,
+      XtNlabel, 'Quit',
+      //      XtNbackground, $8888FF,
+      //      XtNborderColor, $444488,
+      XtNborderWidth, 3,
+      XtNfromHoriz, button3,
+      XtNfromVert, label1,
+      XtNtranslations, XtParseTranslationTable('#augment <Btn1Down>,<Btn1Up>:btn_quit(3) unset()'),
+      nil);
+
     label2 := XtVaCreateManagedWidget('', labelWidgetClass, box,
       XtNborderWidth, 0,
       XtNforeground, $008800,
@@ -108,9 +141,7 @@ type
       XtNfromVert, button3,
       nil);
 
-    //XtAddCallback(button1, XtNcallback, @On_Click, label2);
-    //XtAddCallback(button2, XtNcallback, @On_Click, label2);
-    //XtAddCallback(button3, XtNcallback, @On_Click, label2);
+   Print_ActionList(commandWidgetClass);
 
     XtRealizeWidget(toplevel);
     XtAppMainLoop(app);

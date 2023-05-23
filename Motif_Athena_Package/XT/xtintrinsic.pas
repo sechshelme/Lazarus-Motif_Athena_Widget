@@ -63,13 +63,12 @@ type
 
   PXtUIntPtr = ^TXtUIntPtr;
 //  TXtUIntPtr = Tuintptr_t;
-  TXtUIntPtr = LongInt;
+  TXtUIntPtr = PtrUInt;
 
 type
   PPWidget = ^PWidget;
   PWidget = ^TWidget;
   TWidget = Pointer; //PWidgetRec;
-//  TWidget = PWidgetRec;
 
   PWidgetList = ^TWidgetList;
   TWidgetList = PWidget;
@@ -79,9 +78,6 @@ type
 
   PCompositeWidget = ^TCompositeWidget;
   TCompositeWidget = Pointer; //PCompositeRec;
-
-  PXtActionList = ^TXtActionList;
-  TXtActionList = Pointer; //PXtActionsRec;
 
   PXtEventTable = ^TXtEventTable;
   TXtEventTable = Pointer; //PXtEventRec;
@@ -184,18 +180,13 @@ type
 //{$include <X11/RectObj.h>}
 type
   PXtTranslations = ^TXtTranslations;
-//  TXtTranslations = record
-//  end; //PTranslationData;
   TXtTranslations = Pointer;
 
   PXtAccelerators = ^TXtAccelerators;
-//  TXtAccelerators = record
-//  end; //PTranslationData;
   TXtAccelerators = Pointer;
 
   PModifiers = ^TModifiers;
   TModifiers = LongInt;
-
 
   TXtActionProc = procedure(w: TWidget; event: PXEvent; params: PXtString; num_params: PCardinal); cdecl;
 
@@ -208,15 +199,8 @@ type
     proc: TXtActionProc;
   end;
 
-  { address mode		parameter representation     }
-  { ------------		------------------------     }
-  { address		     }
-  { offset		     }
-  { constant		     }
-  { resource name string	     }
-  { resource name quark	     }
-  { offset from ancestor	     }
-  { procedure to invoke	     }
+  PXtActionList = ^TXtActionList;
+  TXtActionList = PXtActionsRec;
 
 type
   PXtAddressMode = ^TXtAddressMode;
