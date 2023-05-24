@@ -373,12 +373,12 @@ type
   TXtResourceList = PXtResource;
   PXtResourceList = ^TXtResourceList;
 
-  TXtResourceDefaultProc = procedure(para1: TWidget; para2: LongInt; para3: PXrmValue); cdecl;
-  TXtLanguageProc = function(para1: PDisplay; para2: TXtString; para3: TXtPointer): TXtString; cdecl;
-  TXtErrorMsgHandler = procedure(para1: TXtString; para2: TXtString; para3: TXtString; para4: TXtString; para5: PXtString; para6: PCardinal); cdecl;
-  TXtErrorHandler = procedure(para1: TXtString); cdecl;
-  TXtCreatePopupChildProc = procedure(para1: TWidget); cdecl;
-  TXtWorkProc = function(para1: TXtPointer): TBoolean; cdecl;
+  TXtResourceDefaultProc = procedure(w: TWidget; offset: LongInt; value: PXrmValue); cdecl;
+  TXtLanguageProc = function(dis: PDisplay; xnl: TXtString; client_data: TXtPointer): TXtString; cdecl;
+  TXtErrorMsgHandler = procedure(name: TXtString; type_: TXtString; class_: TXtString; default: TXtString; params: PXtString; num_params: PCardinal); cdecl;
+  TXtErrorHandler = procedure(msg: TXtString); cdecl;
+  TXtCreatePopupChildProc = procedure(shell: TWidget); cdecl;
+  TXtWorkProc = function(closure: TXtPointer): TBoolean; cdecl;
 
   PSubstitutionRec = ^TSubstitutionRec;
   TSubstitutionRec = record

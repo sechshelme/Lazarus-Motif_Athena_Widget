@@ -7,6 +7,7 @@ uses
   XTStringdefs,
   XawLabel,
   XawForm,
+  XawSme,
   XTIntrinsic;
 
 // https://www.oreilly.com/openbook/motif/vol6a/Vol6a_html/ch02.html
@@ -54,10 +55,12 @@ type
     if num_params^ > 0 then begin
       WriteLn(params[0]);
       XtVaGetValues(w, XtNlabel, @Caption, nil);
-      s := 'Es wurde der Button: '#10'"' + Caption + '" gedrueckt';
+      s := 'Es wurde der Button: '#10'"' + Caption + '" gedrückt';
       WriteLn(XtName(w));
       WriteLn(s);
-      XtVaSetValues(label2, XtNlabel, PChar(s));
+      XtVaSetValues(label2,
+        XtNlabel, PChar(s),
+        nil);
     end;
   end;
 
@@ -72,6 +75,8 @@ type
     app: TXtAppContext;
     rec: TXtActionsRecs = nil;
   begin
+    XtSetLanguageProc(nil, nil, nil);
+
     toplevel := XtVaAppInitialize(@app, 'bnoname', nil, 0, @argc, argv, nil,
       XtNwidth, 320,
       XtNheight, 200,
@@ -85,7 +90,9 @@ type
     AddActionsRec(rec, 'btn_click', @OnBtnClick);
     XtAppAddActions(app, TXtActionList(rec), Length(rec));
 
-    label1 := XtVaCreateManagedWidget('Bitte druecke eine Taste', labelWidgetClass, box,
+    label1 := XtVaCreateManagedWidget('label_1', labelWidgetClass, box,
+      XtNinternational, True,
+      XtNlabel, 'Bitte drücke eine Taste',
       XtNborderWidth, 0,
       XtNforeground, $FF0000,
       XtNwidth, 320,
@@ -124,8 +131,6 @@ type
 
     button_quit := XtVaCreateManagedWidget('quit', commandWidgetClass, box,
       XtNlabel, 'Quit',
-      //      XtNbackground, $8888FF,
-      //      XtNborderColor, $444488,
       XtNborderWidth, 3,
       XtNfromHoriz, button3,
       XtNfromVert, label1,
@@ -133,6 +138,7 @@ type
       nil);
 
     label2 := XtVaCreateManagedWidget('', labelWidgetClass, box,
+      XtNinternational, True,
       XtNborderWidth, 0,
       XtNforeground, $008800,
       XtNwidth, 320,
@@ -141,7 +147,7 @@ type
       XtNfromVert, button3,
       nil);
 
-   Print_ActionList(commandWidgetClass);
+    Print_ActionList(commandWidgetClass);
 
     XtRealizeWidget(toplevel);
     XtAppMainLoop(app);

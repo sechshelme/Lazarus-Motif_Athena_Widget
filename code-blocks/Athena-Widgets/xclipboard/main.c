@@ -33,6 +33,7 @@ in this Software without prior written authorization from The Open Group.
 #endif
 
 #include <stdio.h>
+#include <locale.h>
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
 #include <X11/Xatom.h>
@@ -688,6 +689,10 @@ static XtResource resources[] =
 int
 main(int argc, char *argv[])
 {
+WidgetList
+XtGetActionList()
+
+setlocale(LC_ALL,"123");
     Arg args[4];
     Cardinal n;
     XtAppContext xtcontext;

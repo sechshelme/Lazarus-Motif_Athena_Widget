@@ -55,17 +55,12 @@ type
   procedure On_Click(w: TWidget; client: TXtPointer; call: TXtPointer); cdecl;
   var
     Caption: PChar;
-    //    name:array[0..15] of Char;
-    Name: PChar;
     s: string;
   begin
     XtVaGetValues(w, XtNlabel, @Caption, nil);
-    XtVaGetValues(w, XtNname, Name, nil);
     s := 'Es wurde der Button: "' + Caption + '" gedrueckt';
     WriteLn(s);
-    //    WriteLn(name);
-    //    WriteLn(Length(name));
-    XtVaSetValues(label1, XtNlabel, PChar(s));
+    XtVaSetValues(label1, XtNlabel, PChar(s),nil);
   end;
 
   procedure main;
@@ -75,7 +70,7 @@ type
     argsta: array[0..7] of TArg;
     argdyn: TArgs = nil;
   begin
-    toplevel := XtVaAppInitialize(@app, 'noname', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
+    toplevel := XtVaAppInitialize(@app, 'oname', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
 
     box := XtCreateManagedWidget('box', boxWidgetClass, toplevel, nil, 0);
     XtVaSetValues(box, XtNorientation, XtEhorizontal, nil);
@@ -89,7 +84,7 @@ type
     XtAddCallback(button1, XtNcallback, @On_Click, nil);
 
     button2 := XtCreateManagedWidget('Buttton 2', commandWidgetClass, box, nil, 0);
-    XtVaSetValues(button2, XtNbackground, $FF8888, XtNname, PChar('1234'), nil);
+    XtVaSetValues(button2, XtNbackground, $FF8888, nil);
     XtAddCallback(button2, XtNcallback, @On_Click, nil);
 
     argdyn.Add(XtNwidth, 75);
@@ -105,7 +100,6 @@ type
     XtVaSetValues(label1, XtNborderWidth, 0, XtNforeground, $FF0000, nil);
 
     XtRealizeWidget(toplevel);
-    //  XtMainLoop;
     XtAppMainLoop(app);
   end;
 

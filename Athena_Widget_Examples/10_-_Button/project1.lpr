@@ -4,6 +4,7 @@ uses
   XawCommand,
   XTStringdefs,
   XawLabel,
+  XawSme,
   XawBox,
   XTIntrinsic;
 
@@ -15,17 +16,14 @@ var
   procedure On_Click(w: TWidget; client: TXtPointer; call: TXtPointer); cdecl;
   var
     Caption: PChar;
-    //    name:array[0..15] of Char;
-    Name: PChar = nil;
     s: string;
   begin
     XtVaGetValues(w, XtNlabel, @Caption, nil);
-    XtVaGetValues(w, XtNname, Name, nil);
-    s := 'Es wurde der Button: "' + Caption + '" gedrueckt';
+    s := 'Es wurde der Button: "' + Caption + '" gedrückt';
     WriteLn(s);
-    //    WriteLn(name);
-    //    WriteLn(Length(name));
-    XtVaSetValues(label1, XtNlabel, PChar(s));
+    XtVaSetValues(label1,
+      XtNlabel, PChar(s),
+      nil);
   end;
 
   procedure main;
@@ -33,6 +31,8 @@ var
     toplevel, button1, button2, box, button3: TWidget;
     app: TXtAppContext;
   begin
+    XtSetLanguageProc(nil, nil, nil);
+
     toplevel := XtVaAppInitialize(@app, 'myapp', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
 
     box := XtCreateManagedWidget('box', boxWidgetClass, toplevel, nil, 0);
@@ -52,8 +52,11 @@ var
       nil);
     XtAddCallback(button3, XtNcallback, @On_Click, nil);
 
-    label1 := XtCreateManagedWidget('', labelWidgetClass, box, nil, 0);
-    XtVaSetValues(label1, XtNborderWidth, 0, XtNforeground, $FF0000, nil);
+    label1 := XtVaCreateManagedWidget('', labelWidgetClass, box,
+      XtNborderWidth, 0,
+      XtNinternational, True,
+      XtNforeground, $FF0000,
+      nil);
 
     XtRealizeWidget(toplevel);
     XtAppMainLoop(app);

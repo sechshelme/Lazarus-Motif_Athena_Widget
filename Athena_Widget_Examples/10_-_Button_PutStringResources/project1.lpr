@@ -76,9 +76,9 @@ var
     s: string;
   begin
     XtVaGetValues(w, XtNlabel, @Caption, nil);
-    s := 'Es wurde der Button: "' + Caption + '" gedrueckt';
+    s := 'Es wurde der Button: "' + Caption + '" gedrückt';
     WriteLn(s);
-    XtVaSetValues(label1, XtNlabel, PChar(s));
+    XtVaSetValues(label1, XtNlabel, PChar(s),nil);
   end;
 
   procedure main;
@@ -93,9 +93,14 @@ var
     i: integer;
     s: string;
     db: PXrmDatabase;
+    db2: TXrmDatabase;
+    rs:PChar;
   begin
+    XtSetLanguageProc(nil, nil, nil);
+
     toplevel := XtVaAppInitialize(@app, 'myapp', nil, 0, @argc, argv, nil,
-      XtNwidth, 640, XtNheight, 400,
+      XtNwidth, 640,
+      XtNheight, 400,
       nil);
 
     // --- Direkt
@@ -103,11 +108,23 @@ var
     // 200 ist das Offset von "db: PXrmDatabase" in der TDisplay struct.
     // Achtung, nur bei 64Bit !
     db := PXrmDatabase(dis + 200);
+    XrmPutStringResource(db, '*box*international', 'true');
     XrmPutStringResource(db, '*box*foreground', 'red');
     XrmPutStringResource(db, '*box*borderColor', 'blue');
     XrmPutStringResource(db, '*box*Button*background', 'yellow');
     XrmPutStringResource(db, '*box*ShapeStyle', 'Ellipse');
     XrmPutStringResource(db, '*box*borderWidth', '10');
+
+    WriteLn(PtrUInt(db));
+
+    //rs:=    XResourceManagerString(dis);
+    //WriteLn('---' ,rs);
+    //rs:=    XScreenResourceString(XtScreen(toplevel));
+    //WriteLn('---' ,rs);
+    //
+
+    db2:=XrmGetStringDatabase(XResourceManagerString(dis));
+    WriteLn(PtrUInt(@db2));
 
     // --- Über den Umweg record und absolute
     XrmPutStringResource(@MyDis^.db, '*box*background', 'Green');

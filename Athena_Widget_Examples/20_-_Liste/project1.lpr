@@ -28,7 +28,7 @@ var
     WriteLn(s);
     //    WriteLn(name);
     //    WriteLn(Length(name));
-    XtVaSetValues(label1, XtNlabel, PChar(s));
+    XtVaSetValues(label1, XtNlabel, PChar(s),nil);
   end;
 
 const

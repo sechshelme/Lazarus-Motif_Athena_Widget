@@ -54,8 +54,7 @@ var
 
     XtRealizeWidget(toplevel);
 
-     XtMainLoop;
-
+    XtMainLoop;
   end;
 
 begin

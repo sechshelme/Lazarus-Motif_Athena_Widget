@@ -15,17 +15,12 @@ var
   procedure On_Click(w: TWidget; client: TXtPointer; call: TXtPointer); cdecl;
   var
     Caption: PChar;
-    //    name:array[0..15] of Char;
-    Name: PChar=nil;
     s: string;
   begin
     XtVaGetValues(w, XtNlabel, @Caption, nil);
-    XtVaGetValues(w, XtNname, Name, nil);
     s := 'Es wurde der Button: "' + Caption + '" gedrueckt';
     WriteLn(s);
-    //    WriteLn(name);
-    //    WriteLn(Length(name));
-    XtVaSetValues(label1, XtNlabel, PChar(s));
+    XtVaSetValues(label1, XtNlabel, PChar(s), nil);
   end;
 
   procedure main;
@@ -33,36 +28,38 @@ var
     toplevel, button1, button2, box, button3, button0: TWidget;
     app: TXtAppContext;
   begin
-    toplevel := XtVaAppInitialize(@app, 'myapp', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
-//    toplevel := XtVaAppInitialize(@app, 'XClipboard', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
-//    toplevel := XtVaAppInitialize(@app, 'noname', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
+    //    toplevel := XtVaAppInitialize(@app, 'myapp', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
+    toplevel := XtVaAppInitialize(@app, 'xXClipboard', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
+    //    toplevel := XtVaAppInitialize(@app, 'noname', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
 
-    box := XtCreateManagedWidget('box', boxWidgetClass, toplevel, nil, 0);
-    XtVaSetValues(box, XtNorientation, XtEhorizontal, nil);
+    box := XtVaCreateManagedWidget('box', boxWidgetClass, toplevel,
+      XtNorientation, XtEhorizontal,
+      nil);
 
     button0 := XtVaCreateManagedWidget('Button0', commandWidgetClass, box,
-    nil);
+      nil);
     XtAddCallback(button0, XtNcallback, @On_Click, nil);
 
     button1 := XtVaCreateManagedWidget('delete', commandWidgetClass, box,
-      XtNborderWidth,5,
-      XtNshapeStyle,XawShapeOval,
-    nil);
+      XtNborderWidth, 5,
+      XtNshapeStyle, XawShapeOval,
+      nil);
     XtAddCallback(button1, XtNcallback, @On_Click, nil);
 
     button2 := XtVaCreateManagedWidget('Buttton 2', commandWidgetClass, box,
-    nil);
-    XtVaSetValues(button2, XtNbackground, $FF8888, XtNname, PChar('1234'), nil);
+      XtNbackground, $FF8888,
+      nil);
     XtAddCallback(button2, XtNcallback, @On_Click, nil);
 
     button3 := XtVaCreateManagedWidget('Buttton 3', commandWidgetClass, box,
-    nil);
+      nil);
 
-    label1 := XtCreateManagedWidget('', labelWidgetClass, box, nil, 0);
-    XtVaSetValues(label1, XtNborderWidth, 0, XtNforeground, $FF0000, nil);
+    label1 := XtVaCreateManagedWidget('', labelWidgetClass, box,
+      XtNborderWidth, 0,
+      XtNforeground, $FF0000,
+      nil);
 
     XtRealizeWidget(toplevel);
-    //  XtMainLoop;
     XtAppMainLoop(app);
   end;
 

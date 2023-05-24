@@ -18,7 +18,7 @@ uses
     s := 'Es wurde der Button: '#10'"' + Caption + '" gedrueckt';
     WriteLn(XtName(w));
     WriteLn(s);
-    XtVaSetValues(TWidget(client_data), XtNlabel, PChar(s));
+    XtVaSetValues(TWidget(client_data), XtNlabel, PChar(s),nil);
   end;
 
   procedure main;
