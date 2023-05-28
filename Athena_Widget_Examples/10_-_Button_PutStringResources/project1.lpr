@@ -11,9 +11,9 @@ uses
   XawBox,
   XTIntrinsic;
 
-// https://www.oreilly.com/openbook/motif/vol6a/Vol6a_html/ch02.html
+  // https://www.oreilly.com/openbook/motif/vol6a/Vol6a_html/ch02.html
 
-// Für den Umweg über absolute
+  // Für den Umweg über absolute
 type
   PMyXDisplay = ^TMyXDisplay;
 
@@ -78,7 +78,7 @@ var
     XtVaGetValues(w, XtNlabel, @Caption, nil);
     s := 'Es wurde der Button: "' + Caption + '" gedrückt';
     WriteLn(s);
-    XtVaSetValues(label1, XtNlabel, PChar(s),nil);
+    XtVaSetValues(label1, XtNlabel, PChar(s), nil);
   end;
 
   procedure main;
@@ -94,7 +94,7 @@ var
     s: string;
     db: PXrmDatabase;
     db2: TXrmDatabase;
-    rs:PChar;
+    rs: PChar;
   begin
     XtSetLanguageProc(nil, nil, nil);
 
@@ -123,7 +123,7 @@ var
     //WriteLn('---' ,rs);
     //
 
-    db2:=XrmGetStringDatabase(XResourceManagerString(dis));
+    db2 := XrmGetStringDatabase(XResourceManagerString(dis));
     WriteLn(PtrUInt(@db2));
 
     // --- Über den Umweg record und absolute

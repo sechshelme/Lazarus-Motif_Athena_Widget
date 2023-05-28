@@ -296,7 +296,7 @@ type
   TArg = record
     Name: TXtString;
     case byte of
-      0: (valueP: Pointer);
+//      0: (valueP: Pointer);
       1: (valuePC: PChar);
       2: (valueI: LongInt);
       3: (valueB: Boolean);

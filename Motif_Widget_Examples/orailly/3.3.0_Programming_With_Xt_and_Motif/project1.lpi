@@ -48,9 +48,6 @@
     </RunParams>
     <RequiredPackages>
       <Item>
-        <PackageName Value="LCL"/>
-      </Item>
-      <Item>
         <PackageName Value="Athena_Package"/>
       </Item>
     </RequiredPackages>
