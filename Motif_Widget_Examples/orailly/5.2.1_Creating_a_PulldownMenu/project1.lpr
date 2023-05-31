@@ -1,6 +1,7 @@
 program project1;
 
 uses
+  ctypes,
   x,
   xlib,
   XmPushB,
@@ -23,11 +24,75 @@ uses
 
   end;
 
+  function CreateToggleMenu(menubar: TWidget; nr: cint): TWidget;
+  var
+    b1, b2, b3, b4: TXmString;
+  begin
+    b1 := XmStringCreateLocalized('Toggle 1');
+    b2 := XmStringCreateLocalized('Toggle 2');
+    b3 := XmStringCreateLocalized('Toggle 3');
+    b4 := XmStringCreateLocalized('Toggle 4');
+    Result := XmVaCreateSimplePulldownMenu(menubar, 'file_menu', nr, @file_cb,
+      XmVaTOGGLEBUTTON, b1, '1', nil, nil,
+      XmVaTOGGLEBUTTON, b2, '2', nil, nil,
+      XmVaTOGGLEBUTTON, b3, '3', nil, nil,
+      XmVaTOGGLEBUTTON, b4, '4', nil, nil,
+      nil);
+
+    XmStringFree(b1);
+    XmStringFree(b2);
+    XmStringFree(b3);
+    XmStringFree(b4);
+  end;
+
+  function CreateCheckMenu(menubar: TWidget; nr: cint): TWidget;
+  var
+    b1, b2, b3, b4: TXmString;
+  begin
+    b1 := XmStringCreateLocalized('Check 1');
+    b2 := XmStringCreateLocalized('Check 2');
+    b3 := XmStringCreateLocalized('Check 3');
+    b4 := XmStringCreateLocalized('Check 4');
+    Result := XmVaCreateSimplePulldownMenu(menubar, 'file_menu', nr, @file_cb,
+      XmVaCHECKBUTTON, b1, '1', nil, nil,
+      XmVaCHECKBUTTON, b2, '2', nil, nil,
+      XmVaCHECKBUTTON, b3, '3', nil, nil,
+      XmVaCHECKBUTTON, b4, '4', nil, nil,
+      nil);
+
+    XmStringFree(b1);
+    XmStringFree(b2);
+    XmStringFree(b3);
+    XmStringFree(b4);
+  end;
+
+  function CreateRadioMenu(menubar: TWidget; nr: cint): TWidget;
+  var
+    b1, b2, b3, b4: TXmString;
+  begin
+    b1 := XmStringCreateLocalized('Radio 1');
+    b2 := XmStringCreateLocalized('Radio 2');
+    b3 := XmStringCreateLocalized('Radio 3');
+    b4 := XmStringCreateLocalized('Radio 4');
+    Result := XmVaCreateSimplePulldownMenu(menubar, 'file_menu', nr, @file_cb,
+      XmVaRADIOBUTTON, b1, '1', nil, nil,
+      XmVaRADIOBUTTON, b2, '2', nil, nil,
+      XmVaRADIOBUTTON, b3, '3', nil, nil,
+      XmVaRADIOBUTTON, b4, '4', nil, nil,
+      nil);
+
+    XmStringFree(b1);
+    XmStringFree(b2);
+    XmStringFree(b3);
+    XmStringFree(b4);
+  end;
+
   procedure main(argc: longint; argv: PPChar);
   var
-    toplevel, main_w, menubar, menu_file: TWidget;
+    toplevel, main_w, menubar, menu_file, menu_toggle: TWidget;
     app: TXtAppContext;
-    file_s, edit_s, help_s, open_s, save_s, quit_s, quit_acc_s: TXmString;
+    file_s, edit_s, help_s, open_s, save_s, quit_s, quit_acc_s,
+    toggle_s, check_s, radion_s: TXmString;
   begin
     XtSetLanguageProc(nil, nil, nil);
 
@@ -37,16 +102,25 @@ uses
 
     file_s := XmStringCreateLocalized('File');
     edit_s := XmStringCreateLocalized('Edit');
+    toggle_s := XmStringCreateLocalized('Toggle');
+    check_s := XmStringCreateLocalized('Check');
+    radion_s := XmStringCreateLocalized('Radio');
     help_s := XmStringCreateLocalized('Help');
 
     menubar := XmVaCreateSimpleMenuBar(main_w, 'menubar',
       XmVaCASCADEBUTTON, file_s, 'F',
       XmVaCASCADEBUTTON, edit_s, 'E',
+      XmVaCASCADEBUTTON, toggle_s, 'T',
+      XmVaCASCADEBUTTON, check_s, 'C',
+      XmVaCASCADEBUTTON, radion_s, 'R',
       XmVaCASCADEBUTTON, help_s, 'H',
       nil);
 
     XmStringFree(file_s);
     XmStringFree(edit_s);
+    XmStringFree(toggle_s);
+    XmStringFree(check_s);
+    XmStringFree(radion_s);
     XmStringFree(help_s);
 
     open_s := XmStringCreateLocalized('Open...');
@@ -60,6 +134,10 @@ uses
       XmVaSEPARATOR,
       XmVaPUSHBUTTON, quit_acc_s, 'Q', 'Ctrl<Key>c', quit_acc_s,
       nil);
+
+    menu_toggle := CreateToggleMenu(menubar, 2);
+    menu_toggle := CreateCheckMenu(menubar, 3);
+    menu_toggle := CreateRadioMenu(menubar, 4);
 
     XmStringFree(open_s);
     XmStringFree(save_s);
