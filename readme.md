@@ -74,6 +74,13 @@ sudo apt install libmotif-dev
 
 # Klassische motif Anwendungen
 
+## Nostalgie Editot ( neditk )
+Sourcen: (https://sourceforge.net/projects/nedit/)
+```
+apt install nedit 
+```
+
+
 ## Nostalgie Desktop ( tkdesk )
 Sourcen: (https://tkdesk.sourceforge.net)
 ```

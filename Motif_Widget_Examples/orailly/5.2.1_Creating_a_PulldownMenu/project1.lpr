@@ -89,7 +89,8 @@ uses
 
   procedure main(argc: longint; argv: PPChar);
   var
-    toplevel, main_w, menubar, menu_file, menu_toggle: TWidget;
+    toplevel, main_w, menubar, menu_file, menu_toggle, menu_Check,
+      menu_Radio: TWidget;
     app: TXtAppContext;
     file_s, edit_s, help_s, open_s, save_s, quit_s, quit_acc_s,
     toggle_s, check_s, radion_s: TXmString;
@@ -136,8 +137,8 @@ uses
       nil);
 
     menu_toggle := CreateToggleMenu(menubar, 2);
-    menu_toggle := CreateCheckMenu(menubar, 3);
-    menu_toggle := CreateRadioMenu(menubar, 4);
+    menu_Check := CreateCheckMenu(menubar, 3);
+    menu_Radio := CreateRadioMenu(menubar, 4);
 
     XmStringFree(open_s);
     XmStringFree(save_s);
