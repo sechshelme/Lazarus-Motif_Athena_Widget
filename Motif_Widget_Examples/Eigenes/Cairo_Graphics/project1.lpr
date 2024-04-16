@@ -3,13 +3,8 @@ program project1;
 uses
   CairoXlib,
   Cairo,
-  XmForm,
-  XmLabel,
-  XmPushB,
-  XmXm,
-  XmXmStrDefs,
-  XmDrawingA,
-  XTIntrinsic,
+  Xm,
+  XT,
   x,
   xlib,
   unixtype;

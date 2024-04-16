@@ -1,11 +1,7 @@
 program project1;
 
 uses
-  XawCommand,
-  XTStringdefs,
-  XawLabel,
-  XawBox,
-  XTIntrinsic;
+  Xaw, XT;
 
 // https://www.oreilly.com/openbook/motif/vol6a/Vol6a_html/ch02.html
 

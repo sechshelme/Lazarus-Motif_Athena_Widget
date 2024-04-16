@@ -26,7 +26,7 @@ Diese sind alle in C/C++
 
 | Datum | Änderungen 
 | :---: | ---
-| 02.04.2023 | Package **Motif Widgets** ersellt
+| 02.04.2023 | Package **Motif Widgets** erstellt
 | 20.03.2023 | Erste Gehversuche mit **Motif Widgets**
 | 18.03.2023 | Package **Athen Widgets** ersellt
 | 10.03.2023 | Erste Gehversuche mit **Athena Widgets**

@@ -6,25 +6,7 @@ uses
   Strings,
   xlib,
   x,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmMainW,
-  XmRowColumn,
-  XmMessageB,
-  XmSelectioB,
-  XmDialogS,
-  XmPanedW,
-  XmLabelG,
-  XmTextF,
-  XmForm,
-  XmFrame,
-  XmBulletinB,
-
-  XmCommand,
-  XmText,
-  XTComposite,
-  XTIntrinsic;
+  Xm, XT;
 
   procedure main(argc: longint; argv: PPChar);
   var

@@ -1,16 +1,12 @@
 program project1;
 
 uses
-  xlib,
+  Xaw,
+  XT,
   x,
-  XawCommand,
-  XTStringdefs,
-  XawLabel,
-  XawBox,
-  XawList,
-  XTIntrinsic;
+  xlib;
 
-// https://www.oreilly.com/openbook/motif/vol6a/Vol6a_html/ch02.html
+  // https://www.oreilly.com/openbook/motif/vol6a/Vol6a_html/ch02.html
 
 var
   label1: TWidget;
@@ -28,7 +24,7 @@ var
     WriteLn(s);
     //    WriteLn(name);
     //    WriteLn(Length(name));
-    XtVaSetValues(label1, XtNlabel, PChar(s),nil);
+    XtVaSetValues(label1, XtNlabel, PChar(s), nil);
   end;
 
 const

@@ -3,14 +3,7 @@ program project1;
 uses
   x,
   xlib,
-  XmPushB,
-  XmXm,
-  XmXmStrDefs,
-  XmRowColumn,
-  XmLabel,
-  XmMainW,
-  XTComposite,
-  XTIntrinsic;
+  Xm, XT;
 
   procedure button_pushed(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   begin

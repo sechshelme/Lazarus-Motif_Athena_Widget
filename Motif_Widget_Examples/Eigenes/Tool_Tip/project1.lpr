@@ -3,19 +3,7 @@ program project1;
 uses
   xlib,
   x,
-  XmText,
-  XmPushB,
-  XmXm,
-  XmXmStrDefs,
-  XTIntrinsic,
-  XmToolTipT;
-
-{$IFDEF FPC}
-{$PACKRECORDS C}
-{$ENDIF}
-
-
-// h2pas -p -T -d -c -e Intrinsic.h
+  Xm, XT;
 
 // https://www.softintegration.com/chhtml/toolkit/demos/X11/motif/
 

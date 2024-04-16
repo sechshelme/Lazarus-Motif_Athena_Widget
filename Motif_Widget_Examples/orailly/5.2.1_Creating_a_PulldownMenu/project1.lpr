@@ -4,15 +4,7 @@ uses
   ctypes,
   x,
   xlib,
-  XmPushB,
-  XmXm,
-  XmXmStrDefs,
-  XmRowColumn,
-  XmLabel,
-  XmMainW,
-  XmList,
-  XTComposite,
-  XTIntrinsic;
+  Xm, XT;
 
   procedure button_pushed(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   begin
