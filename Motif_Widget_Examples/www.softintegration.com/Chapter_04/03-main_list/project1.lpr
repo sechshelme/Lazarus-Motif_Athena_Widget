@@ -6,15 +6,7 @@ uses
   ctypes,
   xlib,
   x,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmMainW,
-  XmCommand,
-  XmText,
-  XmList,
-  XTComposite,
-  XTIntrinsic;
+  Xm, XT;
 
   procedure main(argc: longint; argv: PPChar);
   var

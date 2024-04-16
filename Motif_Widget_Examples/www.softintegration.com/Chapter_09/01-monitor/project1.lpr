@@ -6,25 +6,7 @@ uses
   Strings,
   xlib,
   x,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmMainW,
-  XmRowColumn,
-  XmMessageB,
-  XmSelectioB,
-  XmDialogS,
-  XmPanedW,
-  XmLabelG,
-  XmTextF,
-  XmForm,
-  XmBulletinB,
-  XmList,
-
-  XmCommand,
-  XmText,
-  XTComposite,
-  XTIntrinsic;
+  Xm, XT;
 
   procedure scroll_action(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var

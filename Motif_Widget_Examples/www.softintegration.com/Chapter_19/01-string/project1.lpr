@@ -12,33 +12,7 @@ uses
   xlib,
   x,
   xresource,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmPushBG,
-  XmMainW,
-  XmRowColumn,
-  XmMessageB,
-  XmSelectioB,
-  XmDialogS,
-  XmPanedW,
-  XmLabelG,
-  XmTextF,
-  XmForm,
-  XmBulletinB,
-  XmList,
-  XmScrolledW,
-  XmDrawingA,
-  XmArrowBG,
-  XmAtomMgr,
-  XmScale,
-  xmCutPaste,
-
-  XmCommand,
-  XmText,
-  XTComposite,
-  XTCore,
-  XTIntrinsic;
+  Xm, XT;
 
 const
   fallbacks: array of PChar = ('*fontList:9x15=MY_TAG1,*fontList:5x7=MY_TAG2,*fontList:5x7=MY_TAG3', nil);

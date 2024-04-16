@@ -6,17 +6,7 @@ uses
   Strings,
   xlib,
   x,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmMainW,
-  XmRowColumn,
-  XmMessageB,
-
-  XmCommand,
-  XmText,
-  XTComposite,
-  XTIntrinsic;
+  Xm, XT;
 
   procedure callback(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var

@@ -6,17 +6,7 @@ uses
   ctypes,
   xlib,
   x,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmMainW,
-  XmCommand,
-  XmText,
-  XmLabel,
-  XmMessageB,
-  XmFileSB,
-  XTComposite,
-  XTIntrinsic;
+  Xm, XT;
 
 const
   colors: array[0..3] of PChar = ('Black', 'Red', 'Green', 'Blue');

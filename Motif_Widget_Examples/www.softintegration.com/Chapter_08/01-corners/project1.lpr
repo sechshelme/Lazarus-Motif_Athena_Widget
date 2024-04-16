@@ -6,24 +6,7 @@ uses
   Strings,
   xlib,
   x,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmMainW,
-  XmRowColumn,
-  XmMessageB,
-  XmSelectioB,
-  XmDialogS,
-  XmPanedW,
-  XmLabelG,
-  XmTextF,
-  XmForm,
-  XmBulletinB,
-
-  XmCommand,
-  XmText,
-  XTComposite,
-  XTIntrinsic;
+  Xm, XT;
 
 const
   corners: array of PChar = ('Top, Left', 'Top Right', 'Bottom Left', 'Bottom Right');

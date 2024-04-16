@@ -5,11 +5,7 @@ uses
   x,
   xlib,
   ctypes,
-  XawCommand,
-  XTStringdefs,
-  XawLabel,
-  XawBox,
-  XTIntrinsic;
+  Xaw, XT;
 
 // https://www.x.org/releases/X11R7.7/doc/libXt/intrinsics.html
 // Appendix B. Translation Table Syntax

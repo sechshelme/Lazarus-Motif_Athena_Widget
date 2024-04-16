@@ -12,29 +12,7 @@ uses
   xlib,
   x,
   xresource,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmPushBG,
-  XmMainW,
-  XmRowColumn,
-  XmMessageB,
-  XmSelectioB,
-  XmDialogS,
-  XmPanedW,
-  XmLabelG,
-  XmTextF,
-  XmForm,
-  XmBulletinB,
-  XmList,
-  XmScrolledW,
-  XmDrawingA,
-  XmArrowBG,
-
-  XmCommand,
-  XmText,
-  XTComposite,
-  XTIntrinsic;
+  Xm, XT;
 
 type
   PValueRange = ^TValueRange;

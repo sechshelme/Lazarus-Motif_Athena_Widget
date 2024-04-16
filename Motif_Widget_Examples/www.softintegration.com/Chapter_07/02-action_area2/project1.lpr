@@ -6,23 +6,7 @@ uses
   Strings,
   xlib,
   x,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmMainW,
-  XmRowColumn,
-  XmMessageB,
-  XmSelectioB,
-  XmDialogS,
-  XmPanedW,
-  XmLabelG,
-  XmTextF,
-  XmForm,
-
-  XmCommand,
-  XmText,
-  XTComposite,
-  XTIntrinsic;
+  Xm, XT;
 
 type
   TActionAreaItem = record
@@ -61,9 +45,9 @@ type
 
   procedure help(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var
-    string_: TString;
+    string_: PChar;
   begin
-    string_ := TString(client_data);
+    string_ := PChar(client_data);
     WriteLn(string_);
   end;
 

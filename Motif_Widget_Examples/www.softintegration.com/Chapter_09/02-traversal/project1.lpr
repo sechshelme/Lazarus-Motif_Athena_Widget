@@ -6,26 +6,7 @@ uses
   Strings,
   xlib,
   x,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmMainW,
-  XmRowColumn,
-  XmMessageB,
-  XmSelectioB,
-  XmDialogS,
-  XmPanedW,
-  XmLabelG,
-  XmTextF,
-  XmForm,
-  XmBulletinB,
-  XmToggleB,
-  XmList,
-  XmScrolledW,
-  XmCommand,
-  XmText,
-  XTComposite,
-  XTIntrinsic;
+  Xm, XT;
 
   procedure travers(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var

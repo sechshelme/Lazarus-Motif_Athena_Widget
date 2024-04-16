@@ -5,14 +5,7 @@ uses
   Strings,
   xlib,
   x,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmMainW,
-  XmCommand,
-  XmText,
-  XTComposite,
-  XTIntrinsic;
+  Xm, XT;
 
   procedure Press_Exit(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   begin

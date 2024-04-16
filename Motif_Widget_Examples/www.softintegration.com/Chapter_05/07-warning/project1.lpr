@@ -6,17 +6,7 @@ uses
   Strings,
   xlib,
   x,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmMainW,
-  XmRowColumn,
-  XmMessageB,
-
-  XmCommand,
-  XmText,
-  XTComposite,
-  XTIntrinsic;
+  Xm, XT;
 
   procedure WarningMsg(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var
@@ -28,6 +18,7 @@ uses
   begin
     msg := PChar(client_data);
 
+    ok_str:=nil;
     XtSetArg(args[0], XmNmessageString, ok_str);
 
     if dialog = nil then begin

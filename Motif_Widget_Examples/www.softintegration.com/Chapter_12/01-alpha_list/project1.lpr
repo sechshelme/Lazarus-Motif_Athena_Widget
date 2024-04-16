@@ -12,29 +12,7 @@ uses
   xlib,
   x,
   xresource,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmPushBG,
-  XmMainW,
-  XmRowColumn,
-  XmMessageB,
-  XmSelectioB,
-  XmDialogS,
-  XmPanedW,
-  XmLabelG,
-  XmTextF,
-  XmForm,
-  XmBulletinB,
-  XmList,
-  XmScrolledW,
-  XmDrawingA,
-  XmArrowBG,
-
-  XmCommand,
-  XmText,
-  XTComposite,
-  XTIntrinsic;
+  Xm, XT;
 
   procedure add_item(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   var

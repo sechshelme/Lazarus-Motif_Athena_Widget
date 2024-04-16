@@ -13,32 +13,7 @@ uses
   xlib,
   x,
   xresource,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmPushBG,
-  XmMainW,
-  XmRowColumn,
-  XmMessageB,
-  XmSelectioB,
-  XmDialogS,
-  XmPanedW,
-  XmLabelG,
-  XmTextF,
-  XmForm,
-  XmBulletinB,
-  XmList,
-  XmScrolledW,
-  XmDrawingA,
-  XmArrowBG,
-  XmScale,
-  XmFileSB,
-
-  XmCommand,
-  XmText,
-  XTComposite,
-  XTCore,
-  XTIntrinsic;
+  Xm, XT;
 
 var
   passwd: PChar = nil;

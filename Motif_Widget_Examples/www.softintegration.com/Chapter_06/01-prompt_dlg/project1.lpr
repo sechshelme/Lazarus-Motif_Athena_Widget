@@ -6,18 +6,7 @@ uses
   Strings,
   xlib,
   x,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmMainW,
-  XmRowColumn,
-  XmMessageB,
-  XmSelectioB,
-
-  XmCommand,
-  XmText,
-  XTComposite,
-  XTIntrinsic;
+  Xm, XT;
 
   procedure DestroyWidget(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   begin
@@ -28,7 +17,6 @@ uses
   var
     push_button: TWidget;
     cbs: PXmSelectionBoxCallbackStruct;
-    t: TXmString;
   begin
     push_button := TWidget(client_data);
     cbs := PXmSelectionBoxCallbackStruct(call_data);

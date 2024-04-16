@@ -2,8 +2,7 @@ program project1;
 
 uses
   xlib,
-  x        ,
-  XmStrDefs;
+  x;
 
 const
   libXaw = 'libXaw';
@@ -20,27 +19,27 @@ type
 
 
 var
-  xmPushButtonWidgetClass:Pointer;cvar; external libXm;
-  boxWidgetClass:Pointer;cvar; external libXaw;
-  commandWidgetClass:Pointer;cvar; external libXaw;
-  XtStrings:array[0..30000] of Char;cvar; external libXaw;
-  _XmStrings:array[0..30000] of Char;cvar; external libXaw;
+  xmPushButtonWidgetClass: Pointer; cvar; external libXm;
+  boxWidgetClass: Pointer; cvar; external libXaw;
+  commandWidgetClass: Pointer; cvar; external libXaw;
+  XtStrings: array[0..30000] of char; cvar; external libXaw;
+  _XmStrings: array[0..30000] of char; cvar; external libXaw;
 
 
-  type
-  myfunc=procedure (w:WideChar;p:Pointer;p2:Pointer);
+type
+  myfunc = procedure(w: widechar; p: Pointer; p2: Pointer);
 
 
 
   function XtInitialize(titel: PChar; Name: PChar; p: Pointer; i: integer; argc: PInteger; argv: PPChar): TWidget; cdecl; external libXt;
-  function XtCreateManagedWidget(Name: PChar; boxWidgetC:Pointer; parent: TWidget; p:Pointer;i: integer): TWidget; cdecl; external libXt;
+  function XtCreateManagedWidget(Name: PChar; boxWidgetC: Pointer; parent: TWidget; p: Pointer; i: integer): TWidget; cdecl; external libXt;
 
-  function XtAddCallback(command:TWidget; p:Pointer; f:myfunc;p2:Pointer): TWidget; cdecl; external libXt;
+  function XtAddCallback(command: TWidget; p: Pointer; f: myfunc; p2: Pointer): TWidget; cdecl; external libXt;
 
-  procedure XtRealizeWidget(w:TWidget);cdecl;external libX11;
-  procedure XtMainLoop;cdecl; external libX11;
+  procedure XtRealizeWidget(w: TWidget); cdecl; external libX11;
+  procedure XtMainLoop; cdecl; external libX11;
 
-  procedure press_hello(w:WideChar;p:Pointer;p2:Pointer);
+  procedure press_hello(w: widechar; p: Pointer; p2: Pointer);
   begin
     WriteLn('Hello World');
   end;
@@ -53,23 +52,23 @@ var
 
   begin
     toplevel := XtInitialize('Mein Fenster', 'noname', nil, 0, @i, nil);
-    box:=XtCreateManagedWidget('hallo', boxWidgetClass, toplevel,nil,0);
+    box := XtCreateManagedWidget('hallo', boxWidgetClass, toplevel, nil, 0);
 
-    command:=XtCreateManagedWidget('Hello Button', commandWidgetClass, box,nil,0);
-    XtAddCallback(command,  @XtStrings[136],@press_hello,nil);
+    command := XtCreateManagedWidget('Hello Button', commandWidgetClass, box, nil, 0);
+    XtAddCallback(command, @XtStrings[136], @press_hello, nil);
 
-    command:=XtCreateManagedWidget('Quit Button', commandWidgetClass, box,nil,0);
+    command := XtCreateManagedWidget('Quit Button', commandWidgetClass, box, nil, 0);
 
-    command:=XtCreateManagedWidget('Ich bin ein ganz grosser'#10'Button', xmPushButtonWidgetClass, box,nil,0);
-    command:=XtCreateManagedWidget('Ich bin ein ganz grosser'#10'zweiter Button', xmPushButtonWidgetClass, box,nil,0);
-    XtAddCallback(command,  @_XmStrings[4700],@press_hello,nil);
-//    XtAddCallback(command, pchar('activateCallback'),@press_hello,nil);
+    command := XtCreateManagedWidget('Ich bin ein ganz grosser'#10'Button', xmPushButtonWidgetClass, box, nil, 0);
+    command := XtCreateManagedWidget('Ich bin ein ganz grosser'#10'zweiter Button', xmPushButtonWidgetClass, box, nil, 0);
+    XtAddCallback(command, @_XmStrings[4700], @press_hello, nil);
+    //    XtAddCallback(command, pchar('activateCallback'),@press_hello,nil);
 
 
 
     XtRealizeWidget(toplevel);
 
-     XtMainLoop;
+    XtMainLoop;
 
   end;
 

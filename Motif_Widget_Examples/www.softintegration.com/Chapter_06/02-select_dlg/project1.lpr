@@ -6,21 +6,11 @@ uses
   Strings,
   xlib,
   x,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmMainW,
-  XmRowColumn,
-  XmMessageB,
-  XmSelectioB,
-
-  XmCommand,
-  XmText,
-  XTComposite,
-  XTIntrinsic;
+  Xm,
+  XT;
 
 type
-  PListItem = ^  TListItem;
+  PListItem = ^TListItem;
 
   TListItem = record
     label_: PChar;

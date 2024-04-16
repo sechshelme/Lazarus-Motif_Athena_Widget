@@ -1,14 +1,10 @@
 program project1;
 
 uses
+  ctypes,
   x,
   xlib,
-  unixtype,
-  XawCommand,
-  XTStringdefs,
-  XawLabel,
-  XawBox,
-  XTIntrinsic;
+  Xaw, XT;
 
 type
   TxbmMask = record

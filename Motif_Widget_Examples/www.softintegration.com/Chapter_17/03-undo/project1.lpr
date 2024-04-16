@@ -12,32 +12,7 @@ uses
   xlib,
   x,
   xresource,
-  XmXm,
-  XmXmStrDefs,
-  XmPushB,
-  XmPushBG,
-  XmMainW,
-  XmRowColumn,
-  XmMessageB,
-  XmSelectioB,
-  XmDialogS,
-  XmPanedW,
-  XmLabelG,
-  XmTextF,
-  XmForm,
-  XmBulletinB,
-  XmList,
-  XmScrolledW,
-  XmDrawingA,
-  XmArrowBG,
-  XmScale,
-  xmCutPaste,
-
-  XmCommand,
-  XmText,
-  XTComposite,
-  XTCore,
-  XTIntrinsic;
+  Xm, XT;
 
   procedure cut_to_clipboard(w: TWidget; client_data: TXtPointer; call_data: TXtPointer); cdecl;
   const

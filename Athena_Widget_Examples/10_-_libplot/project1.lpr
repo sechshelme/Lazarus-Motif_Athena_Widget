@@ -1,39 +1,39 @@
 program project1;
 
 uses
-  XawCommand,
-  XTStringdefs,
-  XawLabel,
-  XawBox,
-  XTCore,
-  XTIntrinsic,
-  plot, xlib, x;
+  Xaw,
+  XT,
+  plot,
+  xlib,
+  x;
 
 const
-  lib_stdio='c';
+  lib_stdio = 'c';
 var
-  stdin :TFILE;cvar;external lib_stdio;
-  stdout :TFILE;cvar;external lib_stdio;
-  stderr :TFILE;cvar;external lib_stdio;
+  stdin: TFILE; cvar;external lib_stdio;
+  stdout: TFILE; cvar;external lib_stdio;
+  stderr: TFILE; cvar;external lib_stdio;
 
 
-var     display: PDisplay;
-    window: TWindow;
-    plotter: PplPlotter;
+var
+  display: PDisplay;
+  window: TWindow;
+  plotter: PplPlotter;
 
-procedure re_draw2(para1: TWidget; para2: TXtPointer; para3: PXEvent; para4: PBoolean); cdecl;
-begin
-  WriteLn('plot');
-  pl_pencolorname_r(plotter, 'green');
-  pl_fmove_r(plotter, 100, 100);
+  procedure re_draw2(para1: TWidget; para2: TXtPointer; para3: PXEvent; para4: PBoolean); cdecl;
+  begin
+    WriteLn('plot');
+    pl_pencolorname_r(plotter, 'green');
+    pl_fmove_r(plotter, 100, 100);
 
-  pl_fcontrel_r(plotter, 500, 500);
+    pl_fcontrel_r(plotter, 500, 500);
 
-  pl_endpath_r(plotter);
-end;
+    pl_endpath_r(plotter);
+  end;
+
   procedure main;
   const
-bg_colorname :PChar= 'white';
+    bg_colorname: PChar = 'white';
 
   var
     toplevel, box: TWidget;
@@ -50,17 +50,17 @@ bg_colorname :PChar= 'white';
 
     XtRealizeWidget(toplevel);
 
-    plotter_params:=pl_newplparams;
-    display:=XtDisplay(box);
-    window:=XtWindow(box);
+    plotter_params := pl_newplparams;
+    display := XtDisplay(box);
+    window := XtWindow(box);
 
-    pl_setplparam (plotter_params, 'XDRAWABLE_DISPLAY', display);
-    pl_setplparam (plotter_params, 'XDRAWABLE_DRAWABLE1', @window);
-    pl_setplparam (plotter_params, 'BG_COLOR', bg_colorname);
-    plotter:=pl_newpl_r('Xdrawable',nil,nil,stderr,plotter_params);
+    pl_setplparam(plotter_params, 'XDRAWABLE_DISPLAY', display);
+    pl_setplparam(plotter_params, 'XDRAWABLE_DRAWABLE1', @window);
+    pl_setplparam(plotter_params, 'BG_COLOR', bg_colorname);
+    plotter := pl_newpl_r('Xdrawable', nil, nil, stderr, plotter_params);
     pl_openpl_r(plotter);
-    pl_fspace_r(plotter,0,0,1000,1000);
-    pl_flinewidth_r(plotter,0.25);
+    pl_fspace_r(plotter, 0, 0, 1000, 1000);
+    pl_flinewidth_r(plotter, 0.25);
 
     XtAppMainLoop(app);
   end;

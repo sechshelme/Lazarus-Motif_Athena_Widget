@@ -1,5 +1,6 @@
 # FPC X11 Tutorial
 ## Einleitung:
+Die Unit **Xaw** oder **Xm** muss immer **vor** der Unit **XT** deklariert sein ! Ansonsten wird das Fenster nicht aktiv.
 
 ## Externe Beispiele:
 Diese sind alle in C/C++
@@ -26,6 +27,7 @@ Diese sind alle in C/C++
 
 | Datum | Änderungen 
 | :---: | ---
+| 16.04.2024 | Include anstelle von Units
 | 02.04.2023 | Package **Motif Widgets** erstellt
 | 20.03.2023 | Erste Gehversuche mit **Motif Widgets**
 | 18.03.2023 | Package **Athen Widgets** ersellt

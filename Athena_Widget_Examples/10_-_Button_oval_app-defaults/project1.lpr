@@ -1,11 +1,7 @@
 program project1;
 
 uses
-  XawCommand,
-  XTStringdefs,
-  XawLabel,
-  XawBox,
-  XTIntrinsic;
+Xaw, XT;
 
 // http://users.polytech.unice.fr/~buffa/cours/X11_Motif/cours/XmAppDefaults.html
 
