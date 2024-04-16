@@ -142,7 +142,7 @@ begin
   end;
 
   slFile.Free;
-  slArtList.SaveToFile(destPath+art+'_includes.txt' );
+//  slArtList.SaveToFile(destPath+art+'_includes.txt' );
   slArtList.Free
 end;
 

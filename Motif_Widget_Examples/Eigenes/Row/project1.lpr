@@ -14,7 +14,6 @@ uses
   begin
     s := PString(client_data)^;
     WriteLn(s);
-
   end;
 
   procedure main(argc: longint; argv: PPChar);
