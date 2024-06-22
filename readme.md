@@ -90,8 +90,19 @@ apt install tkdesk
 ```
 
 # Sonstige Widgets Set
+## FLTK
 https://www.fltk.org/
 https://www.fltk.org/doc-2.0/html/example1.html
+
+### Linux
+```bash
+cmake -S .. -B . 
+```
+
+### Windows
+```bash
+cmake -S .. -B . -DCMAKE_CXX_COMPILER="/usr/bin/x86_64-w64-mingw32-g++" -DCMAKE_C_COMPILER="/usr/bin/x86_64-w64-mingw32-gcc" -DCMAKE_RC_COMPILER="/usr/bin/x86_64-w64-mingw32-windres" -DCMAKE_FIND_ROOT_PATH="/usr/x86_64-w64-mingw32" -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="ONLY" -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" -DCMAKE_SYSTEM_NAME="Windows"
+```
 
 
 
