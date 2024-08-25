@@ -29,7 +29,11 @@ var
   begin
     XtSetLanguageProc(nil, nil, nil);
 
-    toplevel := XtVaAppInitialize(@app, 'myapp', nil, 0, @argc, argv, nil, XtNwidth, 320, XtNheight, 200, nil);
+    toplevel := XtVaAppInitialize(@app, 'myapp', nil, 0, @argc, argv, nil,
+      XtNwidth, 320,
+      XtNheight, 200,
+      XtNtitle, 'Mein Athena Fenster',
+      nil);
 
     box := XtCreateManagedWidget('box', boxWidgetClass, toplevel, nil, 0);
     XtVaSetValues(box, XtNorientation, XtEhorizontal, nil);
