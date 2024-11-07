@@ -12,7 +12,6 @@ const
 
   {$IFDEF Windows}
 //  libXt = 'libXt.so'
-//  sdl3_lib = 'SDL3.dll';
   {$ENDIF}
 
   {$IFDEF FPC}

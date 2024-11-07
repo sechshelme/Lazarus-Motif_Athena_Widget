@@ -44,94 +44,101 @@ type
 
 type
   PXawTextScrollMode = ^TXawTextScrollMode;
-  TXawTextScrollMode =  Longint;
-  Const
-    XawtextScrollNever = 0;
-    XawtextScrollWhenNeeded = 1;
-    XawtextScrollAlways = 2;
+  TXawTextScrollMode = longint;
+
+const
+  XawtextScrollNever = 0;
+  XawtextScrollWhenNeeded = 1;
+  XawtextScrollAlways = 2;
 
 type
   PXawTextResizeMode = ^TXawTextResizeMode;
-  TXawTextResizeMode =  Longint;
-  Const
-    XawtextResizeNever = 0;
-    XawtextResizeWidth = 1;
-    XawtextResizeHeight = 2;
-    XawtextResizeBoth = 3;
+  TXawTextResizeMode = longint;
+
+const
+  XawtextResizeNever = 0;
+  XawtextResizeWidth = 1;
+  XawtextResizeHeight = 2;
+  XawtextResizeBoth = 3;
+
 type
   PXawTextWrapMode = ^TXawTextWrapMode;
-  TXawTextWrapMode =  Longint;
-  Const
-    XawtextWrapNever = 0;
-    XawtextWrapLine = 1;
-    XawtextWrapWord = 2;
+  TXawTextWrapMode = longint;
+
+const
+  XawtextWrapNever = 0;
+  XawtextWrapLine = 1;
+  XawtextWrapWord = 2;
 
 type
   PXawTextScanDirection = ^TXawTextScanDirection;
-  TXawTextScanDirection =  Longint;
-  Const
-    XawsdLeft = 0;
-    XawsdRight = 1;
+  TXawTextScanDirection = longint;
+
+const
+  XawsdLeft = 0;
+  XawsdRight = 1;
 
 type
   PXawTextEditType = ^TXawTextEditType;
-  TXawTextEditType =  Longint;
-  Const
-    XawtextRead = 0;
-    XawtextAppend = 1;
-    XawtextEdit = 2;
+  TXawTextEditType = longint;
+
+const
+  XawtextRead = 0;
+  XawtextAppend = 1;
+  XawtextEdit = 2;
 
 type
   PXawTextSelectType = ^TXawTextSelectType;
-  TXawTextSelectType =  Longint;
-  Const
-    XawselectNull = 0;
-    XawselectPosition = 1;
-    XawselectChar = 2;
-    XawselectWord = 3;
-    XawselectLine = 4;
-    XawselectParagraph = 5;
-    XawselectAll = 6;
-    XawselectAlphaNumeric = 7;
+  TXawTextSelectType = longint;
+
+const
+  XawselectNull = 0;
+  XawselectPosition = 1;
+  XawselectChar = 2;
+  XawselectWord = 3;
+  XawselectLine = 4;
+  XawselectParagraph = 5;
+  XawselectAll = 6;
+  XawselectAlphaNumeric = 7;
 
 type
   PXawTextJustifyMode = ^TXawTextJustifyMode;
-  TXawTextJustifyMode =  Longint;
-  Const
-    XawjustifyLeft = 0;
-    XawjustifyRight = 1;
-    XawjustifyCenter = 2;
-    XawjustifyFull = 3;
+  TXawTextJustifyMode = longint;
+
+const
+  XawjustifyLeft = 0;
+  XawjustifyRight = 1;
+  XawjustifyCenter = 2;
+  XawjustifyFull = 3;
 
 type
   PXawTextBlock = ^TXawTextBlock;
+
   TXawTextBlock = record
-      firstPos : longint;
-      length : longint;
-      ptr : Pchar;
-      format : culong;
-    end;
+    firstPos: longint;
+    length: longint;
+    ptr: pchar;
+    format: culong;
+  end;
   TXawTextBlockPtr = PXawTextBlock;
   PXawTextBlockPtr = ^TXawTextBlockPtr;
 
 type
-  PXawTextPositionInfo = ^TXawTextPositionInfo;
   TXawTextPositionInfo = record
-      line_number : longint;
-      column_number : longint;
-      insert_position : TXawTextPosition;
-      last_position : TXawTextPosition;
-      overwrite_mode : TBoolean;
-    end;
+    line_number: longint;
+    column_number: longint;
+    insert_position: TXawTextPosition;
+    last_position: TXawTextPosition;
+    overwrite_mode: TBoolean;
+  end;
+  PXawTextPositionInfo = ^TXawTextPositionInfo;
 
-  PXawTextPropertyInfo = ^TXawTextPropertyInfo;
   TXawTextPropertyInfo = record
-      left : TXawTextPosition;
-      right : TXawTextPosition;
-      block : PXawTextBlock;
-    end;
-
-
+    left: TXawTextPosition;
+    right: TXawTextPosition;
+    block: PXawTextBlock;
+  end;
+  PXawTextPropertyInfo = ^TXawTextPropertyInfo;
 
 const
   XtEtextScrollNever = 'never';  
@@ -244,9 +251,6 @@ procedure XawTextDisplayCaret(w:TWidget; visible:TBoolean);cdecl;external libXaw
 
 {$IFDEF read_implementation}
 
-{ was #define dname(params) para_def_expr }
-{ argument types are unknown }
-{ return type might be wrong }   
 function XawTextFormat(tw, fmt: PtrUInt): TBoolean;
 begin
   XawTextFormat:=_XawTextFormat(tw)=fmt;
