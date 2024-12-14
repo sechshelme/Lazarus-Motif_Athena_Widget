@@ -27,6 +27,7 @@ Diese sind alle in C/C++
 
 | Datum | Änderungen 
 | :---: | ---
+| 14.12.2024 | Includes in einzelne Ordner ausgelagert
 | 16.04.2024 | Include anstelle von Units
 | 02.04.2023 | Package **Motif Widgets** erstellt
 | 20.03.2023 | Erste Gehversuche mit **Motif Widgets**
@@ -91,9 +92,9 @@ apt install tkdesk
 
 # Sonstige Widgets Set
 ## FLTK
-https://www.fltk.org/
-https://www.fltk.org/doc-2.0/html/example1.html
-https://github.com/fltk/fltk
+- https://www.fltk.org/
+- https://www.fltk.org/doc-2.0/html/example1.html
+- https://github.com/fltk/fltk
 
 ### Linux
 ```bash

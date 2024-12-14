@@ -1,5 +1,5 @@
-{$include xmu_drawing.inc}
-{$include xmu_atoms.inc}
-{$include xmu_widgetnode.inc}
-{$include xmu_converters.inc}
-{$include xmu_stdsel.inc}
+{$include xmu/xmu_drawing.inc}
+{$include xmu/xmu_atoms.inc}
+{$include xmu/xmu_widgetnode.inc}
+{$include xmu/xmu_converters.inc}
+{$include xmu/xmu_stdsel.inc}
